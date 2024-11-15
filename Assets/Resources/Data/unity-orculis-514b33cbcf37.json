@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "unity-orculis",
+  "private_key_id": "514b33cbcf37c9c431cd4494ceb3544922b3bb34",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDAQ/VPf3ufbDkd\nyDKrQ5cerv2GiD7bqyWKQyalmMOZ6nsykv6ZyjsU/Fxx57f4TZsehajuUjur7kKp\nlsnY3boOAplXCAx9pIlKGyYkohJ/QQsMbFr10Gg6xzxFRX+WnIcO8PsoqP1uk8C+\nT0J/E5N1nxAL0itLPyr1+XwefIuGnF7fzepIqREWNqf/7MkDgdZ2Sssr8SWPxjnq\ntvCn8paJIdKz1zc5QvZ0hke6bXBNEYAMKhax7wAjzGXFJS2tcuXGhmH2juo6uftc\nLEAzUgcsIt24CApvjGnEtfeDUWmtv2/JKEi2iSDlHZmt5r7fDvvWVVx474TLlHCj\n1B/YEUnjAgMBAAECggEAAjWlujyo/eDfWoAZqPiKt4+479SyrZFEH1h8jLb6jyhv\n3a8XyEpX2dAOpevM+Z22tH1CaZQTWyX5U9FHpOY4xFQeUVmRKdkmuhh2x0FU52vR\ncIVG7v/upWJIcd6wboQs/yx2I8umt0sbvMl/Zk4iHzNtRUgsjDL/z4+G8CNr8meQ\n4ToRNT5rZBYWkWJz5864RhVtASzFAYsdCmYTLsWYeGezi1uUaRsOMrDebcuVhtCL\nzlcihYuu5iIzi6md4yN/7MAmc1kZ70im+b1PrBMJt5p84nylWfXNz25IpH2V067l\nmHkbpkULag7ZftQvS1O93zVvDXmpO46iyE76b3chFQKBgQDiKjpwPHzSFzYS19jC\n9Lf1UDHJTfx6XORcVJ3EHSNVtR5egBGy/6N9mwPy0/iVwIaB1+Y6v25o3o01VeZi\nyqYbzmjTQ+1ocJwkiCyboGmOA9NnDzLfKaazth94Tht8/gu3m7PWzzuu79CSun1o\nrQ+8yf7E63stCX+D5Tme6Hd0nQKBgQDZoOq9TF7J17HJgpjwRcC7NCK4lbDarZoB\nVAFo+54rPpHjcTG9UlVw5D/0Qbb3wg1cDf1vD9V4km0gu3DMGiDkZWyD71d7p1xZ\nVET0miT9RezXJH0TujP3PNa2dhxEg/L1hElK+FhCZOyl2WeYai5sqwYBAjGJ7qcx\nMkAQgWUwfwKBgB+A9Fz4AAcf1pdvW7Fkd0+DmTvKUjYVRHYcD1HnISnqLc3KFy0Q\n8QwpELa9ki4CAHqLwXVDfzS6c38PdSUjx1muOenb13Ep5oYsNdKD2NBAdi0v780o\nNyFnaCDQ+IFDvgwYc0ej3FN08l/N/HQdT0jj9kol5yWR4iJURt980E79AoGAJkH8\nojSHwVHyxir4Odz5Sa+bnvlpsresCCm9abg6EP4Z5XLjvJV5wbPObmETCjEJ6jHn\naJvO+jg7iPKKnMbHG3+c+QCdT3aXbHi8+ocSk5e0UAnxFwO32PHQCRlwVLchgfm0\nbMKFuX5Gf81dQdUAvke+cXTyQn461BIyYvRsVn8CgYEArclR/tHXuAaQIrtwWfiC\nmp+pzeKc1xMB6wuFwBP1oPmIA+24853IvO08s0JRxRcjnNOonLaKIOOIW4GEgWE+\nVhFJk3cPeVDk9A6Ta+yJHAvo8I4DGeyeCDygmblt+9huYFSfu2N33ot10oLoFtFQ\nkOzumLTtoLNJi9N2UQV3sbU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "orculis-stt-test@unity-orculis.iam.gserviceaccount.com",
+  "client_id": "113619537786655310591",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/orculis-stt-test%40unity-orculis.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
