@@ -1,5 +1,7 @@
+using Oculus.Interaction;
 using System.Collections;
 using UnityEngine;
+using static Define;
 
 public class Orb : MonoBehaviour
 {
@@ -14,7 +16,7 @@ public class Orb : MonoBehaviour
     private Collider m_Collider;
 
     [Header("Property")]
-    [SerializeField]  private float m_fLiftTime = 1f;
+    [SerializeField]  private float m_fLiftTime = 10f;
     [SerializeField] private Vector3 m_moveVector;
     [SerializeField] LayerMask m_hitLayerMask;
     [SerializeField]  private float m_fImpulse = 1f;
@@ -28,6 +30,8 @@ public class Orb : MonoBehaviour
         m_hitLayerMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("Character"));
 
         MoveObject();
+
+        StartCoroutine(TimeOverDestroy());
     }
 
     public void SetInfo(PlayerManager player, Transform forwardVector)
@@ -47,10 +51,21 @@ public class Orb : MonoBehaviour
     {
         if(other != null)
         {
-            if (other.gameObject.layer != m_hitLayerMask)
+            // other의 레이어가 m_hitLayerMask에 포함되지 않으면 return
+            if ((m_hitLayerMask & (1 << other.gameObject.layer)) == 0)
                 return;
 
-            Debug.Log("hit object name : " + other.gameObject.name);
+            if (other.gameObject.layer == LayerMask.NameToLayer("Character"))
+            {
+                var hitObj = other.gameObject.GetComponent<IHitable>();
+
+                if (hitObj != null)
+                    hitObj.OnHit();
+            }
+
+            // Rigidbody의 움직임 정지
+            m_Rigidbody.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+
             m_goOrbBody.gameObject.SetActive(false);
             m_goTrail.gameObject.SetActive(false);
 
@@ -61,5 +76,12 @@ public class Orb : MonoBehaviour
 
             Destroy(gameObject, m_fLiftTime);
         }
+    }
+
+    private IEnumerator TimeOverDestroy()
+    {
+        yield return new WaitForSeconds(m_fLiftTime);
+
+        Destroy(gameObject);
     }
 }

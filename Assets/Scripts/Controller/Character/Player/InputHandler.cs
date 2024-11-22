@@ -3,7 +3,7 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
     [Header("Ref")]
-    @XRIDefaultInputActions inputActions;
+    public @XRIDefaultInputActions inputActions;
     PlayerManager m_PlayerManager;
 
 
@@ -24,9 +24,6 @@ public class InputHandler : MonoBehaviour
 
 
             inputActions.XRIRightInteraction.Select.performed += i => right_select = true;
-
-
-
         }
 
         inputActions.Enable();
@@ -42,11 +39,14 @@ public class InputHandler : MonoBehaviour
     {
         
     }
-
-
     
     private void LateUpdate()
     {
         
+    }
+
+    public void KeyInput()
+    {
+
     }
 }

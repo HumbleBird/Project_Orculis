@@ -40,20 +40,25 @@ MonoBehaviour:
     - id: 1280147426502073
       name: Project_Orculis_MagicSpell
       entities:
-      - name: Accio:Accio
+      - name: HarryPotter:Accio
         id: 1116961269797152
-      - name: Incendio:Incendio
-        id: 356932574145947
-      - name: Repello:Repello
-        id: 1625739128356125
     entities:
-    - name: Accio
+    - name: HarryPotter
       id: 1285632372331407
       lookups:
+      - free-text
       - keywords
       roles:
       - name: Accio
         id: 1116961269797152
+      - name: Attack
+        id: 912102794317150
+      - name: Cure
+        id: 784478017141417
+      - name: Defende
+        id: 486879231174432
+      - name: Object
+        id: 9200152893337002
       keywords:
       - keyword: Accio
         synonyms:
@@ -62,29 +67,13 @@ MonoBehaviour:
       - keyword: Expelliarmus
         synonyms:
         - Expelliarmus
-    - name: Incendio
-      id: 981599100674409
-      lookups:
-      - keywords
-      roles:
-      - name: Incendio
-        id: 356932574145947
-      keywords:
       - keyword: Incendio
         synonyms:
-        - incendio
+        - Incendio
         - infantio
-    - name: Repello
-      id: 582847260771682
-      lookups:
-      - keywords
-      roles:
-      - name: Repello
-        id: 1625739128356125
-      keywords:
       - keyword: Repello
         synonyms:
-        - repello
+        - Repello
     traits: []
     versionTags: []
     voices:
