@@ -1,19 +1,27 @@
 using UnityEngine;
+using static UnityEngine.InputSystem.InputAction;
 
 public class InputHandler : MonoBehaviour
 {
     [Header("Ref")]
     public @XRIDefaultInputActions inputActions;
     PlayerManager m_PlayerManager;
+    GestureEventProcessor m_GestureEventProcessor;
 
 
     [Header("XRI Right")]
     public bool right_select;
+    public bool right_Trigger;
+
+
+    [Header("XRI Left")]
+    public bool left_Trigger;
 
 
     private void Start()
     {
         m_PlayerManager = GetComponent<PlayerManager>();
+        m_GestureEventProcessor = GetComponent<GestureEventProcessor>();
     }
 
     private void OnEnable()
@@ -22,8 +30,14 @@ public class InputHandler : MonoBehaviour
         {
             inputActions = new XRIDefaultInputActions();
 
-
+            // Right
             inputActions.XRIRightInteraction.Select.performed += i => right_select = true;
+            inputActions.XRIRightInteraction.Activate.performed += i => right_Trigger = true;
+            inputActions.XRIRightInteraction.Activate.canceled += i => right_Trigger = false;
+
+            // Left
+            inputActions.XRILeftInteraction.Activate.performed += i => left_Trigger = true;
+            inputActions.XRILeftInteraction.Activate.canceled += i => left_Trigger = false;
         }
 
         inputActions.Enable();
@@ -37,7 +51,7 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        GestureRecognitionInput();
     }
     
     private void LateUpdate()
@@ -45,8 +59,37 @@ public class InputHandler : MonoBehaviour
         
     }
 
-    public void KeyInput()
+    public void GestureRecognitionInput()
     {
+        // Right Trigger Logic
+        if (right_Trigger)
+        {
+            FirstInputHandle(); // 첫 입력 처리
+            m_PlayerManager.MoveMagicStaff(true); // 파티클 생성
+        }
+        else
+        {
+            m_PlayerManager.MoveMagicStaff(false); // 파티클 제거
+        }
 
+        // Left Trigger Logic
+        //if (left_Trigger)
+        //{
+        //    FirstInputHandle(); // 첫 입력 처리
+        //    m_PlayerManager.MoveMagicStaff(true); // 파티클 생성
+        //}
+        //else
+        //{
+        //    m_PlayerManager.MoveMagicStaff(false); // 파티클 제거
+        //}
+    }
+
+    private void FirstInputHandle()
+    {
+        if (m_PlayerManager.m_GestureEventProcessor.m_bIsFirstRecognition == false)
+        {
+            m_PlayerManager.m_GestureEventProcessor.m_bIsFirstRecognition = true;
+            m_GestureEventProcessor.m_Mivry.enabled = true;
+        }
     }
 }

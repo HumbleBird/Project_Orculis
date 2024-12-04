@@ -2,19 +2,27 @@ using Meta.XR.ImmersiveDebugger.UserInterface;
 using NUnit.Framework;
 using Oculus.Voice;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Tutorials.Core.Editor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using static Define;
 
-public class PlayerManager : MonoBehaviour, IHitable
+
+public class PlayerManager : MonoBehaviour
 {
     [Header("Ref")]
-    InputHandler m_InputHandler;
+    public InputHandler m_InputHandler;
     public AppVoiceExperience voiceExperience;
+    public GestureEventProcessor m_GestureEventProcessor;
+    public StressReceiver m_StressReceiver; // Camera
+    public PlayerStateManager m_PlayerStatesManager;
+    public HUD m_HUD;
+    public PlayerMagicManager m_PlayerMagicManager;
 
     [Header("Interactor")]
     public XRBaseInteractor m_RightHandLearFarInteractor;
@@ -22,38 +30,38 @@ public class PlayerManager : MonoBehaviour, IHitable
     [Header("Interactable Object")]
     public XRBaseInteractable m_RightHandInteractableObject;
 
-    [Header("Magic")]
-    [SerializeField] private Transform RightHandStickTransform;
-    [SerializeField] private Orb m_OrbPrefab;
-    [SerializeField] private float m_fRepellcioAddForece = 50;
+    [Header("Magic Equippment")]
+    public MagicEquippment m_CurrentMagicEquippment;
 
-    [Header("Flag")]
-    [SerializeField] private bool m_bIsSelectObject;
+    [Header("Magic Base")]
+    [SerializeField] private GameObject m_MagicStafeMoveParticle;
+    [SerializeField] private float m_fParticleTimeInterval = 0.1f;
+    public bool isGeneratingParticles = false;
 
     private void Awake()
     {
         m_InputHandler = GetComponent<InputHandler>();
+        m_GestureEventProcessor = GetComponent<GestureEventProcessor>();
+        m_PlayerStatesManager = GetComponent<PlayerStateManager>();
+        m_PlayerMagicManager = GetComponent<PlayerMagicManager>();
+
+        // Camera
+        m_StressReceiver = GetComponentInChildren<StressReceiver>();
+        m_HUD = GetComponentInChildren<HUD>();
     }
 
     void Start()
     {
+        StartCoroutine(GenerateMagicMoveParticle());
     }
 
     void Update()
     {
         voiceExperience.Activate();
-
-        if(Input.GetKeyDown(KeyCode.Alpha1))
-            CastSpell_Incendio();
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            CastSpell_Accio();
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            CastSpell_Repulsio();
     }
 
-    public void CheckMagicSpells(string[] vars)
+    // Meta Voice, Wit.ai를 통해 음성을 입력받아서 해당 스펠의 함수를 실행함.
+    public void CheckVoiceMagicSpells(string[] vars)
     {
         // 유효한 값만 추출
         var validValues = vars
@@ -88,51 +96,63 @@ public class PlayerManager : MonoBehaviour, IHitable
         }
     }
 
-    public void CastSpell_Incendio()
+    public void CheckRecognition(GestureCompletionData data)
     {
-        Orb orb = Instantiate(m_OrbPrefab, RightHandStickTransform.position, Quaternion.identity);
-        orb.SetInfo(this, RightHandStickTransform);
-        m_InputHandler.right_select = false;
+        //    Debug.Log("data similarity : " + data.similarity);
+        //    Debug.Log("data gestureName : " + data.gestureName);
+        //    Debug.Log("data parts : " + data.parts);
+        //    Debug.Log("data gestureID : " + data.gestureID);
+
+        // 얼마나 기록한 제스쳐와 유사한가.
+        if(data.similarity > 0.4f)
+        {
+            StartCoroutine(SpellBoolMotionTimeCheck(data.gestureName));
+        }
     }
 
-    // 물건을 끌어 당김
-    public void CastSpell_Accio()
+    public void MoveMagicStaff(bool isMove)
     {
-        if(m_bIsSelectObject == false && m_RightHandInteractableObject == null)
+        isGeneratingParticles = isMove;
+    }
+
+    public IEnumerator GenerateMagicMoveParticle()
+    {
+        while(true)
         {
-            if (m_RightHandLearFarInteractor.interactablesHovered.Count > 0)
+            if(isGeneratingParticles)
             {
-                m_RightHandInteractableObject = m_RightHandLearFarInteractor.interactablesHovered[0] as XRBaseInteractable;
+                // 파티클 소환
+                GameObject go  = Managers.Resource.Instantiate(m_MagicStafeMoveParticle);
+                go.transform.position = m_CurrentMagicEquippment.m_MagicSpawnTransform.position;
+                go.transform.rotation = m_CurrentMagicEquippment.m_MagicSpawnTransform.rotation;
 
-                m_RightHandLearFarInteractor.interactionManager.SelectEnter(
-                    (IXRSelectInteractor)m_RightHandLearFarInteractor,
-                    (IXRSelectInteractable)m_RightHandInteractableObject);
-
-                m_bIsSelectObject = true;
+                yield return new WaitForSeconds(m_fParticleTimeInterval);
             }
+
+            yield return null;
         }
     }
 
-    // 물건을 던짐
-    public void CastSpell_Repulsio()
+    // 동작에 따른 해당 Bool값 True/False 변경
+    private IEnumerator SpellBoolMotionTimeCheck(string spellMotionName)
     {
-        if (m_bIsSelectObject && m_RightHandInteractableObject != null)
+        if(m_PlayerMagicManager.m_dicMagicSpell.ContainsKey(spellMotionName))
         {
-            m_RightHandLearFarInteractor.interactionManager.SelectExit(
-                (IXRSelectInteractor)m_RightHandLearFarInteractor,
-                (IXRSelectInteractable)m_RightHandInteractableObject);
+            m_PlayerMagicManager.m_dicMagicSpell[spellMotionName] = true;
 
-            m_bIsSelectObject = false;
+            Debug.Log($"Magic Spell Bool Change : {spellMotionName} - True");
 
-            var obj =  m_RightHandInteractableObject.GetComponent<Magic_Object>();
-            obj.Throw(RightHandStickTransform.forward, m_fRepellcioAddForece);
+            yield return new WaitForSeconds(m_PlayerMagicManager.m_bIsMotionTimeLife);
 
-            m_RightHandInteractableObject = null;
+            m_PlayerMagicManager.m_dicMagicSpell[spellMotionName] = false;
+
+            Debug.Log($"Magic Spell Bool Change : {spellMotionName} - False");
         }
     }
 
-    public void OnHit()
+    // Weapon
+    public void EquipItem()
     {
-        Debug.Log("On Hit : " + name);
+        m_CurrentMagicEquippment = GetComponentInChildren<MagicEquippment>();
     }
 }

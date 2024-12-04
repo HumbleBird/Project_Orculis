@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class Define
 {
-
+    public enum E_CastHand
+    {
+        RightHand,
+        LeftHand,
+        TwoHand
+    }
 
     public interface IHitable
     {
-        void OnHit();
+        // TODO 어떤 마법, 어떤 각도, 적중 부위
+        void OnHit(PlayerManager Attacker, int damage);
     }
 
     #region MagicSpell

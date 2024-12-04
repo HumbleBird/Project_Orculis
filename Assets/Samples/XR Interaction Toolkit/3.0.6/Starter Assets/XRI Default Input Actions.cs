@@ -371,7 +371,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Is Tracked"",
                     ""type"": ""Button"",
                     ""id"": ""82eb6741-beef-48d3-83ab-a957dc1caa1e"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -912,7 +912,16 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Activate"",
                     ""type"": ""Button"",
                     ""id"": ""0c0991c5-d329-4afc-8892-1076b440477c"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ActivateNative"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7dcfc76f-7f28-4c6b-a23e-6494a516f2d4"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1118,6 +1127,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Activate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3658cfc1-87ab-493b-9ced-edeba9f4c6bb"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/{TriggerButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivateNative"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1983,7 +2003,16 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Activate"",
                     ""type"": ""Button"",
                     ""id"": ""41976d89-60de-4deb-bff9-16b4af96b290"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ActivateNative"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7e7c7ef7-cbb8-451f-b3c5-c64560d70c2f"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -2189,6 +2218,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Activate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""18dd656d-843b-47ef-81fd-5b778762d284"",
+                    ""path"": ""<OculusTouchController>{RightHand}/{TriggerButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivateNative"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -3370,6 +3410,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_XRILeftInteraction_Select = m_XRILeftInteraction.FindAction("Select", throwIfNotFound: true);
         m_XRILeftInteraction_SelectValue = m_XRILeftInteraction.FindAction("Select Value", throwIfNotFound: true);
         m_XRILeftInteraction_Activate = m_XRILeftInteraction.FindAction("Activate", throwIfNotFound: true);
+        m_XRILeftInteraction_ActivateNative = m_XRILeftInteraction.FindAction("ActivateNative", throwIfNotFound: true);
         m_XRILeftInteraction_ActivateValue = m_XRILeftInteraction.FindAction("Activate Value", throwIfNotFound: true);
         m_XRILeftInteraction_UIPress = m_XRILeftInteraction.FindAction("UI Press", throwIfNotFound: true);
         m_XRILeftInteraction_UIPressValue = m_XRILeftInteraction.FindAction("UI Press Value", throwIfNotFound: true);
@@ -3408,6 +3449,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_XRIRightInteraction_Select = m_XRIRightInteraction.FindAction("Select", throwIfNotFound: true);
         m_XRIRightInteraction_SelectValue = m_XRIRightInteraction.FindAction("Select Value", throwIfNotFound: true);
         m_XRIRightInteraction_Activate = m_XRIRightInteraction.FindAction("Activate", throwIfNotFound: true);
+        m_XRIRightInteraction_ActivateNative = m_XRIRightInteraction.FindAction("ActivateNative", throwIfNotFound: true);
         m_XRIRightInteraction_ActivateValue = m_XRIRightInteraction.FindAction("Activate Value", throwIfNotFound: true);
         m_XRIRightInteraction_UIPress = m_XRIRightInteraction.FindAction("UI Press", throwIfNotFound: true);
         m_XRIRightInteraction_UIPressValue = m_XRIRightInteraction.FindAction("UI Press Value", throwIfNotFound: true);
@@ -3776,6 +3818,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_XRILeftInteraction_Select;
     private readonly InputAction m_XRILeftInteraction_SelectValue;
     private readonly InputAction m_XRILeftInteraction_Activate;
+    private readonly InputAction m_XRILeftInteraction_ActivateNative;
     private readonly InputAction m_XRILeftInteraction_ActivateValue;
     private readonly InputAction m_XRILeftInteraction_UIPress;
     private readonly InputAction m_XRILeftInteraction_UIPressValue;
@@ -3792,6 +3835,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @Select => m_Wrapper.m_XRILeftInteraction_Select;
         public InputAction @SelectValue => m_Wrapper.m_XRILeftInteraction_SelectValue;
         public InputAction @Activate => m_Wrapper.m_XRILeftInteraction_Activate;
+        public InputAction @ActivateNative => m_Wrapper.m_XRILeftInteraction_ActivateNative;
         public InputAction @ActivateValue => m_Wrapper.m_XRILeftInteraction_ActivateValue;
         public InputAction @UIPress => m_Wrapper.m_XRILeftInteraction_UIPress;
         public InputAction @UIPressValue => m_Wrapper.m_XRILeftInteraction_UIPressValue;
@@ -3819,6 +3863,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @Activate.started += instance.OnActivate;
             @Activate.performed += instance.OnActivate;
             @Activate.canceled += instance.OnActivate;
+            @ActivateNative.started += instance.OnActivateNative;
+            @ActivateNative.performed += instance.OnActivateNative;
+            @ActivateNative.canceled += instance.OnActivateNative;
             @ActivateValue.started += instance.OnActivateValue;
             @ActivateValue.performed += instance.OnActivateValue;
             @ActivateValue.canceled += instance.OnActivateValue;
@@ -3859,6 +3906,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @Activate.started -= instance.OnActivate;
             @Activate.performed -= instance.OnActivate;
             @Activate.canceled -= instance.OnActivate;
+            @ActivateNative.started -= instance.OnActivateNative;
+            @ActivateNative.performed -= instance.OnActivateNative;
+            @ActivateNative.canceled -= instance.OnActivateNative;
             @ActivateValue.started -= instance.OnActivateValue;
             @ActivateValue.performed -= instance.OnActivateValue;
             @ActivateValue.canceled -= instance.OnActivateValue;
@@ -4146,6 +4196,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_XRIRightInteraction_Select;
     private readonly InputAction m_XRIRightInteraction_SelectValue;
     private readonly InputAction m_XRIRightInteraction_Activate;
+    private readonly InputAction m_XRIRightInteraction_ActivateNative;
     private readonly InputAction m_XRIRightInteraction_ActivateValue;
     private readonly InputAction m_XRIRightInteraction_UIPress;
     private readonly InputAction m_XRIRightInteraction_UIPressValue;
@@ -4162,6 +4213,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @Select => m_Wrapper.m_XRIRightInteraction_Select;
         public InputAction @SelectValue => m_Wrapper.m_XRIRightInteraction_SelectValue;
         public InputAction @Activate => m_Wrapper.m_XRIRightInteraction_Activate;
+        public InputAction @ActivateNative => m_Wrapper.m_XRIRightInteraction_ActivateNative;
         public InputAction @ActivateValue => m_Wrapper.m_XRIRightInteraction_ActivateValue;
         public InputAction @UIPress => m_Wrapper.m_XRIRightInteraction_UIPress;
         public InputAction @UIPressValue => m_Wrapper.m_XRIRightInteraction_UIPressValue;
@@ -4189,6 +4241,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @Activate.started += instance.OnActivate;
             @Activate.performed += instance.OnActivate;
             @Activate.canceled += instance.OnActivate;
+            @ActivateNative.started += instance.OnActivateNative;
+            @ActivateNative.performed += instance.OnActivateNative;
+            @ActivateNative.canceled += instance.OnActivateNative;
             @ActivateValue.started += instance.OnActivateValue;
             @ActivateValue.performed += instance.OnActivateValue;
             @ActivateValue.canceled += instance.OnActivateValue;
@@ -4229,6 +4284,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @Activate.started -= instance.OnActivate;
             @Activate.performed -= instance.OnActivate;
             @Activate.canceled -= instance.OnActivate;
+            @ActivateNative.started -= instance.OnActivateNative;
+            @ActivateNative.performed -= instance.OnActivateNative;
+            @ActivateNative.canceled -= instance.OnActivateNative;
             @ActivateValue.started -= instance.OnActivateValue;
             @ActivateValue.performed -= instance.OnActivateValue;
             @ActivateValue.canceled -= instance.OnActivateValue;
@@ -4612,6 +4670,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnSelect(InputAction.CallbackContext context);
         void OnSelectValue(InputAction.CallbackContext context);
         void OnActivate(InputAction.CallbackContext context);
+        void OnActivateNative(InputAction.CallbackContext context);
         void OnActivateValue(InputAction.CallbackContext context);
         void OnUIPress(InputAction.CallbackContext context);
         void OnUIPressValue(InputAction.CallbackContext context);
@@ -4653,6 +4712,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnSelect(InputAction.CallbackContext context);
         void OnSelectValue(InputAction.CallbackContext context);
         void OnActivate(InputAction.CallbackContext context);
+        void OnActivateNative(InputAction.CallbackContext context);
         void OnActivateValue(InputAction.CallbackContext context);
         void OnUIPress(InputAction.CallbackContext context);
         void OnUIPressValue(InputAction.CallbackContext context);

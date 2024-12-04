@@ -7,9 +7,6 @@ using static Define;
 
 public class GameScene : BaseScene
 {
-    public bool m_isNewGame = true;
-    public bool m_isDeveling = true;
-
     protected override void Init()
     {
         base.Init();
