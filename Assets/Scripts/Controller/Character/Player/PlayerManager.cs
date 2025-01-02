@@ -12,7 +12,6 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using static Define;
 
-
 public class PlayerManager : MonoBehaviour
 {
     [Header("Ref")]
@@ -23,6 +22,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerStateManager m_PlayerStatesManager;
     public HUD m_HUD;
     public PlayerMagicManager m_PlayerMagicManager;
+    public PlayerEffectsManager m_PlayerEffectsManager;
 
     [Header("Interactor")]
     public XRBaseInteractor m_RightHandLearFarInteractor;
@@ -44,6 +44,7 @@ public class PlayerManager : MonoBehaviour
         m_GestureEventProcessor = GetComponent<GestureEventProcessor>();
         m_PlayerStatesManager = GetComponent<PlayerStateManager>();
         m_PlayerMagicManager = GetComponent<PlayerMagicManager>();
+        m_PlayerEffectsManager = GetComponent<PlayerEffectsManager>();
 
         // Camera
         m_StressReceiver = GetComponentInChildren<StressReceiver>();
@@ -75,25 +76,7 @@ public class PlayerManager : MonoBehaviour
         // 첫 번째 단어 주문
         string spellString = validValues[0];
 
-        // 동적 메서드 호출 (Reflection 활용)
-        try
-        {
-            var methodName = $"CastSpell_{spellString}";
-            var method = GetType().GetMethod(methodName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-
-            if (method != null)
-            {
-                method.Invoke(this, null);
-            }
-            else
-            {
-                Debug.LogWarning($"알 수 없는 주문: {spellString}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"주문 처리 중 오류 발생: {ex.Message}");
-        }
+        m_PlayerMagicManager.SpellFlagCheck(E_SpellCheckType.Chant, spellString);
     }
 
     public void CheckRecognition(GestureCompletionData data)
@@ -106,7 +89,7 @@ public class PlayerManager : MonoBehaviour
         // 얼마나 기록한 제스쳐와 유사한가.
         if(data.similarity > 0.4f)
         {
-            StartCoroutine(SpellBoolMotionTimeCheck(data.gestureName));
+            m_PlayerMagicManager.SpellFlagCheck(E_SpellCheckType.Motion, data.gestureName);
         }
     }
 
@@ -115,6 +98,7 @@ public class PlayerManager : MonoBehaviour
         isGeneratingParticles = isMove;
     }
 
+    // 모션 동작을 위한 지팡이 이동 시 반짝거리는 작은 입자 생성
     public IEnumerator GenerateMagicMoveParticle()
     {
         while(true)
@@ -130,23 +114,6 @@ public class PlayerManager : MonoBehaviour
             }
 
             yield return null;
-        }
-    }
-
-    // 동작에 따른 해당 Bool값 True/False 변경
-    private IEnumerator SpellBoolMotionTimeCheck(string spellMotionName)
-    {
-        if(m_PlayerMagicManager.m_dicMagicSpell.ContainsKey(spellMotionName))
-        {
-            m_PlayerMagicManager.m_dicMagicSpell[spellMotionName] = true;
-
-            Debug.Log($"Magic Spell Bool Change : {spellMotionName} - True");
-
-            yield return new WaitForSeconds(m_PlayerMagicManager.m_bIsMotionTimeLife);
-
-            m_PlayerMagicManager.m_dicMagicSpell[spellMotionName] = false;
-
-            Debug.Log($"Magic Spell Bool Change : {spellMotionName} - False");
         }
     }
 

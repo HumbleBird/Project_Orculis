@@ -10,7 +10,6 @@ public class MagicObject_Fire : MagicObjectBase
 
     // 콜라이더 컴포넌트 참조
     private CapsuleCollider CapsuleCollider; // 예: CapsuleCollider를 사용한다고 가정
-    [SerializeField] private float m_fPowerCameraShake = 1;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Start()
@@ -31,9 +30,6 @@ public class MagicObject_Fire : MagicObjectBase
         {
             Debug.LogWarning("Collider component not found!");
         }
-
-        // Camera Shake
-        m_Owner.m_StressReceiver.InduceStress(m_fPowerCameraShake);
     }
 
     // Update is called once per frame

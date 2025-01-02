@@ -4,41 +4,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using static Define;
 
+
+// 마법 주문 동작 원리
+// 1차 조건 : 동작, 영창 
+// 2차 조건 : 기본 조건 (마나량, 목표물, 환경 등)
+// 실패 시 -> 실패 패널티
+// 성공 시 -> 주문 발동
 public class PlayerMagicManager : MonoBehaviour
 {
     [Header("Ref")]
     PlayerManager m_PlayerManager;
 
-    [Header("Spell Common")]
-    [SerializeField] AudioClip m_SuccessAudioClip;
-    [SerializeField] AudioClip m_FailAudioClip;
-
-    [Header("Spell_Accio & Repulsio")]
-    [SerializeField] private ushort m_iAccioCost;
-    [SerializeField] private float m_fRepellcioAddForece = 50;
-    [SerializeField] AudioClip m_AccioSuccessAudioClip;
-    [SerializeField] AudioClip m_AccioFailAudioClip;
-    [SerializeField] AudioClip m_AccioRepullsioAudioClip;
-    // PlayerManager의 m_RightHandInteractableObject
-
-    [Header("Spell_Incendio")]
-    [SerializeField] private GameObject m_IncendioPrefab;
-    [SerializeField] private ushort m_iIncendioCost;
-
-    [Header("Spell_Volate Ascendere")]
-    [SerializeField] private ushort m_iVolateAscendereCost;
-
     [Header("Flag")]
-    [SerializeField] private bool m_bIsSelectObject;
-    [SerializeField] public float m_bIsMotionTimeLife = 2f;
+    [SerializeField] public bool m_bIsSelectObject { get; set; }
+    [SerializeField] public float m_bIsSpellDelayFlagTime = 1.5f;
 
     [Header("Resources")]
-    // 동작이 필요한 마법의 Flag
-    public Dictionary<string, bool> m_dicMagicSpell = new Dictionary<string, bool>()
-    { {"Volate Ascendere", false } };
-    
-    public Coroutine m_currentCoroutin; // 후에 스크립터블 오브젝트로 변경 
+    // 마법 동작 Flag
+    public Dictionary<string, bool> m_dicMotionMagicSpell = new Dictionary<string, bool>()
+    { 
+        {"Accio", false },
+        {"Depulso", false }, 
+        {"Incendio", false }, 
+    };
+
+    // 주문 영창 Flag
+    public Dictionary<string, bool> m_dicChatingMagicSpell = new Dictionary<string, bool>()
+    {
+        {"Accio", false },
+        {"Depulso", false },
+        {"Incendio", false },
+    };
+
+    public List<Spell> m_lockSpells = new List<Spell>();
+    public List<Spell> m_UnlockSpells = new List<Spell>();
+    public List<Spell> m_UsingSpells = new List<Spell>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,162 +51,97 @@ public class PlayerMagicManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-             CastSpell_Accio();
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            CastSpell_Repulsio();
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            CastSpell_Incendio();
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-             CastSpell_VolateAscendere();
-    }
-
-    public bool TryCastSpell(ushort cost)
-    {
-        // Check Cost
-        if (m_PlayerManager.m_PlayerStatesManager.UseManaForSkill(cost) == false)
+        // 숫자 키 입력 처리 (Alpha1 ~ Alpha4)
+        for (int i = 0; i < m_UnlockSpells.Count; i++)
         {
-            // TODO UI
-             
-            return false;
-        }
-
-        return true;
-    }
-
-    // 마법 실행 매커니즘
-    // 마법 시도 -> 성공/여부 -> 성공시 성공 판정
-
-    // 화염을 발사해 공격하는 마법
-
-    // 물건을 끌어 당김
-    public void CastSpell_Accio()
-    {
-        // Check()
-        if (TryCastSpell(m_iIncendioCost) == false)
-            return;
-
-        // Cast
-        if (m_bIsSelectObject == false && m_PlayerManager.m_RightHandInteractableObject == null)
-        {
-            if (m_PlayerManager.m_RightHandLearFarInteractor.interactablesHovered.Count > 0)
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
-                SelectInteractObject();
-
-                // 지속적으로 마나가 빨려들어감
-                m_currentCoroutin = StartCoroutine(DrainManaOverTime());
-
-                // Sound
-                Managers.Sound.Play(m_AccioSuccessAudioClip);
-
-                // Effect
-                // 마법 봉 끝이 빛나야 함 (최초의 노란색. 이후에 파란색)
-                // 화면 이펙트
-
+                // spells[i]가 존재할 경우 처리
+                if (m_UnlockSpells[i] != null)
+                {
+                    m_UnlockSpells[i].SuccessfullyCastSpell(m_PlayerManager);
+                }
+                else
+                {
+                    Debug.LogWarning($"Spell {i} is not assigned.");
+                }
             }
         }
     }
 
-    IEnumerator DrainManaOverTime(float time = 1)
-    {
-        while (true)
-        {
-            m_PlayerManager.m_PlayerStatesManager.UseManaForSkill((ushort)time);
-
-            //checked Mana
-            if (m_PlayerManager.m_PlayerStatesManager.m_CurrentMana <= 0)
-            {
-                ReleaseInteractingObject();
-                Managers.Sound.Play(m_AccioFailAudioClip);
-
-                yield break;
-            }
-
-            yield return null;
-        }
-    }
-
-    private void SelectInteractObject()
-    {
-        m_PlayerManager.m_RightHandInteractableObject = m_PlayerManager.m_RightHandLearFarInteractor.interactablesHovered[0] as XRBaseInteractable;
-
-        m_PlayerManager.m_RightHandLearFarInteractor.interactionManager.SelectEnter(
-            (IXRSelectInteractor)m_PlayerManager.m_RightHandLearFarInteractor,
-            (IXRSelectInteractable)m_PlayerManager.m_RightHandInteractableObject);
-
-        m_bIsSelectObject = true;
-    }
-
-    private void ReleaseInteractingObject()
+    public void ReleaseInteractingObject()
     {
         m_PlayerManager.m_RightHandLearFarInteractor.interactionManager.SelectExit(
             (IXRSelectInteractor)m_PlayerManager.m_RightHandLearFarInteractor,
             (IXRSelectInteractable)m_PlayerManager.m_RightHandInteractableObject);
 
-        m_bIsSelectObject = false;
+        m_PlayerManager.m_PlayerMagicManager.m_bIsSelectObject = false;
 
         m_PlayerManager.m_RightHandInteractableObject = null;
     }
-
-    // 물건을 던짐
-    public void CastSpell_Repulsio()
+    
+    public void MagicObjectTrow(GameObject prefab, Vector3 pos, float power, ForceMode mode)
     {
-        // Check()
-        if (TryCastSpell(m_iIncendioCost) == false)
-            return;
+        var obj =  prefab.GetComponent<Rigidbody>();
+        obj.AddForce(transform.forward * power);
+    }
 
-        if (m_bIsSelectObject && m_PlayerManager.m_RightHandInteractableObject != null)
+    public void SpellFlagCheck(E_SpellCheckType type, string spellName)
+    {
+        if(type == E_SpellCheckType.Chant)
         {
-            ReleaseInteractingObject();
+            if (m_dicChatingMagicSpell.ContainsKey(spellName))
+            {
+                m_dicChatingMagicSpell[spellName] = true;
 
-            var obj = m_PlayerManager.m_RightHandInteractableObject.GetComponent<iMagicInteractableObject>();
-            obj.Throw(m_PlayerManager.m_CurrentMagicEquippment.m_MagicSpawnTransform.forward, m_fRepellcioAddForece, ForceMode.Impulse);
+                Debug.Log($"Chanting Magic Spell Bool Change : {spellName} - True");
 
-            // Drain Mana 코루틴 제거
-            if (m_currentCoroutin != null)
-                StopCoroutine(m_currentCoroutin);
+                StartCoroutine(DelayChangeFlag(type, spellName));
+            }
+        }
 
-            Managers.Sound.Play(m_AccioRepullsioAudioClip);
+        else if (type == E_SpellCheckType.Motion)
+        {
+            if (m_dicMotionMagicSpell.ContainsKey(spellName))
+            {
+                m_dicMotionMagicSpell[spellName] = true;
+
+                Debug.Log($"Motion Magic Spell Bool Change : {spellName} - True");
+
+                StartCoroutine(DelayChangeFlag(type, spellName));
+            }
+        }
+
+        // Attemp Spell
+        if (m_dicMotionMagicSpell[spellName] == true && m_dicChatingMagicSpell[spellName] == true)
+        {
+            Spell spell = m_UnlockSpells.Find(s => s.name == spellName);
+            if (spell != null)
+            {
+                spell.AttempToCastSpell(m_PlayerManager);
+            }
+            else
+            {
+                Debug.LogWarning($"Spell not found: {spellName}");
+            }
         }
     }
 
-
-    public void CastSpell_Incendio()
+    IEnumerator DelayChangeFlag(E_SpellCheckType type, string spellName)
     {
-        // Check()
-        if (TryCastSpell(m_iIncendioCost) == false)
-            return;
+        yield return new WaitForSeconds(m_bIsSpellDelayFlagTime);
 
-        // Prefab 소환
-        GameObject go = Managers.Resource.Instantiate(m_IncendioPrefab);
-        var obj = go.GetComponent<MagicObjectBase>();
-        obj.SetInfo(m_PlayerManager, m_PlayerManager.m_CurrentMagicEquippment.m_MagicSpawnTransform);
-        m_PlayerManager.m_InputHandler.right_select = false;
-
-        // Camera
-
-        // Window Effect
-
-        // UI
-
-        // Resource Mana
-    }
-
-
-
-    // 볼라테 아센데레 : 충격을 주는 마법
-    public void CastSpell_VolateAscendere()
-    {
-        // Check()
-        if (TryCastSpell(m_iIncendioCost) == false)
-            return;
-
-        if (m_dicMagicSpell["Volate Ascendere"] == true)
+        if(type == E_SpellCheckType.Chant)
         {
-            Debug.Log("볼라테 아센데레 실행");
+            m_dicMotionMagicSpell[spellName] = false;
+
+            Debug.Log($"Chant Magic Spell Bool Change : {spellName} - false");
+        }
+        else if (type == E_SpellCheckType.Chant)
+        {
+            m_dicMotionMagicSpell[spellName] = false;
+
+            Debug.Log($"Motion Magic Spell Bool Change : {spellName} - false");
         }
     }
 }

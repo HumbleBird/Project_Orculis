@@ -15,21 +15,6 @@ public class MagicProjectile : MagicObjectBase
     [SerializeField] protected GameObject[] m_goBodyParticle;
     [SerializeField] protected ParticleSystem[] m_DestoryParticlePrefabs;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public override void Start()
-    {
-        base.Start();
-
-        Throw();
-
-        StartCoroutine(TimeOverDestroy());
-    }
-
-    private void Throw()
-    {
-        m_Rigidbody.AddForce(transform.forward * Time.deltaTime * m_fImpulse);
-    }
-
     protected override void OnTriggerEnter(Collider other)
     {
         if (other != null)
@@ -67,6 +52,17 @@ public class MagicProjectile : MagicObjectBase
             }
 
             StartCoroutine(TimeOverDestroy(m_fLiftTime));
+        }
+    }
+
+    private void ParticleObjectOnOff(ParticleSystem[] particles)
+    {
+        if(particles.Count() > 0)
+        {
+            foreach (var particle in particles)
+            {
+                particle.Play();
+            }
         }
     }
 }

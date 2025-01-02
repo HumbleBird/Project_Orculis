@@ -7,12 +7,12 @@ public class PlayerStateManager : MonoBehaviour, IHitable
     private PlayerManager m_PlayerManager;
 
     [Header("Health Stats")]
-    public ushort m_MaxHealth { private set; get; } = 100;
-    public ushort m_CurrentHealth { private set; get; }
+    public int m_MaxHealth { private set; get; } = 100;
+    public int m_CurrentHealth { private set; get; }
 
     [Header("Mana Stats")]
-    public ushort m_MaxMana { private set; get; } = 100;
-    public ushort m_CurrentMana { private set; get; }
+    public int m_MaxMana { private set; get; } = 100;
+    public int m_CurrentMana { private set; get; }
     public float m_ManaRegenRate { private set; get; } // 초당 마나 회복량
 
     private float m_ManaRegenTimer = 0f;
@@ -42,9 +42,9 @@ public class PlayerStateManager : MonoBehaviour, IHitable
         m_PlayerManager.m_HUD.RefreshUI();
     }
 
-    public void ChangeHealth(short healthDelta)
+    public void ChangeHealth(int healthDelta)
     {
-        m_CurrentHealth = (ushort)Mathf.Clamp(m_CurrentHealth + healthDelta, 0, m_MaxHealth);
+        m_CurrentHealth = Mathf.Clamp(m_CurrentHealth + healthDelta, 0, m_MaxHealth);
         if (m_CurrentHealth <= 0)
         {
             OnPlayerDeath();
@@ -63,9 +63,9 @@ public class PlayerStateManager : MonoBehaviour, IHitable
         m_CurrentMana = m_MaxMana;
     }
 
-    public void ChangeMana(short manaDelta)
+    public void ChangeMana(int manaDelta)
     {
-        m_CurrentMana = (ushort)Mathf.Clamp(m_CurrentMana + manaDelta, 0, m_MaxMana);
+        m_CurrentMana = Mathf.Clamp(m_CurrentMana + manaDelta, 0, m_MaxMana);
 
         m_PlayerManager.m_HUD.RefreshUI();
     }
@@ -96,17 +96,17 @@ public class PlayerStateManager : MonoBehaviour, IHitable
         return m_CurrentMana == m_MaxMana;
     }
 
-    public bool HasEnoughMana(ushort cost)
+    public bool HasEnoughMana(int cost)
     {
         return m_CurrentMana >= cost;
     }
 
     // Example: 특정 스킬 발동 시 마나 차감
-    public bool UseManaForSkill(ushort cost)
+    public bool UseManaForSkill(int cost)
     {
         if (HasEnoughMana(cost))
         {
-            ChangeMana((short)-cost);
+            ChangeMana(-cost);
             return true;
         }
         Debug.Log("Not enough mana!");
@@ -119,7 +119,7 @@ public class PlayerStateManager : MonoBehaviour, IHitable
         Debug.Log("On Hit : " + name);
 
         // HP
-        ChangeHealth((short)-damage);
+        ChangeHealth((ushort)-damage);
 
         // UI
 

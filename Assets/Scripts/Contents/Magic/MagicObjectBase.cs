@@ -2,31 +2,27 @@ using System.Collections;
 using UnityEngine;
 using static Define;
 
-// 던질 수 있는 오브젝트
-public interface iMagicInteractableObject
-{
-    public void Throw(Vector3 pos, float power, ForceMode mode);
-}
-
 // 스펠로부터 생성된 모든 오브젝트의 기본 베이스
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public abstract class MagicObjectBase : MonoBehaviour
+public class MagicObjectBase : MonoBehaviour
 {
     [Header("Ref")]
     protected PlayerManager m_Owner;
-    protected Rigidbody m_Rigidbody;
+    public Rigidbody m_Rigidbody;
     protected Collider m_Collider;
 
     [Header("Property")]
-    [SerializeField] protected float m_fLiftTime = 10f;
+    [SerializeField] protected float m_fLiftTime = 20f;
     [SerializeField] protected Vector3 m_moveVector;
     [SerializeField] protected LayerMask m_hitLayerMask;
-    [SerializeField] protected float m_fImpulse = 1f;
-    public ushort m_fSpellCost { get; set; }
+    [SerializeField] protected bool m_bIsMagicInteract = true;
 
-    [Header("Sound")]
-    [SerializeField] protected AudioClip m_AudioClip;
+    [Header("RigidBody Property")]
+    [SerializeField] protected float m_fImpulse = 1f;
+
+    [Header("Spell Property")]
+    public ushort m_fSpellCost { get; set; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public virtual void Start()
@@ -36,9 +32,8 @@ public abstract class MagicObjectBase : MonoBehaviour
 
         m_hitLayerMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("Character"));
 
-        // Sound
-        if (m_AudioClip != null)
-            Managers.Sound.Play(m_AudioClip);
+
+        StartCoroutine(TimeOverDestroy());
     }
 
     public virtual void SetInfo(PlayerManager player, Transform trans)
@@ -58,6 +53,9 @@ public abstract class MagicObjectBase : MonoBehaviour
         Managers.Resource.Destroy(gameObject);
     }
 
-
+    public bool CanControlMagicObject()
+    {
+        return m_bIsMagicInteract;
+    }
 }
 
