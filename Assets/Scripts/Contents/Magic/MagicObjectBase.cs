@@ -13,7 +13,6 @@ public class MagicObjectBase : MonoBehaviour
     protected Collider m_Collider;
 
     [Header("Property")]
-    [SerializeField] protected float m_fLiftTime = 20f;
     [SerializeField] protected Vector3 m_moveVector;
     [SerializeField] protected LayerMask m_hitLayerMask;
     [SerializeField] protected bool m_bIsMagicInteract = true;
@@ -31,9 +30,6 @@ public class MagicObjectBase : MonoBehaviour
         m_Collider = GetComponent<Collider>();
 
         m_hitLayerMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("Character"));
-
-
-        StartCoroutine(TimeOverDestroy());
     }
 
     public virtual void SetInfo(PlayerManager player, Transform trans)
@@ -45,13 +41,6 @@ public class MagicObjectBase : MonoBehaviour
     }
 
     protected virtual void OnTriggerEnter(Collider other) { }
-
-    protected IEnumerator TimeOverDestroy(float destroyTimeDelay = 0)
-    {
-        yield return new WaitForSeconds(destroyTimeDelay);
-
-        Managers.Resource.Destroy(gameObject);
-    }
 
     public bool CanControlMagicObject()
     {

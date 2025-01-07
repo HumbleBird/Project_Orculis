@@ -10,6 +10,9 @@ using static Define;
 // 발사 (구체, 화살, 파이어볼 등)
 public class MagicProjectile : MagicObjectBase
 {
+    [Header("Property")]
+    [SerializeField] protected float m_fLifeTime = 20f;
+
     [Header("Prefab")]
     [SerializeField] protected GameObject m_ProjectilePrefab;
     [SerializeField] protected GameObject[] m_goBodyParticle;
@@ -51,7 +54,7 @@ public class MagicProjectile : MagicObjectBase
                 }
             }
 
-            StartCoroutine(TimeOverDestroy(m_fLiftTime));
+            StartCoroutine(TimeOverDestroy(m_fLifeTime));
         }
     }
 
@@ -64,5 +67,12 @@ public class MagicProjectile : MagicObjectBase
                 particle.Play();
             }
         }
+    }
+
+    protected IEnumerator TimeOverDestroy(float destroyTimeDelay = 0)
+    {
+        yield return new WaitForSeconds(destroyTimeDelay);
+
+        Managers.Resource.Destroy(gameObject);
     }
 }

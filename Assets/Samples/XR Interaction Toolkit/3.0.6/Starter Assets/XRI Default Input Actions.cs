@@ -918,7 +918,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ActivateNative"",
+                    ""name"": ""Activate Native"",
                     ""type"": ""PassThrough"",
                     ""id"": ""7dcfc76f-7f28-4c6b-a23e-6494a516f2d4"",
                     ""expectedControlType"": ""Axis"",
@@ -1137,7 +1137,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ActivateNative"",
+                    ""action"": ""Activate Native"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2009,7 +2009,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ActivateNative"",
+                    ""name"": ""Activate Native"",
                     ""type"": ""PassThrough"",
                     ""id"": ""7e7c7ef7-cbb8-451f-b3c5-c64560d70c2f"",
                     ""expectedControlType"": ""Axis"",
@@ -2228,7 +2228,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ActivateNative"",
+                    ""action"": ""Activate Native"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -3375,6 +3375,34 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Keyboard"",
+            ""id"": ""2e760bb9-8539-411f-b7b9-0954e85c1100"",
+            ""actions"": [
+                {
+                    ""name"": ""InstantlySpellUse"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5ca336a-7983-4849-966f-beb86b7113d6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""fcb6e544-fa00-4340-887e-0ac6c6b4ea23"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InstantlySpellUse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -3410,7 +3438,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_XRILeftInteraction_Select = m_XRILeftInteraction.FindAction("Select", throwIfNotFound: true);
         m_XRILeftInteraction_SelectValue = m_XRILeftInteraction.FindAction("Select Value", throwIfNotFound: true);
         m_XRILeftInteraction_Activate = m_XRILeftInteraction.FindAction("Activate", throwIfNotFound: true);
-        m_XRILeftInteraction_ActivateNative = m_XRILeftInteraction.FindAction("ActivateNative", throwIfNotFound: true);
+        m_XRILeftInteraction_ActivateNative = m_XRILeftInteraction.FindAction("Activate Native", throwIfNotFound: true);
         m_XRILeftInteraction_ActivateValue = m_XRILeftInteraction.FindAction("Activate Value", throwIfNotFound: true);
         m_XRILeftInteraction_UIPress = m_XRILeftInteraction.FindAction("UI Press", throwIfNotFound: true);
         m_XRILeftInteraction_UIPressValue = m_XRILeftInteraction.FindAction("UI Press Value", throwIfNotFound: true);
@@ -3449,7 +3477,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_XRIRightInteraction_Select = m_XRIRightInteraction.FindAction("Select", throwIfNotFound: true);
         m_XRIRightInteraction_SelectValue = m_XRIRightInteraction.FindAction("Select Value", throwIfNotFound: true);
         m_XRIRightInteraction_Activate = m_XRIRightInteraction.FindAction("Activate", throwIfNotFound: true);
-        m_XRIRightInteraction_ActivateNative = m_XRIRightInteraction.FindAction("ActivateNative", throwIfNotFound: true);
+        m_XRIRightInteraction_ActivateNative = m_XRIRightInteraction.FindAction("Activate Native", throwIfNotFound: true);
         m_XRIRightInteraction_ActivateValue = m_XRIRightInteraction.FindAction("Activate Value", throwIfNotFound: true);
         m_XRIRightInteraction_UIPress = m_XRIRightInteraction.FindAction("UI Press", throwIfNotFound: true);
         m_XRIRightInteraction_UIPressValue = m_XRIRightInteraction.FindAction("UI Press Value", throwIfNotFound: true);
@@ -3489,6 +3517,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_TouchscreenGestures_TwistDeltaRotation = m_TouchscreenGestures.FindAction("Twist Delta Rotation", throwIfNotFound: true);
         m_TouchscreenGestures_ScreenTouchCount = m_TouchscreenGestures.FindAction("Screen Touch Count", throwIfNotFound: true);
         m_TouchscreenGestures_SpawnObject = m_TouchscreenGestures.FindAction("Spawn Object", throwIfNotFound: true);
+        // Keyboard
+        m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
+        m_Keyboard_InstantlySpellUse = m_Keyboard.FindAction("InstantlySpellUse", throwIfNotFound: true);
     }
 
     ~@XRIDefaultInputActions()
@@ -3502,6 +3533,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         UnityEngine.Debug.Assert(!m_XRIRightLocomotion.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.XRIRightLocomotion.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_XRIUI.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.XRIUI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_TouchscreenGestures.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.TouchscreenGestures.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Keyboard.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.Keyboard.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -4637,6 +4669,52 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         }
     }
     public TouchscreenGesturesActions @TouchscreenGestures => new TouchscreenGesturesActions(this);
+
+    // Keyboard
+    private readonly InputActionMap m_Keyboard;
+    private List<IKeyboardActions> m_KeyboardActionsCallbackInterfaces = new List<IKeyboardActions>();
+    private readonly InputAction m_Keyboard_InstantlySpellUse;
+    public struct KeyboardActions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public KeyboardActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @InstantlySpellUse => m_Wrapper.m_Keyboard_InstantlySpellUse;
+        public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(KeyboardActions set) { return set.Get(); }
+        public void AddCallbacks(IKeyboardActions instance)
+        {
+            if (instance == null || m_Wrapper.m_KeyboardActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_KeyboardActionsCallbackInterfaces.Add(instance);
+            @InstantlySpellUse.started += instance.OnInstantlySpellUse;
+            @InstantlySpellUse.performed += instance.OnInstantlySpellUse;
+            @InstantlySpellUse.canceled += instance.OnInstantlySpellUse;
+        }
+
+        private void UnregisterCallbacks(IKeyboardActions instance)
+        {
+            @InstantlySpellUse.started -= instance.OnInstantlySpellUse;
+            @InstantlySpellUse.performed -= instance.OnInstantlySpellUse;
+            @InstantlySpellUse.canceled -= instance.OnInstantlySpellUse;
+        }
+
+        public void RemoveCallbacks(IKeyboardActions instance)
+        {
+            if (m_Wrapper.m_KeyboardActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IKeyboardActions instance)
+        {
+            foreach (var item in m_Wrapper.m_KeyboardActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_KeyboardActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public KeyboardActions @Keyboard => new KeyboardActions(this);
     public interface IXRIHeadActions
     {
         void OnPosition(InputAction.CallbackContext context);
@@ -4755,5 +4833,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnTwistDeltaRotation(InputAction.CallbackContext context);
         void OnScreenTouchCount(InputAction.CallbackContext context);
         void OnSpawnObject(InputAction.CallbackContext context);
+    }
+    public interface IKeyboardActions
+    {
+        void OnInstantlySpellUse(InputAction.CallbackContext context);
     }
 }

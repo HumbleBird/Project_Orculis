@@ -14,24 +14,25 @@ using static Define;
 
 public class PlayerManager : MonoBehaviour
 {
-    [Header("Ref")]
+    [Header("PlayerManager Ref")]
     public InputHandler m_InputHandler;
+    public PlayerStatManager m_PlayerStatesManager;
+    public PlayerMagicManager m_PlayerMagicManager;
+    public PlayerEffectsManager m_PlayerEffectsManager;
+    public PlayerEquipmentManager m_PlayerEquipmentManager;
+
+    [Header("UI Ref")]
+    public HUD m_HUD;
+    public DevelopUI m_DevelopUI;
+
+    [Header("Other Ref")]
     public AppVoiceExperience voiceExperience;
     public GestureEventProcessor m_GestureEventProcessor;
     public StressReceiver m_StressReceiver; // Camera
-    public PlayerStateManager m_PlayerStatesManager;
-    public HUD m_HUD;
-    public PlayerMagicManager m_PlayerMagicManager;
-    public PlayerEffectsManager m_PlayerEffectsManager;
 
     [Header("Interactor")]
     public XRBaseInteractor m_RightHandLearFarInteractor;
-
-    [Header("Interactable Object")]
     public XRBaseInteractable m_RightHandInteractableObject;
-
-    [Header("Magic Equippment")]
-    public MagicEquippment m_CurrentMagicEquippment;
 
     [Header("Magic Base")]
     [SerializeField] private GameObject m_MagicStafeMoveParticle;
@@ -42,9 +43,10 @@ public class PlayerManager : MonoBehaviour
     {
         m_InputHandler = GetComponent<InputHandler>();
         m_GestureEventProcessor = GetComponent<GestureEventProcessor>();
-        m_PlayerStatesManager = GetComponent<PlayerStateManager>();
+        m_PlayerStatesManager = GetComponent<PlayerStatManager>();
         m_PlayerMagicManager = GetComponent<PlayerMagicManager>();
         m_PlayerEffectsManager = GetComponent<PlayerEffectsManager>();
+        m_PlayerEquipmentManager = GetComponent<PlayerEquipmentManager>();
 
         // Camera
         m_StressReceiver = GetComponentInChildren<StressReceiver>();
@@ -103,12 +105,12 @@ public class PlayerManager : MonoBehaviour
     {
         while(true)
         {
-            if(isGeneratingParticles)
+            if(isGeneratingParticles && m_PlayerEquipmentManager.m_CurrentMagicEquippment != null)
             {
                 // 파티클 소환
                 GameObject go  = Managers.Resource.Instantiate(m_MagicStafeMoveParticle);
-                go.transform.position = m_CurrentMagicEquippment.m_MagicSpawnTransform.position;
-                go.transform.rotation = m_CurrentMagicEquippment.m_MagicSpawnTransform.rotation;
+                go.transform.position = m_PlayerEquipmentManager.m_CurrentMagicEquippment.m_EquipmentEdge_SpawnTransform.position;
+                go.transform.rotation = m_PlayerEquipmentManager.m_CurrentMagicEquippment.m_EquipmentEdge_SpawnTransform.rotation;
 
                 yield return new WaitForSeconds(m_fParticleTimeInterval);
             }
@@ -117,9 +119,5 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    // Weapon
-    public void EquipItem()
-    {
-        m_CurrentMagicEquippment = GetComponentInChildren<MagicEquippment>();
-    }
+
 }

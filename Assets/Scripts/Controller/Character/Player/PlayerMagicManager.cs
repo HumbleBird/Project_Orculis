@@ -80,10 +80,10 @@ public class PlayerMagicManager : MonoBehaviour
         m_PlayerManager.m_RightHandInteractableObject = null;
     }
     
-    public void MagicObjectTrow(GameObject prefab, Vector3 pos, float power, ForceMode mode)
+    public void MagicObjectTrow(GameObject prefab, float power, ForceMode mode)
     {
         var obj =  prefab.GetComponent<Rigidbody>();
-        obj.AddForce(transform.forward * power);
+        obj.AddForce(m_PlayerManager.m_PlayerEquipmentManager.m_CurrentMagicEquippment.m_EquipmentEdge_SpawnTransform.forward* power);
     }
 
     public void SpellFlagCheck(E_SpellCheckType type, string spellName)
@@ -115,15 +115,38 @@ public class PlayerMagicManager : MonoBehaviour
         // Attemp Spell
         if (m_dicMotionMagicSpell[spellName] == true && m_dicChatingMagicSpell[spellName] == true)
         {
-            Spell spell = m_UnlockSpells.Find(s => s.name == spellName);
-            if (spell != null)
-            {
-                spell.AttempToCastSpell(m_PlayerManager);
-            }
-            else
-            {
-                Debug.LogWarning($"Spell not found: {spellName}");
-            }
+            AttempSpell(spellName);
+        }
+    }
+
+    public void AttempSpell(string spellName)
+    {
+        Spell spell = m_UnlockSpells.Find(s => s.name == spellName);
+        if (spell != null)
+        {
+            spell.AttempToCastSpell(m_PlayerManager);
+        }
+        else
+        {
+            Debug.LogWarning($"Spell not found: {spellName}");
+        }
+    }
+
+    public void SimpleAttempSpell()
+    {
+        bool canUse = m_PlayerManager.m_DevelopUI.m_Toggle.isOn;
+
+        int currentSpell = m_PlayerManager.m_DevelopUI.dropDown.value;
+        Spell spell = m_UnlockSpells[currentSpell];
+
+
+        if (spell != null && canUse)
+        {
+            spell.AttempToCastSpell(m_PlayerManager);
+        }
+        else
+        {
+            Debug.LogWarning($"Spell not found: {spell.name}");
         }
     }
 

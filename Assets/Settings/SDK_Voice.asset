@@ -46,7 +46,6 @@ MonoBehaviour:
     - name: Spells
       id: 1285632372331407
       lookups:
-      - free-text
       - keywords
       roles:
       - name: Attack

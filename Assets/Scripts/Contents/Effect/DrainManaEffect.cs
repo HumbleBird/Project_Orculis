@@ -27,6 +27,9 @@ public class DrainManaEffect : CharacterEffect
             // ex) 무기에 마나를 이용해 지속적인 강화
             // ex) 마나를 이용해 물건을 들고 있는 상태라면
 
+            var spells = player.m_PlayerMagicManager.m_UsingSpells;
+            foreach (var spell in spells)
+                spell.FailCastSpell(player);
         }
         else
         {

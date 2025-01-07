@@ -9,14 +9,14 @@ public class UI_Stat : MonoBehaviour
     PlayerManager m_Player;
 
     [Header("HP")]
-    Image m_HealthBarFill;
-    Image m_HealthBardown;
+    [SerializeField] Image m_HealthBarFill;
+    [SerializeField] Image m_HealthBardown;
 
     public int m_iPreHp; // HP Refresh �� HP
 
     [Header("MP")]
-    Image m_ManaBarFill;
-    Image m_ManaBarDown;
+    [SerializeField]Image m_ManaBarFill;
+    [SerializeField] Image m_ManaBarDown;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

@@ -13,10 +13,12 @@ public class InputHandler : MonoBehaviour
     public bool right_select;
     public bool right_Trigger;
 
-
     [Header("XRI Left")]
+    public bool left_select;
     public bool left_Trigger;
 
+    [Header("Keyboard")]
+    public bool InstantlySpelluse;
 
     private void Start()
     {
@@ -36,11 +38,20 @@ public class InputHandler : MonoBehaviour
             inputActions.XRIRightInteraction.Activate.canceled += i => right_Trigger = false;
 
             // Left
+            inputActions.XRILeftInteraction.Select.performed += i => left_Trigger = true;
             inputActions.XRILeftInteraction.Activate.performed += i => left_Trigger = true;
             inputActions.XRILeftInteraction.Activate.canceled += i => left_Trigger = false;
+
+            // Keyboard
+            inputActions.Keyboard.InstantlySpellUse.performed += i => InstantlySpelluse = true;
         }
 
         inputActions.Enable();
+    }
+
+    private void InstantlySpellUse_performed(CallbackContext obj)
+    {
+        throw new System.NotImplementedException();
     }
 
     private void OnDisable()
@@ -52,6 +63,7 @@ public class InputHandler : MonoBehaviour
     void Update()
     {
         GestureRecognitionInput();
+        TestDevelupSpell();
     }
     
     private void LateUpdate()
@@ -90,6 +102,17 @@ public class InputHandler : MonoBehaviour
         {
             m_PlayerManager.m_GestureEventProcessor.m_bIsFirstRecognition = true;
             m_GestureEventProcessor.m_Mivry.enabled = true;
+        }
+    }
+
+    // 조건 없이 스펠을 바로 쓸 수 있게 해주는 거
+    private void TestDevelupSpell()
+    {
+        if(left_select || InstantlySpelluse)
+        {
+            InstantlySpelluse = false;
+            left_select = false;
+            m_PlayerManager.m_PlayerMagicManager.SimpleAttempSpell();
         }
     }
 }

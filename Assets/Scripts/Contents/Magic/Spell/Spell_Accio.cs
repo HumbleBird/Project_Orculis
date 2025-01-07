@@ -14,9 +14,9 @@ public class Spell_Accio : Spell
     public DrainManaEffect m_DrainManaEffect;
     XRBaseInteractable m_obj;
 
-    public override bool AttempToCastSpell(PlayerManager player)
+    protected override bool AttempToCastSpellCondition(PlayerManager player)
     {
-        if (base.AttempToCastSpell(player) == false)
+        if (base.AttempToCastSpellCondition(player) == false)
             return false;
 
         if (player.m_PlayerMagicManager.m_bIsSelectObject == true)
@@ -30,14 +30,12 @@ public class Spell_Accio : Spell
         m_obj = list[0] as XRBaseInteractable;
         var magicObj = m_obj.transform.GetComponent<MagicObjectBase>();
 
-        if (magicObj == null && magicObj.CanControlMagicObject() == false)
+        if (magicObj == null || magicObj.CanControlMagicObject() == false)
             return false;
-        else
-        {
-            SuccessfullyCastSpell(player);
-            return true;
-        }
+
+        return true;
     }
+
 
     public override void SuccessfullyCastSpell(PlayerManager player)
     {
@@ -63,6 +61,9 @@ public class Spell_Accio : Spell
     {
         base.FailCastSpell(player);
 
-        player.m_PlayerMagicManager.ReleaseInteractingObject();
+        if(player.m_PlayerMagicManager.m_bIsSelectObject == true)
+        {
+            player.m_PlayerMagicManager.ReleaseInteractingObject();
+        }
     }
 }

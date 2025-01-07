@@ -19,41 +19,48 @@ public abstract class Spell : ScriptableObject
     public float m_fCoolTime;
     public string m_sTagline;
     public string m_sDetailDescription;
-    public Image m_image;
+    public Sprite m_image;
 
     [Header("Audio Clip")]
+    [SerializeField] protected AudioClip m_SpellAttempAudioClip;
     [SerializeField] protected AudioClip m_SpellSuccessAudioClip;
     [SerializeField] protected AudioClip m_SpellFailAudioClip;
-    [SerializeField] protected AudioClip m_SpellRepullsioAudioClip;
 
     [Header("Camera")]
     [SerializeField] protected float m_fPowerCameraShake;
 
     // 음성과 동작 두 가지 조건을 모두 만족 했을 때 시도
 
-    public virtual bool AttempToCastSpell(PlayerManager player)
+    public void AttempToCastSpell(PlayerManager player)
+    {
+        // Equipment Light
+
+        // 각자의 스펠 조건
+        bool m_CanAttempToCastSpell = AttempToCastSpellCondition(player);
+
+        if (m_CanAttempToCastSpell == true)
+        {
+            SuccessfullyCastSpell(player);
+        }
+        else
+        {
+            FailCastSpell(player);
+        }
+    }
+
+    protected virtual bool AttempToCastSpellCondition(PlayerManager player)
     {
         // Check Mana
-        if(player.m_PlayerStatesManager.HasEnoughMana(m_Cost) == false)
-        {
-            Managers.Sound.Play(m_SpellFailAudioClip);
+        if (player.m_PlayerStatesManager.HasEnoughMana(m_Cost) == false)
             return false;
-        }
 
-        // Light
-        // -> True/False 나눠서
-
-        return false;
+        return true;
     }
 
     public virtual void SuccessfullyCastSpell(PlayerManager player)
     {
         // Deduct Mana
-        if (player.m_PlayerStatesManager.UseManaForSkill(m_Cost) == false)
-        {
-            FailCastSpell(player);
-            return;
-        }
+        player.m_PlayerStatesManager.UseManaForSkill(m_Cost);
 
         if (m_ESpellActivation == E_SpellActivation.Continuous)
             player.m_PlayerMagicManager.m_UsingSpells.Add(this);

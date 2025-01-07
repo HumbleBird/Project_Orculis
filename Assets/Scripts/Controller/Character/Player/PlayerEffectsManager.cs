@@ -41,7 +41,7 @@ public class PlayerEffectsManager : MonoBehaviour
             effectTickTimer = 0;
 
             // PROCESS ALL ACTIVE EFFECT OVER GAME TIME
-            for (int i = timedEffects.Count - 1; i > 0; i--)
+            for (int i = timedEffects.Count - 1; i >= 0; i--)
             {
                 timedEffects[i].ProccessEffect(m_PlayerManager);
             }

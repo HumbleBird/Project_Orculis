@@ -61,7 +61,7 @@ public class Managers : MonoBehaviour
 
             s_instance._pool.Init();
             s_instance._sound.Init();
-            s_instance._table.Init();
+            //s_instance._table.Init();
             s_instance._cursor.Init();
 
             Application.targetFrameRate = 60;

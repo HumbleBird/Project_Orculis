@@ -1,3 +1,4 @@
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 /// <summary>
@@ -10,14 +11,9 @@ public class Spell_Depulso : Spell
     [SerializeField] private float m_fAddForece = 50;
     [SerializeField] private Spell_Accio m_Spell_Accio;
 
-    public override bool AttempToCastSpell(PlayerManager player)
+    protected override bool AttempToCastSpellCondition(PlayerManager player)
     {
-        if (base.AttempToCastSpell(player) == false)
-            return false;
-
-        SuccessfullyCastSpell(player);
-
-        return true;
+        return base.AttempToCastSpellCondition(player);
     }
 
     public override void SuccessfullyCastSpell(PlayerManager player)
@@ -26,18 +22,18 @@ public class Spell_Depulso : Spell
 
         // Acio를 통해 부유 중인 물체가 있다면
         if(player.m_PlayerMagicManager.m_bIsSelectObject)
-        {
-            player.m_PlayerMagicManager.ReleaseInteractingObject();
-
+        { 
             player.m_PlayerMagicManager.MagicObjectTrow(
                 player.m_RightHandInteractableObject.gameObject,
-                player.m_CurrentMagicEquippment.m_MagicSpawnTransform.forward,
                 m_fAddForece,
                 ForceMode.Impulse);
 
             // DrainMana 제거
             player.m_PlayerEffectsManager.timedEffects.Remove(m_Spell_Accio.m_DrainManaEffect);
             player.m_PlayerMagicManager.m_UsingSpells.Remove(m_Spell_Accio);
+
+            // MagicThrow 뒤에 있어야 함.
+            player.m_PlayerMagicManager.ReleaseInteractingObject();
         }
         else
         {

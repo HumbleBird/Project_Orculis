@@ -3353,6 +3353,34 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Keyboard",
+            "id": "2e760bb9-8539-411f-b7b9-0954e85c1100",
+            "actions": [
+                {
+                    "name": "InstantlySpellUse",
+                    "type": "Button",
+                    "id": "b5ca336a-7983-4849-966f-beb86b7113d6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fcb6e544-fa00-4340-887e-0ac6c6b4ea23",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InstantlySpellUse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

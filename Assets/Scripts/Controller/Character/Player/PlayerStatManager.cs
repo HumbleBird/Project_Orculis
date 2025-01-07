@@ -1,13 +1,13 @@
 using UnityEngine;
 using static Define;
 
-public class PlayerStateManager : MonoBehaviour, IHitable
+public class PlayerStatManager : MonoBehaviour, IHitable
 {
     [Header("Ref")]
     private PlayerManager m_PlayerManager;
 
     [Header("Health Stats")]
-    public int m_MaxHealth { private set; get; } = 100;
+    [SerializeField] public int m_MaxHealth { private set; get; } = 100;
     public int m_CurrentHealth { private set; get; }
 
     [Header("Mana Stats")]
@@ -17,7 +17,7 @@ public class PlayerStateManager : MonoBehaviour, IHitable
 
     private float m_ManaRegenTimer = 0f;
 
-    void Start()
+    void Awake()
     {
         m_PlayerManager = GetComponent<PlayerManager>();
         InitState();
@@ -38,8 +38,6 @@ public class PlayerStateManager : MonoBehaviour, IHitable
     public void InitHealth()
     {
         m_CurrentHealth = m_MaxHealth;
-
-        m_PlayerManager.m_HUD.RefreshUI();
     }
 
     public void ChangeHealth(int healthDelta)
@@ -49,6 +47,8 @@ public class PlayerStateManager : MonoBehaviour, IHitable
         {
             OnPlayerDeath();
         }
+
+        m_PlayerManager.m_HUD.RefreshUI();
     }
 
     private void OnPlayerDeath()
