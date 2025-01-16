@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Spell Incendio
   m_EditorClassIdentifier: 
   spellName: Incendio
-  m_Cost: 0
+  m_Cost: 10
   m_ESpellActivation: 0
   m_SpellType: 2
   m_fCoolTime: 0

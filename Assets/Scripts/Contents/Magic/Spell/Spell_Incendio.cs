@@ -15,6 +15,7 @@ public class Spell_Incendio : Spell
     {
         base.SuccessfullyCastSpell(player);
 
+
         // Prefab 소환
         GameObject go = Managers.Resource.Instantiate(m_IncendioPrefab);
         var obj = go.GetComponent<MagicObjectBase>();

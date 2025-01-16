@@ -97,6 +97,14 @@ public class PlayerMagicManager : MonoBehaviour
                 Debug.Log($"Chanting Magic Spell Bool Change : {spellName} - True");
 
                 StartCoroutine(DelayChangeFlag(type, spellName));
+
+                // Show UI
+                m_PlayerManager.m_MagicTryResultUI.ShowUIMagicAttemptResult(true);
+            }
+            else
+            {
+                // Show UI
+                m_PlayerManager.m_MagicTryResultUI.ShowUIMagicAttemptResult(false);
             }
         }
 

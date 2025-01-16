@@ -24,6 +24,7 @@ public class PlayerManager : MonoBehaviour
     [Header("UI Ref")]
     public HUD m_HUD;
     public DevelopUI m_DevelopUI;
+    public UI_MagicTryResult m_MagicTryResultUI;
 
     [Header("Other Ref")]
     public AppVoiceExperience voiceExperience;
@@ -51,11 +52,13 @@ public class PlayerManager : MonoBehaviour
         // Camera
         m_StressReceiver = GetComponentInChildren<StressReceiver>();
         m_HUD = GetComponentInChildren<HUD>();
+        m_MagicTryResultUI = GetComponentInChildren<UI_MagicTryResult>();
     }
 
     void Start()
     {
         StartCoroutine(GenerateMagicMoveParticle());
+
     }
 
     void Update()
@@ -79,6 +82,9 @@ public class PlayerManager : MonoBehaviour
         string spellString = validValues[0];
 
         m_PlayerMagicManager.SpellFlagCheck(E_SpellCheckType.Chant, spellString);
+
+        // Show UI
+        m_MagicTryResultUI.ShowUIPlayersMagicUtterance(spellString);
     }
 
     public void CheckRecognition(GestureCompletionData data)
