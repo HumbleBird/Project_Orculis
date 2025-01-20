@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "116206775078",
+    "project_id": "orculis-1edd0",
+    "storage_bucket": "orculis-1edd0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116206775078:android:3f2348aaed402723752fe7",
+        "android_client_info": {
+          "package_name": "Miho.firefabse.Orculis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqe99HvEUAbIac72SPIMb00FPxyEeRDbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

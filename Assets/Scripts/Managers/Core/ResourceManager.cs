@@ -21,26 +21,6 @@ public class ResourceManager
         return Resources.Load<T>(path);
     }
 
-    //public GameObject Instantiate(GameObject go, Transform parent = null)
-    //{
-    //    if (path.Contains("Prefabs/") == false)
-    //        path = $"Prefabs/{path}";
-
-    //    GameObject original = Load<GameObject>($"{path}");
-    //    if (original == null)
-    //    {
-    //        Debug.Log($"Failed to load prefab : {path}");
-    //        return null;
-    //    }
-
-    //    if (original.GetComponent<Poolable>() != null)
-    //        return Managers.Pool.Pop(original, parent).gameObject;
-
-    //    GameObject go = Object.Instantiate(original, parent);
-    //    go.name = original.name;
-    //    return go;
-    //}
-
     public GameObject Instantiate(string path, Transform parent = null)
     {
         if (path.Contains("Prefabs/") == false)

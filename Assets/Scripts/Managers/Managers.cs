@@ -11,14 +11,16 @@ public class Managers : MonoBehaviour
 
     #region Contents
     ObjectManager _object = new ObjectManager();
-    GameManager _game = new GameManager();
+    GameManagerEX _game = new GameManagerEX();
     GameUIManager _gameUI = new GameUIManager();
     CursorManager _cursor = new CursorManager();
+    FirebaseAuthManager _auth = new FirebaseAuthManager();
 
     public static ObjectManager Object { get { return Instance._object; } }
-    public static GameManager Game { get { return Instance._game; } }
+    public static GameManagerEX Game { get { return Instance._game; } }
     public static GameUIManager GameUI { get { return Instance._gameUI; } }
     public static CursorManager Cursor { get { return Instance._cursor; } }
+    public static FirebaseAuthManager Auth { get { return Instance._auth; } }
 
     #endregion
 

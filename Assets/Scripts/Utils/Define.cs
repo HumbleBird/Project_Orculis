@@ -90,6 +90,8 @@ public class Define
         Start = 1,
         Lobby = 2,
         Game = 3,
+        Login = 4,
+        Loading = 5,
     }
 
     public enum Sound
