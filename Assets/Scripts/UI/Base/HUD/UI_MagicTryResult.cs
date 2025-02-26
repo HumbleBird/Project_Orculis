@@ -4,25 +4,39 @@ using UnityEngine;
 public class UI_MagicTryResult : MonoBehaviour
 {
     [Header("Ref")]
-    public PlayerManager m_PlayerManager;
+    public Player m_PlayerManager;
 
-    public TextMeshProUGUI m_playersUtterance;
-    public TextMeshProUGUI m_Result;
+    public TextMeshProUGUI m_playersUtteranceTrySpell;
+    public TextMeshProUGUI m_playersUtterancResult;
+
+    public TextMeshProUGUI m_playersBehaviourTrySpell;
+    public TextMeshProUGUI m_playersBehaviourResult;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        m_PlayerManager = GetComponentInParent<PlayerManager>();
+        m_PlayerManager = GetComponentInParent<Player>();
     }
 
     public void ShowUIPlayersMagicUtterance(string text)
     {
-        m_playersUtterance.text = text;
+        m_playersUtteranceTrySpell.text = text;
     }
 
-    public void ShowUIMagicAttemptResult(bool result)
+    public void ShowUIMagicAttemptResultUterreance(bool result)
     {
         string text = result.ToString();
-        m_Result.text = text;
+        m_playersUtterancResult.text = text;
+    }
+
+    public void ShowUIPlayersMagicBehaviour(string text)
+    {
+        m_playersBehaviourTrySpell.text = text;
+    }
+
+    public void ShowUIMagicAttemptBehaviourResult(bool result)
+    {
+        string text = result.ToString();
+        m_playersBehaviourResult.text = text;
     }
 }

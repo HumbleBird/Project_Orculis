@@ -16,7 +16,7 @@ public class DrainManaEffect : CharacterEffect
     // 틱 당 없어지는 마나 양
     public ushort m_fDrainManaAmountTick = 1;
 
-    public override void ProccessEffect(PlayerManager player)
+    public override void ProccessEffect(Player player)
     {
         // 현재 플레이어가 마나가 0보다 많은가?
         if(player.m_PlayerStatesManager.m_CurrentMana <= 0)
@@ -29,7 +29,7 @@ public class DrainManaEffect : CharacterEffect
 
             var spells = player.m_PlayerMagicManager.m_UsingSpells;
             foreach (var spell in spells)
-                spell.FailCastSpell(player);
+                spell.FailCastSpell();
         }
         else
         {

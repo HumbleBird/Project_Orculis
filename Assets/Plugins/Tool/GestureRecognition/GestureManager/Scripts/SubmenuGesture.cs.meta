@@ -14,5 +14,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/GestureRecognition/GestureManager/Scripts/SubmenuGesture.cs
+  assetPath: Assets/Plugins/Tool/GestureRecognition/GestureManager/Scripts/SubmenuGesture.cs
   uploadId: 679908

@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/GestureRecognition/GestureManager/Resources/GroundFloorMaterial.mat
+  assetPath: Assets/Plugins/Tool/GestureRecognition/GestureManager/Resources/GroundFloorMaterial.mat
   uploadId: 679908

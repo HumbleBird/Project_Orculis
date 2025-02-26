@@ -1,11 +1,12 @@
+using Fusion;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using static Define;
 
-public class PlayerEffectsManager : MonoBehaviour
+public class PlayerEffectsManager : NetworkBehaviour
 {
-    PlayerManager m_PlayerManager;
+    Player m_PlayerManager;
 
     // 타이머 한정 이펙트
     [Header("Timed Effects")]
@@ -15,7 +16,7 @@ public class PlayerEffectsManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        m_PlayerManager = GetComponent<PlayerManager>();
+        m_PlayerManager = GetComponent<Player>();
 
     }
 

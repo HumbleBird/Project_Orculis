@@ -3,17 +3,21 @@ using UnityEngine;
 public class HUD : MonoBehaviour
 {
     [Header("Ref")]
-     PlayerManager m_PlayerManager;
+    Player m_PlayerManager;
 
     [Header("State")]
     UI_Stat m_UIStat;
+    public UI_KillFeed m_KillFeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Init()
     {
-        m_PlayerManager = GetComponentInParent<PlayerManager>();
-
+        m_PlayerManager = GetComponentInParent<Player>();
         m_UIStat = GetComponentInChildren<UI_Stat>();
+        m_KillFeed = GetComponentInChildren<UI_KillFeed>();
+
+        m_UIStat.Init();
+
 
         RefreshUI();
     }

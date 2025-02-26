@@ -6,8 +6,8 @@ using static Define;
 
 public class ObjectManager
 {
-	#region Id¸¦ ¿ëÇÑ Dic
-	// ÃßÈÄ¿¡ ¼­¹ö ºÙÀ¸¸é ÀÚÁÖ ÀÌ¿ëÇÒ ¿ÀºêÁ§Æ® ¸Å´ÏÀú
+	#region Idï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Dic
+	// ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Å´ï¿½ï¿½ï¿½
 	//Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
 	//Dictionary<int, Item> _items = new Dictionary<int, Item>();
 
@@ -51,7 +51,7 @@ public class ObjectManager
 
 	public List<GameObject> _objects = new List<GameObject>();
 
-	public PlayerManager m_MyPlayer { get; set; }
+	public Player m_MyPlayer { get; set; }
 
 	public void Add(GameObject go)
 	{

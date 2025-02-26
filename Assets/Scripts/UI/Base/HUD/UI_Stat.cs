@@ -6,7 +6,7 @@ public class UI_Stat : MonoBehaviour
 {
     [Header("Ref")]
     HUD m_HUD;
-    PlayerManager m_Player;
+    Player m_Player;
 
     [Header("HP")]
     [SerializeField] Image m_HealthBarFill;
@@ -19,9 +19,9 @@ public class UI_Stat : MonoBehaviour
     [SerializeField] Image m_ManaBarDown;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Init()
     {
-        m_Player = GetComponentInParent<PlayerManager>();
+        m_Player = GetComponentInParent<Player>();
         m_HUD = GetComponentInParent<HUD>();
 
         m_iPreHp = m_Player.m_PlayerStatesManager.m_CurrentHealth;

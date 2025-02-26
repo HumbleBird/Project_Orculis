@@ -5,7 +5,6 @@ using Firebase.Auth;
 using TMPro;
 using System;
 using static Define;
-using Autodesk.Fbx;
 using System.Threading.Tasks;
 
 public class FirebaseAuthManager

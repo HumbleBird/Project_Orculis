@@ -112,5 +112,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/GestureRecognition/Samples/Resources/controller_microsoft_right.obj
+  assetPath: Assets/Plugins/Tool/GestureRecognition/Samples/Resources/controller_microsoft_right.obj
   uploadId: 679908

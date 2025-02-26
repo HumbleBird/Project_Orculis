@@ -105,5 +105,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/GestureRecognition/Samples/Resources/ball.fbx
+  assetPath: Assets/Plugins/Tool/GestureRecognition/Samples/Resources/ball.fbx
   uploadId: 679908

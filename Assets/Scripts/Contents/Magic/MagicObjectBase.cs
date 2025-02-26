@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using UnityEngine;
 using static Define;
@@ -5,10 +6,12 @@ using static Define;
 // 스펠로부터 생성된 모든 오브젝트의 기본 베이스
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public class MagicObjectBase : MonoBehaviour
+[RequireComponent(typeof(NetworkTransform))]
+[RequireComponent(typeof(NetworkObject))]
+public class MagicObjectBase : NetworkBehaviour
 {
     [Header("Ref")]
-    protected PlayerManager m_Owner;
+    protected Player m_Owner;
     public Rigidbody m_Rigidbody;
     protected Collider m_Collider;
 
@@ -32,7 +35,7 @@ public class MagicObjectBase : MonoBehaviour
         m_hitLayerMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("Character"));
     }
 
-    public virtual void SetInfo(PlayerManager player, Transform trans)
+    public virtual void SetInfo(Player player, Transform trans)
     {
         // 플레이어의 현재 바라보는 방향으로 초기 이동 벡터 설정
         m_Owner = player;

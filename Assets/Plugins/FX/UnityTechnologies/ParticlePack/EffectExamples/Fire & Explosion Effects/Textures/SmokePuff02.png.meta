@@ -79,6 +79,6 @@ AssetOrigin:
   productId: 146554
   packageName: Camera Shake FX
   packageVersion: 1.0
-  assetPath: Assets/UnityTechnologies/ParticlePack/EffectExamples/Fire & Explosion
-    Effects/Textures/SmokePuff02.png
+  assetPath: Assets/Plugins/FX/UnityTechnologies/ParticlePack/EffectExamples/Fire
+    & Explosion Effects/Textures/SmokePuff02.png
   uploadId: 557664

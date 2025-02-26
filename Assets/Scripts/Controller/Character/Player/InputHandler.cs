@@ -1,118 +1,75 @@
+using Fusion;
+using Fusion.Sockets;
+using SimpleFPS;
 using UnityEngine;
-using static UnityEngine.InputSystem.InputAction;
+using static Define;
 
-public class InputHandler : MonoBehaviour
+public class InputHandler : NetworkBehaviour, IBeforeUpdate
 {
     [Header("Ref")]
+    public Player m_Player;
     public @XRIDefaultInputActions inputActions;
-    PlayerManager m_PlayerManager;
-    GestureEventProcessor m_GestureEventProcessor;
+    public HandCommand m_LeftHandCommand;
+    public HandCommand m_RightHandCommand;
 
-
-    [Header("XRI Right")]
-    public bool right_select;
-    public bool right_Trigger;
-
-    [Header("XRI Left")]
-    public bool left_select;
-    public bool left_Trigger;
-
-    [Header("Keyboard")]
-    public bool InstantlySpelluse;
-
-    private void Start()
+    public override void Spawned()
     {
-        m_PlayerManager = GetComponent<PlayerManager>();
-        m_GestureEventProcessor = GetComponent<GestureEventProcessor>();
-    }
+        if (HasInputAuthority == false)
+            return;
 
-    private void OnEnable()
-    {
-        if(inputActions == null)
-        {
+        m_Player = GetComponent<Player>();
+
+        // Register to Fusion input poll callback.
+        var networkEvents = Runner.GetComponent<NetworkEvents>();
+        networkEvents.OnInput.AddListener(OnInput);
+
+        if (inputActions == null)
             inputActions = new XRIDefaultInputActions();
-
-            // Right
-            inputActions.XRIRightInteraction.Select.performed += i => right_select = true;
-            inputActions.XRIRightInteraction.Activate.performed += i => right_Trigger = true;
-            inputActions.XRIRightInteraction.Activate.canceled += i => right_Trigger = false;
-
-            // Left
-            inputActions.XRILeftInteraction.Select.performed += i => left_Trigger = true;
-            inputActions.XRILeftInteraction.Activate.performed += i => left_Trigger = true;
-            inputActions.XRILeftInteraction.Activate.canceled += i => left_Trigger = false;
-
-            // Keyboard
-            inputActions.Keyboard.InstantlySpellUse.performed += i => InstantlySpelluse = true;
-        }
 
         inputActions.Enable();
     }
 
-    private void InstantlySpellUse_performed(CallbackContext obj)
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        throw new System.NotImplementedException();
+        RigInput rigInput = new RigInput();
+        rigInput.playAreaPosition = transform.position;
+        rigInput.playAreaRotation = transform.rotation;
+
+        // Left Controller
+        //m_LeftHandCommand.LearFarInteractor_SelectActivate = inputActions.XRILeftInteraction.Select.ReadValue<bool>();
+        rigInput.rightHandCommand.LearFarInteractor_SelectValue = inputActions.XRIRightInteraction.SelectValue.ReadValue<float>();
+        rigInput.rightHandCommand.ActivateValue = inputActions.XRIRightInteraction.ActivateValue.ReadValue<float>();
+
+        // Right Controller
+        //m_RightHandCommand.LearFarInteractor_SelectActivate = inputActions.XRIRightInteraction.Select.ReadValue<bool>();
+        //rigInput.rightHandCommand.LearFarInteractor_SelectValue = inputActions.XRIRightInteraction.SelectValue.ReadValue<float>();
+
+
+        input.Set(rigInput);
     }
 
-    private void OnDisable()
-    {
-        inputActions.Disable();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        GestureRecognitionInput();
-        TestDevelupSpell();
-    }
-    
-    private void LateUpdate()
-    {
-        
-    }
+	public override void Despawned(NetworkRunner runner, bool hasState)
+	{
+		if (runner == null)
+            return;
 
-    public void GestureRecognitionInput()
-    {
-        // Right Trigger Logic
-        if (right_Trigger)
+        var networkEvents = runner.GetComponent<NetworkEvents>();
+        if (networkEvents != null)
         {
-            FirstInputHandle(); // 첫 입력 처리
-            m_PlayerManager.MoveMagicStaff(true); // 파티클 생성
-        }
-        else
-        {
-            m_PlayerManager.MoveMagicStaff(false); // 파티클 제거
-        }
-
-        // Left Trigger Logic
-        //if (left_Trigger)
-        //{
-        //    FirstInputHandle(); // 첫 입력 처리
-        //    m_PlayerManager.MoveMagicStaff(true); // 파티클 생성
-        //}
-        //else
-        //{
-        //    m_PlayerManager.MoveMagicStaff(false); // 파티클 제거
-        //}
-    }
-
-    private void FirstInputHandle()
-    {
-        if (m_PlayerManager.m_GestureEventProcessor.m_bIsFirstRecognition == false)
-        {
-            m_PlayerManager.m_GestureEventProcessor.m_bIsFirstRecognition = true;
-            m_GestureEventProcessor.m_Mivry.enabled = true;
+            networkEvents.OnInput.RemoveListener(OnInput);
         }
     }
 
-    // 조건 없이 스펠을 바로 쓸 수 있게 해주는 거
-    private void TestDevelupSpell()
+    void IBeforeUpdate.BeforeUpdate()
     {
-        if(left_select || InstantlySpelluse)
-        {
-            InstantlySpelluse = false;
-            left_select = false;
-            m_PlayerManager.m_PlayerMagicManager.SimpleAttempSpell();
-        }
+        // This method is called BEFORE ANY FixedUpdateNetwork() and is used to accumulate input from Keyboard/Mouse.
+        // Input accumulation is mandatory - this method is called multiple times before new forward FixedUpdateNetwork() - common if rendering speed is faster than Fusion simulation.
+
+        if (HasInputAuthority == false)
+            return;
+
+
     }
 }

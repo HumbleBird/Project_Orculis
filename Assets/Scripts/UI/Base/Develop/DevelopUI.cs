@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DevelopUI : MonoBehaviour
 {
-    public PlayerManager m_PlayerManager;
+    public Player m_PlayerManager;
     public TMP_Dropdown dropDown;
     public Toggle m_Toggle;
 

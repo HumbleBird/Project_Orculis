@@ -10,5 +10,5 @@ public abstract class CharacterEffect : ScriptableObject
     public int m_iStackCount = 0; // 중첩 Count
 
     // 1회 실행 인지 연속 실행인지
-    public abstract void ProccessEffect(PlayerManager player);
+    public abstract void ProccessEffect(Player player);
 }

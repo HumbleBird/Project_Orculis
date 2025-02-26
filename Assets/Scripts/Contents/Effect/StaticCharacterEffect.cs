@@ -7,7 +7,7 @@ public abstract class StaticCharacterEffect : ScriptableObject
     // Static Effect
     // 
 
-    public abstract void AddStaticEffect(PlayerManager character);
+    public abstract void AddStaticEffect(Player character);
 
-    public abstract void RemoveStaticEffect(PlayerManager character);
+    public abstract void RemoveStaticEffect(Player character);
 }

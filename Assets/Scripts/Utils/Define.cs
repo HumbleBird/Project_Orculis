@@ -1,18 +1,121 @@
-﻿using System.Collections;
+﻿using Fusion;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Define
+public partial class Define
 {
+
+
     #region Interface
     public interface IHitable
     {
         // TODO 어떤 마법, 어떤 각도, 적중 부위
-        void OnHit(PlayerManager Attacker, int damage);
+        void OnHit(Player Attacker, int damage);
     }
 
     #endregion
 
+    #region Network
+
+    public enum RigPart
+    {
+        None,
+        Headset,
+        LeftController,
+        RightController,
+        Undefined
+    }
+
+    public enum RunnerExpectations
+    {
+        NoRunner, // For offline usages
+        PresetRunner,
+        DetectRunner // should not be used in multipeer scenario
+    }
+
+    public enum EGameplayState
+    {
+        Skirmish = 0,
+        Running = 1,
+        Finished = 2,
+    }
+
+    #endregion
+
+    #region Item
+
+    public enum E_ItemType
+    {
+        None = 0,
+        Weapon = 1,
+        Armor = 2,
+        Accessorie = 3,
+        Consumable = 4
+    }
+
+    public enum E_WeaponType
+    {
+        None = 0,
+        Staff = 1,
+        MagicBook = 2,
+        CrystalSwrod = 3,
+        CrystalOrb = 4,
+    }
+
+    public enum E_ArrmorType
+    {
+        None = 0,
+        Head  ,
+        Chest ,
+        Hands ,
+        Legs  ,
+        Shoose
+    }
+
+    public enum E_AccessoriesType
+    {
+        None,
+        Rings,
+        Necklaces,
+        Cloak
+    }
+
+    public enum E_ConsumableType
+    {
+        None,
+        MagicReagent,
+        Throwing,
+        SummoningStone
+    }
+
+    public enum E_ItemGrade
+    {
+        Junk,
+        Poor,
+        Common,
+        Uncommon,
+        Rare,
+        Epic,
+        Legendary,
+        Unique
+    }
+
+    public enum E_ItemElement
+    {
+        None,
+        Fire,
+        Water,
+        Wind,
+        Earth,
+        Electricity,
+        Dark,
+        Light,
+    }
+
+    #endregion
+
+    #region Spell
     public enum E_SpellActivation
     {
         Instant, // 즉발성
@@ -24,6 +127,8 @@ public class Define
         Chant,
         Motion
     }
+
+    #endregion
 
     public enum E_CharacterEffectType
     {

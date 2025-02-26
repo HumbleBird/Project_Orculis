@@ -6,34 +6,34 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(fileName = "Spell Depulso", menuName = "Scriptable Object/Spell Depulso")]
-public class Spell_Depulso : Spell
+public class Spell_Depulso : SpellBase
 {
     [SerializeField] private float m_fAddForece = 50;
-    [SerializeField] private Spell_Accio m_Spell_Accio;
+    [SerializeField] private Accio m_Spell_Accio;
 
-    protected override bool AttempToCastSpellCondition(PlayerManager player)
+    protected override bool AttempToCastSpellCondition()
     {
-        return base.AttempToCastSpellCondition(player);
+        return base.AttempToCastSpellCondition();
     }
 
-    public override void SuccessfullyCastSpell(PlayerManager player)
+    public override void SuccessfullyCastSpell()
     {
-        base.SuccessfullyCastSpell(player);
+        base.SuccessfullyCastSpell();
 
         // Acio를 통해 부유 중인 물체가 있다면
-        if(player.m_PlayerMagicManager.m_bIsSelectObject)
+        if(m_Owner.m_PlayerMagicManager.m_bIsSelectObject)
         { 
-            player.m_PlayerMagicManager.MagicObjectTrow(
-                player.m_RightHandInteractableObject.gameObject,
+            m_Owner.m_PlayerMagicManager.MagicObjectTrow(
+                m_Owner.m_RightHandInteractableObject.gameObject,
                 m_fAddForece,
                 ForceMode.Impulse);
 
             // DrainMana 제거
-            player.m_PlayerEffectsManager.timedEffects.Remove(m_Spell_Accio.m_DrainManaEffect);
-            player.m_PlayerMagicManager.m_UsingSpells.Remove(m_Spell_Accio);
+            m_Owner.m_PlayerEffectsManager.timedEffects.Remove(m_Spell_Accio.m_DrainManaEffect);
+            m_Owner.m_PlayerMagicManager.m_UsingSpells.Remove(m_Spell_Accio);
 
             // MagicThrow 뒤에 있어야 함.
-            player.m_PlayerMagicManager.ReleaseInteractingObject();
+            m_Owner.m_PlayerMagicManager.ReleaseInteractingObject();
         }
         else
         {

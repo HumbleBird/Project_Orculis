@@ -31,7 +31,7 @@ public class UI_Loading : MonoBehaviour
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(name);
 
-        operation.allowSceneActivation = false; 
+        //operation.allowSceneActivation = false; 
 
         // Show Tip
         string todoShowtip = Managers.Game.GetTextTip();

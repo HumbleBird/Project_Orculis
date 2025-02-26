@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: The_Elder_Wand
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+  ItemDbId: 1
+  TemplateId: 1
+  Name: The_Elder_Wand
+  Description: Test
+  Count: 1
+  Slot: 0
+  Icon: {fileID: 0}
+  Path: 
+  PrefabObject: {fileID: 172106298677699311, guid: e79f32f46d522954a90508e8fab9cfdc, type: 3}
+  ItemElement: 0
+  IsStackable: 0
+  IsEquipped: 0
+  E_WeaponType: 0
+  Damage: 10
+  m_MagicEquippmentObject: {fileID: 0}

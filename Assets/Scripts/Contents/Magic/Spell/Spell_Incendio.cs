@@ -2,23 +2,23 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [CreateAssetMenu(fileName = "Spell Incendio", menuName = "Scriptable Object/Spell Incendio")]
-public class Spell_Incendio : Spell
+public class Spell_Incendio : SpellBase
 {
     public GameObject m_IncendioPrefab;
 
-    protected override bool AttempToCastSpellCondition(PlayerManager player)
+    protected override bool AttempToCastSpellCondition()
     {
-        return base.AttempToCastSpellCondition(player);
+        return base.AttempToCastSpellCondition();
     }
 
-    public override void SuccessfullyCastSpell(PlayerManager player)
+    public override void SuccessfullyCastSpell()
     {
-        base.SuccessfullyCastSpell(player);
+        base.SuccessfullyCastSpell();
 
 
         // Prefab 소환
         GameObject go = Managers.Resource.Instantiate(m_IncendioPrefab);
         var obj = go.GetComponent<MagicObjectBase>();
-        obj.SetInfo(player, player.m_PlayerEquipmentManager.m_CurrentMagicEquippment.m_EquipmentEdge_SpawnTransform);
+        obj.SetInfo(m_Owner, m_Owner.m_PlayerEquipmentManager.m_CurrentWeapon.m_MagicEquippmentObject.m_EquipmentEdge_SpawnTransform);
     }
 }

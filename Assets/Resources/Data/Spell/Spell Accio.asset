@@ -28,5 +28,5 @@ MonoBehaviour:
   m_SpellAttempAudioClip: {fileID: 8300000, guid: 5d3b48525c8669846b78a26092310c09, type: 3}
   m_SpellSuccessAudioClip: {fileID: 8300000, guid: 323e15cfe809e114ab92c9f4b25e8bc2, type: 3}
   m_SpellFailAudioClip: {fileID: 8300000, guid: 78ad99fd0a0a5144280b07bbdba84815, type: 3}
-  m_fPowerCameraShake: 0
+  m_fPowerCameraShake: 0.05
   m_DrainManaEffect: {fileID: 11400000, guid: 5a88749f27c4bfa4bbf97b2316611ae6, type: 2}

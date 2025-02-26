@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/GestureRecognition/Samples/Sample_MilitarySettings.lighting
+  assetPath: Assets/Plugins/Tool/GestureRecognition/Samples/Sample_MilitarySettings.lighting
   uploadId: 679908

@@ -1,10 +1,11 @@
+using Fusion;
 using UnityEngine;
 using static Define;
 
-public class PlayerStatManager : MonoBehaviour, IHitable
+public class PlayerStatManager : NetworkBehaviour, IHitable
 {
     [Header("Ref")]
-    private PlayerManager m_PlayerManager;
+    private Player m_PlayerManager;
 
     [Header("Health Stats")]
     [SerializeField] public int m_MaxHealth { private set; get; } = 100;
@@ -19,7 +20,7 @@ public class PlayerStatManager : MonoBehaviour, IHitable
 
     void Awake()
     {
-        m_PlayerManager = GetComponent<PlayerManager>();
+        m_PlayerManager = GetComponent<Player>();
         InitState();
     }
 
@@ -48,7 +49,7 @@ public class PlayerStatManager : MonoBehaviour, IHitable
             OnPlayerDeath();
         }
 
-        m_PlayerManager.m_HUD.RefreshUI();
+        //m_PlayerManager.m_HUD.RefreshUI();
     }
 
     private void OnPlayerDeath()
@@ -67,7 +68,7 @@ public class PlayerStatManager : MonoBehaviour, IHitable
     {
         m_CurrentMana = Mathf.Clamp(m_CurrentMana + manaDelta, 0, m_MaxMana);
 
-        m_PlayerManager.m_HUD.RefreshUI();
+        //m_PlayerManager.m_HUD.RefreshUI();
     }
 
     private void RegenerateMana()
@@ -80,7 +81,7 @@ public class PlayerStatManager : MonoBehaviour, IHitable
                 m_CurrentMana = (ushort)Mathf.Min(m_CurrentMana + m_ManaRegenRate, m_MaxMana);
                 m_ManaRegenTimer = 0f;
 
-                m_PlayerManager.m_HUD.RefreshUI();
+                //m_PlayerManager.m_HUD.RefreshUI();
             }
         }
     }
@@ -114,7 +115,7 @@ public class PlayerStatManager : MonoBehaviour, IHitable
         return false;
     }
 
-    public void OnHit(PlayerManager Attacker, int damage)
+    public void OnHit(Player Attacker, int damage)
     {
         Debug.Log("On Hit : " + name);
 

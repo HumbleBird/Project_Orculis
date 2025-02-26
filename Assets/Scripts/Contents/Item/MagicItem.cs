@@ -1,0 +1,8 @@
+using UnityEngine;
+
+public class MagicItem : MonoBehaviour
+{
+    // 마법 소환 위치
+    // 파티클 소환 위치
+    [SerializeField] public Transform m_EquipmentEdge_SpawnTransform;
+}

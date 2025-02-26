@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public class GameManagerEX
@@ -9,4 +10,16 @@ public class GameManagerEX
         // 새로운 팁 가져오기
         return gameTip.GetNextGameTip();
     }
+
+    public Item MakeItem(int id)
+    {
+        Item item = null;
+
+        return item;
+    }
+
+    //public List<Room> GetRoomList()
+    //{
+    //    return 
+    //}
 }
