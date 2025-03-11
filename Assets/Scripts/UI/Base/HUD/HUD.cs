@@ -10,7 +10,7 @@ public class HUD : MonoBehaviour
     public UI_KillFeed m_KillFeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void Init()
+    public void Start()
     {
         m_PlayerManager = GetComponentInParent<Player>();
         m_UIStat = GetComponentInChildren<UI_Stat>();
@@ -19,6 +19,11 @@ public class HUD : MonoBehaviour
         m_UIStat.Init();
 
 
+        RefreshUI();
+    }
+
+    public void Update()
+    {
         RefreshUI();
     }
 

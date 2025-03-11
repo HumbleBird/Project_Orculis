@@ -15,10 +15,11 @@ public class Spell_Incendio : SpellBase
     {
         base.SuccessfullyCastSpell();
 
-
         // Prefab 소환
-        GameObject go = Managers.Resource.Instantiate(m_IncendioPrefab);
-        var obj = go.GetComponent<MagicObjectBase>();
-        obj.SetInfo(m_Owner, m_Owner.m_PlayerEquipmentManager.m_CurrentWeapon.m_MagicEquippmentObject.m_EquipmentEdge_SpawnTransform);
+        Transform tr = m_Owner.m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform;
+
+        var t = m_IncendioPrefab.GetComponent<MagicObjectBase>();
+        t.m_Owner = m_Owner;
+        m_Owner.m_PlayerMagicManager.NetworkSpawnMagicObject(m_IncendioPrefab.gameObject, tr);
     }
 }

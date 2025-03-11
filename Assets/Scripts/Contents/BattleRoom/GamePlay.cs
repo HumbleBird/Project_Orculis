@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using Fusion;
 using static Define;
+using TMPro;
+using Fusion.XR.Host.Rig;
 
 #if !UNITY_EDITOR && (UNITY_WEBGL || UNITY_ANDROID || UNITY_IOS)
 #error This sample doesn't support currently selected platform, please switch to Windows, Mac, Linux in Build Settings.
@@ -16,16 +18,16 @@ namespace SimpleFPS
     public class Gameplay : NetworkBehaviour
     {
         //public GameUI GameUI;
-        public Player PlayerPrefab;
+        public GameObject PlayerPrefab;
         public float GameDuration = 180f;
         public float PlayerRespawnTime = 5f;
         public float DoubleDamageDuration = 30f;
-
-        
-
+        public GameObject m_HardwareRig;
 
 
-		[Networked][Capacity(32)][HideInInspector]
+
+
+        [Networked][Capacity(32)][HideInInspector]
 		public NetworkDictionary<PlayerRef, PlayerData> PlayerData { get; }
 		[Networked][HideInInspector]
 		public TickTimer RemainingTime { get; set; }
@@ -37,7 +39,7 @@ namespace SimpleFPS
         private List<Player> _spawnedPlayers = new(16);
         private List<PlayerRef> _pendingPlayers = new(16);
         private List<PlayerData> _tempPlayerData = new(16);
-        //private List<Transform> _recentSpawnPoints = new(4);
+        private List<Transform> _recentSpawnPoints = new(4);
 
         public void PlayerKilled(PlayerRef killerPlayerRef, PlayerRef victimPlayerRef, E_WeaponType weaponType)
         {
@@ -152,7 +154,13 @@ namespace SimpleFPS
             var player = Runner.Spawn(PlayerPrefab, spawnPoint.position, spawnPoint.rotation, playerRef);
 
             // Set player instance as PlayerObject so we can easily get it from other locations.
-            Runner.SetPlayerObject(playerRef, player.Object);
+            Runner.SetPlayerObject(playerRef, player);
+
+            // hard rig
+            if (player.HasInputAuthority)
+            {
+                m_HardwareRig.transform.position = spawnPoint.position;
+            }
 
             RecalculateStatisticPositions();
         }
@@ -202,8 +210,15 @@ namespace SimpleFPS
             var spawnPoint = GetSpawnPoint();
             var player = Runner.Spawn(PlayerPrefab, spawnPoint.position, spawnPoint.rotation, playerRef);
 
+            // hard rig
+            if (player.HasInputAuthority)
+            {
+                m_HardwareRig.transform.position = spawnPoint.position;
+            }
+
+
             // Set player instance as PlayerObject so we can easily get it from other locations.
-            Runner.SetPlayerObject(playerRef, player.Object);
+            Runner.SetPlayerObject(playerRef, player);
         }
 
         private Transform GetSpawnPoint()
@@ -216,12 +231,12 @@ namespace SimpleFPS
             {
                 spawnPoint = spawnPoints[(offset + i) % spawnPoints.Length].transform;
 
-                //if (_recentSpawnPoints.Contains(spawnPoint) == false)
-                    //break;
+                if (_recentSpawnPoints.Contains(spawnPoint) == false)
+                    break;
             }
 
             // Add spawn point to list of recently used spawn points.
-            //_recentSpawnPoints.Add(spawnPoint);
+            _recentSpawnPoints.Add(spawnPoint);
 
             // Ignore only last 3 spawn points.
             //if (_recentSpawnPoints.Count > 3)

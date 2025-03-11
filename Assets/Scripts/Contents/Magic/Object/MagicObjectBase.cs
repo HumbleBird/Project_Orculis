@@ -8,10 +8,10 @@ using static Define;
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(NetworkTransform))]
 [RequireComponent(typeof(NetworkObject))]
-public class MagicObjectBase : NetworkBehaviour
+public class MagicObjectBase : MonoBehaviour
 {
     [Header("Ref")]
-    protected Player m_Owner;
+    public Player m_Owner;
     public Rigidbody m_Rigidbody;
     protected Collider m_Collider;
 
@@ -26,8 +26,7 @@ public class MagicObjectBase : NetworkBehaviour
     [Header("Spell Property")]
     public ushort m_fSpellCost { get; set; }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public virtual void Start()
+    public void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<Collider>();

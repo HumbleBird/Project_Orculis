@@ -1,4 +1,5 @@
 using Fusion;
+using Fusion.XR.Host.Rig;
 using Oculus.Voice;
 using SimpleFPS;
 using UnityEngine;
@@ -19,6 +20,8 @@ public class SceneObjects : SimulationBehaviour
     private Mivry _mivry;
     public Mivry m_Mivry { get { return FindComponentInScene(ref _mivry); } }
 
+    private HardwareRig23 _rig;
+    public HardwareRig23 m_Rig { get { return FindComponentInScene(ref _rig); } }
 
     private T FindComponentInScene<T>(ref T cachedComponent) where T : Component
     {

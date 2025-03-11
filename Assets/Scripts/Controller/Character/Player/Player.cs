@@ -1,9 +1,13 @@
 using Fusion;
+using Fusion.XR.Host.Rig;
+using NUnit.Framework;
 using Oculus.Voice;
 using SimpleFPS;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using static Define;
@@ -11,71 +15,84 @@ using static Define;
 public class Player : NetworkBehaviour
 {
     [Header("PlayerManager Ref")]
-    [HideInInspector] public InputHandler m_InputHandler;
+    [HideInInspector] public HardwareRig23 m_HardwareRig;
     [HideInInspector] public PlayerStatManager m_PlayerStatesManager;
     [HideInInspector] public PlayerMagicManager m_PlayerMagicManager;
     [HideInInspector] public PlayerEffectsManager m_PlayerEffectsManager;
     [HideInInspector] public PlayerEquipmentManager m_PlayerEquipmentManager;
+    [HideInInspector] public CharacterAnimationManager m_CharacterAnimationManager;
 
     [Header("UI Ref")]
-    //public HUD m_HUD;
     //public DevelopUI m_DevelopUI;
     //public UI_MagicTryResult m_MagicTryResultUI;
 
     [Header("Other Ref")]
-    public AppVoiceExperience voiceExperience;
-    public StressReceiver m_StressReceiver; // Camera
-    public Mivry m_Mivry;
-    private SceneObjects _sceneObjects;
+    AppVoiceExperience voiceExperience;
+    StressReceiver m_StressReceiver; // Camera
+    Mivry m_Mivry;
+    SceneObjects _sceneObjects;
 
     [Header("Interactor")]
     public XRBaseInteractor m_RightHandLearFarInteractor;
+    public XRBaseInteractor m_LeftHandLearFarInteractor;
     public XRBaseInteractable m_RightHandInteractableObject;
-
-    [Header("Rig")]
-    public GameObject m_LeftHandModel;
-    public GameObject m_RightHandModel;
 
     [Header("Magic Base")]
     [SerializeField] private GameObject m_MagicStafeMoveParticle;
     [SerializeField] private float m_fParticleTimeInterval = 0.03f;
-    public bool isGeneratingParticles = false;
+    bool isGeneratingParticles = false;
 
     public override void Spawned()
     {
-        m_InputHandler = GetComponent<InputHandler>();
+        _sceneObjects = Runner.GetSingleton<SceneObjects>();
+
         m_PlayerStatesManager = GetComponent<PlayerStatManager>();
         m_PlayerMagicManager = GetComponent<PlayerMagicManager>();
         m_PlayerEffectsManager = GetComponent<PlayerEffectsManager>();
         m_PlayerEquipmentManager = GetComponent<PlayerEquipmentManager>();
+        m_CharacterAnimationManager = GetComponent<CharacterAnimationManager>();
 
         // Camera
         m_StressReceiver = GetComponentInChildren<StressReceiver>();
-        //m_HUD = GetComponentInChildren<HUD>();
         //m_MagicTryResultUI = GetComponentInChildren<UI_MagicTryResult>();
 
-        //m_HUD.Init();
-
-		_sceneObjects = Runner.GetSingleton<SceneObjects>();
-        voiceExperience = _sceneObjects.m_AppVoiceExperience;
-
-        // Mivry
-        m_Mivry = _sceneObjects.m_Mivry;
-        m_Mivry.OnGestureCompletion.AddListener(CheckRecognition);
-
-        if (HasInputAuthority)
-        {
-            m_Mivry.LeftHand = m_LeftHandModel;
-            m_Mivry.RightHand = m_RightHandModel;
-        }
 
         StartCoroutine(GenerateMagicMoveParticle());
 
+        if (HasInputAuthority == false)
+        {
+            name = name + " Orther Player";
+            //m_InputActionManager.enabled = false;
+        }
+        else
+        {
+            name = name + " Input Player";
+
+
+            // Voice
+            voiceExperience = _sceneObjects.m_AppVoiceExperience;
+
+            // Mivry
+            m_Mivry = _sceneObjects.m_Mivry;
+            m_Mivry.OnGestureCompletion.AddListener(CheckRecognition);
+            m_Mivry.LeftHand = m_CharacterAnimationManager.leftHandController.gameObject;
+            m_Mivry.RightHand = m_CharacterAnimationManager.rightHandController.gameObject;
+
+            // Set XRBaseInteractor
+            m_HardwareRig =  _sceneObjects.m_Rig;
+            //m_RightHandLearFarInteractor = m_HardwareRig.m_RightHandLearFarInteractor;
+            //m_LeftHandLearFarInteractor = m_HardwareRig.m_LeftHandLearFarInteractor;
+            //m_RightHandLearFarInteractor = m_HardwareRig.m_RightHandLearFarInteractor;
+            //m_LeftHandLearFarInteractor = m_HardwareRig.m_LeftHandLearFarInteractor;
+        }
+
+        // CharacterAnimationManager
     }
 
     void Update()
     {
-        voiceExperience.Activate();
+
+
     }
 
     // Meta Voice, Wit.ai를 통해 음성을 입력받아서 해당 스펠의 함수를 실행함.
@@ -133,12 +150,12 @@ public class Player : NetworkBehaviour
     {
         while(true)
         {
-            if(isGeneratingParticles && m_PlayerEquipmentManager.m_CurrentWeapon.m_MagicEquippmentObject != null)
+            if(isGeneratingParticles && m_PlayerEquipmentManager.m_CurrentWeapon != null)
             {
                 // 파티클 소환
                 GameObject go  = Managers.Resource.Instantiate(m_MagicStafeMoveParticle);
-                go.transform.position = m_PlayerEquipmentManager.m_CurrentWeapon.m_MagicEquippmentObject.m_EquipmentEdge_SpawnTransform.position;
-                go.transform.rotation = m_PlayerEquipmentManager.m_CurrentWeapon.m_MagicEquippmentObject.m_EquipmentEdge_SpawnTransform.rotation;
+                go.transform.position = m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform.position;
+                go.transform.rotation = m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform.rotation;
 
                 yield return new WaitForSeconds(m_fParticleTimeInterval);
             }
@@ -149,6 +166,10 @@ public class Player : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+
+        if (HasInputAuthority)
+            voiceExperience.Activate();
+
         ProcessInput();
     }
 
@@ -160,15 +181,23 @@ public class Player : NetworkBehaviour
         // Head Gear
 
         // LeftHand
-        if (input.rightHandCommand.ActivateValue > 0)
-        {
-            MoveMagicStaff(true);
-            Debug.Log("MoveMagicStaff(true);");
-        }
-        else
-            MoveMagicStaff(false);
+        //if (input.rightHandCommand.ActivateValue > 0)
+        //{
+        //    MoveMagicStaff(true);
+        //    Debug.Log("MoveMagicStaff(true);");
+        //}
+        //else
+        //    MoveMagicStaff(false);
 
 
         // Right Hand
     }
+
+    public override void Render()
+    {
+
+        //m_CharacterAnimationManager.NFixedUpdateNetwork();
+        //m_CharacterAnimationManager.NRender();
+    }
+
 }

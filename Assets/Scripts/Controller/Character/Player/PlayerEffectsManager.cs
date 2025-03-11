@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.TextCore.Text;
 using static Define;
 
-public class PlayerEffectsManager : NetworkBehaviour
+public class PlayerEffectsManager : MonoBehaviour
 {
     Player m_PlayerManager;
 

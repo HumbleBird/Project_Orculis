@@ -56,6 +56,9 @@ public class PlayerMagicManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (HasInputAuthority == false)
+            return;
+
         // 숫자 키 입력 처리 (Alpha1 ~ Alpha4)
         for (int i = 0; i < m_UnlockSpells.Count; i++)
         {
@@ -64,6 +67,7 @@ public class PlayerMagicManager : NetworkBehaviour
                 // spells[i]가 존재할 경우 처리
                 if (m_UnlockSpells[i] != null)
                 {
+                    m_UnlockSpells[i].ChantCondition();
                     m_UnlockSpells[i].SuccessfullyCastSpell();
                 }
                 else
@@ -88,7 +92,7 @@ public class PlayerMagicManager : NetworkBehaviour
     public void MagicObjectTrow(GameObject prefab, float power, ForceMode mode)
     {
         var obj =  prefab.GetComponent<Rigidbody>();
-        obj.AddForce(m_PlayerManager.m_PlayerEquipmentManager.m_CurrentWeapon.m_MagicEquippmentObject.m_EquipmentEdge_SpawnTransform.forward* power);
+        obj.AddForce(m_PlayerManager.m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform.forward* power);
     }
 
     public void SpellFlagCheck(E_SpellCheckType type, string spellName)
@@ -120,22 +124,9 @@ public class PlayerMagicManager : NetworkBehaviour
         }
     }
 
-    //public void SimpleAttempSpell()
-    //{
-    //    bool canUse = m_PlayerManager.m_DevelopUI.m_Toggle.isOn;
-
-    //    int currentSpell = m_PlayerManager.m_DevelopUI.dropDown.value;
-    //    Spell spell = m_UnlockSpells[currentSpell];
-
-
-    //    if (spell != null && canUse)
-    //    {
-    //        spell.AttempToCastSpell();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning($"Spell not found: {spell.name}");
-    //    }
-    //}
+    public void NetworkSpawnMagicObject(GameObject obj, Transform trans)
+    {
+        Runner.Spawn(obj, trans.position, trans.rotation);
+    }
 
 }

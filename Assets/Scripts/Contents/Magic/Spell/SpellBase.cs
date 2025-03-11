@@ -19,7 +19,7 @@ public abstract class SpellBase : ScriptableObject
     [SerializeField] protected ushort m_Cost;
     public E_SpellActivation m_ESpellActivation;
     public E_SpellType m_SpellType;
-    public float m_fCoolTime;
+    public float m_fCoolTime = 10f;
     public string m_sTagline;
     public string m_sDetailDescription;
     public Sprite m_image;
@@ -29,6 +29,7 @@ public abstract class SpellBase : ScriptableObject
     public float m_fChantConditionTime = 2f;
     public bool m_bIsMotion = false;
     public float m_fMotionConditionTime = 2f;
+    public bool m_bIsClearAllCondition => m_bIsChant && m_bIsMotion;
 
     [Header("Audio Clip")]
     [SerializeField] protected AudioClip m_SpellAttempAudioClip;
@@ -38,22 +39,29 @@ public abstract class SpellBase : ScriptableObject
     [Header("Camera")]
     [SerializeField] protected float m_fPowerCameraShake;
 
-    // 음성과 동작 두 가지 조건을 모두 만족 했을 때 시도
+    #region Base Conditoin
 
+    // 기본 음성 조건을 만족했을 경우
     public virtual IEnumerator AchieveChantFlag()
     {
+        // 스펠 음성 조건을 만족 못 했을 경우
         if (ChantCondition() == false)
             yield break;
 
         m_bIsChant = true;
 
         yield return new WaitForSeconds(m_fChantConditionTime);
-        m_bIsChant = false;
 
-        FailHalfwayChant();
+        // 모션 조건을 만족하지 못 했을 경우
+        if (m_bIsClearAllCondition == false)
+        {
+            m_bIsChant = false;
+
+            FailHalfwayChant();
+        }
     }
 
-    protected virtual bool ChantCondition() { return true; }
+    public virtual bool ChantCondition() { return true; }
     protected virtual void FailHalfwayChant() { }
 
     public IEnumerator AchieveMotionFlag()
@@ -64,10 +72,18 @@ public abstract class SpellBase : ScriptableObject
         m_bIsMotion = true;
 
         yield return new WaitForSeconds(m_fMotionConditionTime);
-        m_bIsMotion = false;
+        
+        // 모션 조건을 만족하지 못 했을 경우
+        if (m_bIsClearAllCondition == false)
+        {
+            m_bIsMotion = false;
+
+        }
     }
 
     protected virtual bool MotionCondition() { return true; }
+
+    #endregion
 
     public void AttempToCastSpell()
     {
@@ -106,9 +122,12 @@ public abstract class SpellBase : ScriptableObject
         // PostProceeing?
 
         // Camera Shake
-        m_Owner.m_StressReceiver.InduceStress(m_fPowerCameraShake);
+        //m_Owner.m_StressReceiver.InduceStress(m_fPowerCameraShake);
 
         // 스탬프 Light
+
+        // 마법 조건 clear
+        ClearCondition();
     }
 
     public virtual void FailCastSpell()
@@ -120,5 +139,12 @@ public abstract class SpellBase : ScriptableObject
         {
             m_Owner.m_PlayerMagicManager.m_UsingSpells.Remove(this);
         }
+
+        ClearCondition();
+    }
+
+    private void ClearCondition()
+    {
+        m_bIsChant = m_bIsChant = false;
     }
 }

@@ -46,7 +46,7 @@ public class Item : ScriptableObject
     // Prefab Path
     public string Path ; 
 
-    public GameObject PrefabObject ; // TODO Del
+    public MagicItem m_MagicEquippmentObject; // TODO Del
     public GameObject TempObject; // ON/Off 전용
 
     public E_ItemType ItemType { get; protected set; }
@@ -87,7 +87,6 @@ public class Weapon : Item
     public E_WeaponType E_WeaponType ;
     public int Damage ;
     public strAdditionalStat AdditionalStat ;
-    [HideInInspector] public MagicItem m_MagicEquippmentObject;
 
     public Weapon() : base(E_ItemType.Weapon)
     {

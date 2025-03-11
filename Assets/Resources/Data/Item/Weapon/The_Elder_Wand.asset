@@ -20,10 +20,10 @@ MonoBehaviour:
   Slot: 0
   Icon: {fileID: 0}
   Path: 
-  PrefabObject: {fileID: 172106298677699311, guid: e79f32f46d522954a90508e8fab9cfdc, type: 3}
+  m_MagicEquippmentObject: {fileID: 3190231541477373970, guid: e79f32f46d522954a90508e8fab9cfdc, type: 3}
+  TempObject: {fileID: 0}
   ItemElement: 0
   IsStackable: 0
-  IsEquipped: 0
+  IsEquipped: 1
   E_WeaponType: 0
   Damage: 10
-  m_MagicEquippmentObject: {fileID: 0}

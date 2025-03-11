@@ -18,11 +18,10 @@ public class Accio : SpellBase
     // 조건 달성 중간 실패시
     protected override void FailHalfwayChant()
     {
-        if (m_bIsMotion == false)
-            m_obj = null;
+        m_obj = null;
     }
 
-    protected override bool ChantCondition()
+    public override bool ChantCondition()
     {
         // 마법으로 상호작용이 가능한가?
         var list = m_Owner.m_RightHandLearFarInteractor.interactablesHovered;
@@ -58,7 +57,7 @@ public class Accio : SpellBase
 
         m_Owner.m_RightHandInteractableObject = m_obj;
 
-        m_Owner.m_RightHandLearFarInteractor.interactionManager.SelectEnter(
+        m_Owner.m_RightHandLearFarInteractor.interactionManager.SelectEnter( 
             (IXRSelectInteractor)m_Owner.m_RightHandLearFarInteractor,
             (IXRSelectInteractable)m_Owner.m_RightHandInteractableObject);
 
