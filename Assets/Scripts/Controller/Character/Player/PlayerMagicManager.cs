@@ -19,6 +19,9 @@ public class PlayerMagicManager : NetworkBehaviour
     [Header("Ref")]
     Player m_PlayerManager;
 
+    //[Header("Spell Property")]
+    //public float m_fTimeReduceSkillCooltime = 1f;
+
     [Header("Flag")]
     [SerializeField] public bool m_bIsSelectObject { get; set; }
     [SerializeField] public float m_bIsSpellDelayFlagTime = 1.5f;

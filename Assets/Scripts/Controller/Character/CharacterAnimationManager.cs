@@ -51,8 +51,6 @@ public class CharacterAnimationManager : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        base.FixedUpdateNetwork();
-
         // update the rig at each network tick
         if (GetInput<RigInput>(out var input))
         {
@@ -69,15 +67,8 @@ public class CharacterAnimationManager : NetworkBehaviour
 
         }
 
-        NFixedUpdateNetwork();
-    }
-
-
-    public void NFixedUpdateNetwork()
-    {
         HandAnimation(m_LeftHandAnimator, m_LeftgripAnimationAction, m_LeftpinchAnimationAction);
         HandAnimation(m_RightHandAnimator, m_RightgripAnimationAction, m_RightpinchAnimationAction);
-
 
         MappingHandTransform(leftHandIK, leftHandController, true);
         MappingHandTransform(rightHandIK, rightHandController, false);
@@ -85,62 +76,28 @@ public class CharacterAnimationManager : NetworkBehaviour
         MappingHeadTransform(headIK, HeadController);
     }
 
+
+
     public override void Render()
     {
         if (HasInputAuthority)
         {
             var hardwareRig = m_Player.m_HardwareRig;
 
-            // 🎯 최신 하드웨어 트래킹 위치로 보정 (시각적으로 부드러운 보정)
-            //transform.position = Vector3.Lerp(transform.position, hardwareRig.transform.position, Time.deltaTime * 10);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, hardwareRig.transform.rotation, Time.deltaTime * 10);
-
-            //leftHandController.position = Vector3.Lerp(leftHandController.position, hardwareRig.m_LeftHandTransform.position, Time.deltaTime * 10);
-            //leftHandController.rotation = Quaternion.Slerp(leftHandController.rotation, hardwareRig.m_LeftHandTransform.rotation, Time.deltaTime * 10);
-            //
-            //rightHandController.position = Vector3.Lerp(rightHandController.position, hardwareRig.m_RightHandTransform.position, Time.deltaTime * 10);
-            //rightHandController.rotation = Quaternion.Slerp(rightHandController.rotation, hardwareRig.m_RightHandTransform.rotation, Time.deltaTime * 10);
-            //
-            //HeadController.position = Vector3.Lerp(HeadController.position, hardwareRig.m_Headset.position, Time.deltaTime * 10);
-            //HeadController.rotation = Quaternion.Slerp(HeadController.rotation, hardwareRig.m_Headset.rotation, Time.deltaTime * 10);
-
-            //leftHandController.position = hardwareRig.m_LeftHandTransform.position;
-            //leftHandController.rotation = hardwareRig.m_LeftHandTransform.rotation;
-            //
-            //rightHandController.position = hardwareRig.m_RightHandTransform.position;
-            //rightHandController.rotation = hardwareRig.m_RightHandTransform.rotation;
-            //
-            //HeadController.position = hardwareRig.m_Headset.position;
-            //HeadController.rotation = hardwareRig.m_Headset.rotation;
+            leftHandController.position = hardwareRig.m_LeftHandTransform.position;
+            leftHandController.rotation = hardwareRig.m_LeftHandTransform.rotation;
+            
+            rightHandController.position = hardwareRig.m_RightHandTransform.position;
+            rightHandController.rotation = hardwareRig.m_RightHandTransform.rotation;
+            
+            HeadController.position = hardwareRig.m_Headset.position;
+            HeadController.rotation = hardwareRig.m_Headset.rotation;
         }
         else
         {
 
         }
     }
-
-    public void LateUpdate()
-    {
-        if (HasInputAuthority)
-        {
-            var hardwareRig = m_Player.m_HardwareRig;
-
-            // 🎯 VR 트래킹된 최신 위치 적용 (애니메이션 리깅)
-            //transform.position = hardwareRig.transform.position;
-            //transform.rotation = hardwareRig.transform.rotation;
-
-            //leftHandController.position = hardwareRig.m_LeftHandTransform.position;
-            //leftHandController.rotation = hardwareRig.m_LeftHandTransform.rotation;
-            //
-            //rightHandController.position = hardwareRig.m_RightHandTransform.position;
-            //rightHandController.rotation = hardwareRig.m_RightHandTransform.rotation;
-            //
-            //HeadController.position = hardwareRig.m_Headset.position;
-            //HeadController.rotation = hardwareRig.m_Headset.rotation;
-        }
-    }
-
-
 
     private void SetCharacterHeadLayer()
     {

@@ -1,30 +1,62 @@
 using Fusion;
+using TMPro;
 using UnityEngine;
 using static Define;
 
-public class PlayerStatManager : NetworkBehaviour, IHitable
+public class PlayerStatManager : NetworkBehaviour
 {
     [Header("Ref")]
     private Player m_PlayerManager;
 
-    [Header("Health Stats")]
-    [SerializeField] public int m_MaxHealth { private set; get; } = 100;
-    public int m_CurrentHealth { private set; get; }
+    //[Header("Health")]
+    [Networked]
+    public int m_MaxHealth { set; get; } = 100;
 
-    [Header("Mana Stats")]
-    public int m_MaxMana { private set; get; } = 100;
-    public int m_CurrentMana { private set; get; }
-    public float m_ManaRegenRate { private set; get; } // 초당 마나 회복량
+    [SerializeField]
+    [Networked]
+    public int m_CurrentHealth { set; get; }
 
-    private float m_ManaRegenTimer = 0f;
+    //[Header("Mana")]
+    [Networked]
+    public int m_MaxMana {  set; get; } = 100;
+
+    [Networked]
+    public int m_CurrentMana {  set; get; }
+
+
+    //[Header("Mana Regent")]
+    [Networked]
+    public float m_ManaRegenRate {  set; get; } // 초당 마나 회복량
+
+    [Networked]
+    public float m_ManaRegenTimer { get; set; } = 0f;
+
+    private ChangeDetector _changeDetector;
+
+    [Header("Test")]
+    public Player m_TestPlayerVimtim;
+    public TextMeshProUGUI m_Text;
+
+    public override void Spawned()
+    {
+        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
+        InitState();
+    }
 
     void Awake()
     {
         m_PlayerManager = GetComponent<Player>();
-        InitState();
     }
 
     void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha5) && m_TestPlayerVimtim != null && HasInputAuthority)
+        {
+            m_PlayerManager._sceneObjects.Gameplay.ClientChangeHp(m_PlayerManager, m_TestPlayerVimtim, 10);
+        }
+    }
+
+    public override void FixedUpdateNetwork()
     {
         RegenerateMana();
     }
@@ -39,17 +71,6 @@ public class PlayerStatManager : NetworkBehaviour, IHitable
     public void InitHealth()
     {
         m_CurrentHealth = m_MaxHealth;
-    }
-
-    public void ChangeHealth(int healthDelta)
-    {
-        m_CurrentHealth = Mathf.Clamp(m_CurrentHealth + healthDelta, 0, m_MaxHealth);
-        if (m_CurrentHealth <= 0)
-        {
-            OnPlayerDeath();
-        }
-
-        //m_PlayerManager.m_HUD.RefreshUI();
     }
 
     private void OnPlayerDeath()
@@ -115,17 +136,12 @@ public class PlayerStatManager : NetworkBehaviour, IHitable
         return false;
     }
 
-    public void OnHit(Player Attacker, int damage)
+    public void OnHit(Player attacker, int damage, Item weapon)
     {
         Debug.Log("On Hit : " + name);
 
-        // HP
-        ChangeHealth((ushort)-damage);
-
-        // UI
-
-        // Sound
-
-        // Effect
+        // Hp Effect
+        // Sounds
+        m_PlayerManager.m_GameManager.HitEffect();
     }
 }

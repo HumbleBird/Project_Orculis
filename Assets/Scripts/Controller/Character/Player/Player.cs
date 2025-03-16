@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Windows;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
@@ -15,22 +16,19 @@ using static Define;
 public class Player : NetworkBehaviour
 {
     [Header("PlayerManager Ref")]
-    [HideInInspector] public HardwareRig23 m_HardwareRig;
+    [HideInInspector] public HardwareRig m_HardwareRig;
     [HideInInspector] public PlayerStatManager m_PlayerStatesManager;
     [HideInInspector] public PlayerMagicManager m_PlayerMagicManager;
     [HideInInspector] public PlayerEffectsManager m_PlayerEffectsManager;
     [HideInInspector] public PlayerEquipmentManager m_PlayerEquipmentManager;
     [HideInInspector] public CharacterAnimationManager m_CharacterAnimationManager;
 
-    [Header("UI Ref")]
-    //public DevelopUI m_DevelopUI;
-    //public UI_MagicTryResult m_MagicTryResultUI;
-
     [Header("Other Ref")]
     AppVoiceExperience voiceExperience;
     StressReceiver m_StressReceiver; // Camera
     Mivry m_Mivry;
-    SceneObjects _sceneObjects;
+    public SceneObjects _sceneObjects;
+    public GameManager m_GameManager;
 
     [Header("Interactor")]
     public XRBaseInteractor m_RightHandLearFarInteractor;
@@ -80,19 +78,10 @@ public class Player : NetworkBehaviour
 
             // Set XRBaseInteractor
             m_HardwareRig =  _sceneObjects.m_Rig;
-            //m_RightHandLearFarInteractor = m_HardwareRig.m_RightHandLearFarInteractor;
-            //m_LeftHandLearFarInteractor = m_HardwareRig.m_LeftHandLearFarInteractor;
-            //m_RightHandLearFarInteractor = m_HardwareRig.m_RightHandLearFarInteractor;
-            //m_LeftHandLearFarInteractor = m_HardwareRig.m_LeftHandLearFarInteractor;
+
+            // GameManager
+            m_GameManager = _sceneObjects.m_Game;
         }
-
-        // CharacterAnimationManager
-    }
-
-    void Update()
-    {
-
-
     }
 
     // Meta Voice, Wit.ai를 통해 음성을 입력받아서 해당 스펠의 함수를 실행함.
@@ -166,28 +155,29 @@ public class Player : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-
         if (HasInputAuthority)
             voiceExperience.Activate();
 
-        ProcessInput();
+        if (GetInput(out RigInput input))
+        {
+            // Input is processed on InputAuthority and StateAuthority.
+            ProcessInput(input);
+        }
     }
 
-    private void ProcessInput()
+    private void ProcessInput(RigInput input)
     {
-        if (GetInput(out RigInput input) == false)
-            return;
-
         // Head Gear
 
-        // LeftHand
-        //if (input.rightHandCommand.ActivateValue > 0)
-        //{
-        //    MoveMagicStaff(true);
-        //    Debug.Log("MoveMagicStaff(true);");
-        //}
+        // Right Hand
+        if (input.rightHandCommand.ActivateValue > 0)
+        {
+
+            //MoveMagicStaff(true);
+            Debug.Log("MoveMagicStaff(true);");
+        }
         //else
-        //    MoveMagicStaff(false);
+            //MoveMagicStaff(false);
 
 
         // Right Hand
@@ -196,8 +186,6 @@ public class Player : NetworkBehaviour
     public override void Render()
     {
 
-        //m_CharacterAnimationManager.NFixedUpdateNetwork();
-        //m_CharacterAnimationManager.NRender();
     }
 
 }

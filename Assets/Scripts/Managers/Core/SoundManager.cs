@@ -41,6 +41,12 @@ public class SoundManager
         _audioClips.Clear();
     }
 
+    public void RandomPlay(AudioClip[] clips, int loop = 0, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
+    {
+        AudioClip clip = clips[Random.Range(0, clips.Length)];
+        Play(clip, loop, type, pitch); 
+    }
+
     public void Play(string path, int loop = 0, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
     {
         AudioClip audioClip = GetOrAddAudioClip(path, type);

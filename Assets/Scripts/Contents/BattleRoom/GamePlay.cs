@@ -3,8 +3,6 @@ using System.Collections;
 using UnityEngine;
 using Fusion;
 using static Define;
-using TMPro;
-using Fusion.XR.Host.Rig;
 
 #if !UNITY_EDITOR && (UNITY_WEBGL || UNITY_ANDROID || UNITY_IOS)
 #error This sample doesn't support currently selected platform, please switch to Windows, Mac, Linux in Build Settings.
@@ -23,9 +21,6 @@ namespace SimpleFPS
         public float PlayerRespawnTime = 5f;
         public float DoubleDamageDuration = 30f;
         public GameObject m_HardwareRig;
-
-
-
 
         [Networked][Capacity(32)][HideInInspector]
 		public NetworkDictionary<PlayerRef, PlayerData> PlayerData { get; }
@@ -127,6 +122,8 @@ namespace SimpleFPS
                 _isNicknameSent = true;
             }
         }
+
+        # region Spawn Respawn Despawn
 
         private void SpawnPlayer(PlayerRef playerRef)
         {
@@ -247,6 +244,8 @@ namespace SimpleFPS
             return spawnPoint;
         }
 
+        #endregion
+
         private void StartGameplay()
         {
             // Stop all respawn coroutines.
@@ -307,6 +306,11 @@ namespace SimpleFPS
             }
         }
 
+
+        #region RPC
+
+
+
         [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
         private void RPC_PlayerKilled(PlayerRef killerPlayerRef, PlayerRef victimPlayerRef, E_WeaponType weaponType)
         {
@@ -334,5 +338,34 @@ namespace SimpleFPS
             playerData.Nickname = nickname;
             PlayerData.Set(playerRef, playerData);
         }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, HostMode = RpcHostMode.SourceIsHostPlayer)]
+        public void RPC_ClientRequestHP(Player attacker, Player defender, int damage)
+        {
+
+            Debug.Log("RPC_ClientRequestHP");
+            defender.m_PlayerStatesManager.m_CurrentHealth = Mathf.Clamp(defender.m_PlayerStatesManager.m_CurrentHealth - damage, 0, defender.m_PlayerStatesManager.m_MaxHealth);
+            if (defender.m_PlayerStatesManager.m_CurrentHealth <= 0)
+            {
+                Debug.Log($"플레이어 사망 {defender.name}");
+                // OnPlayerDeath();
+            }
+        }
+
+        public void ClientChangeHp(Player attacker, Player defender, int damage)
+        {
+            if (HasStateAuthority == false)
+                return;
+
+            Debug.Log("RPC_ClientRequestHP");
+            defender.m_PlayerStatesManager.m_CurrentHealth = Mathf.Clamp(defender.m_PlayerStatesManager.m_CurrentHealth - damage, 0, defender.m_PlayerStatesManager.m_MaxHealth);
+            if (defender.m_PlayerStatesManager.m_CurrentHealth <= 0)
+            {
+                Debug.Log($"플레이어 사망 {defender.name}");
+                // OnPlayerDeath();
+            }
+        }
+
+        #endregion
     }
 }

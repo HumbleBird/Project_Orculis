@@ -1,4 +1,3 @@
-using Fusion.XR.Host.Grabbing;
 using UnityEngine;
 using static Define;
 
@@ -22,7 +21,7 @@ namespace Fusion.XR.Host.Rig
     {
         public Player m_Player; 
         public const int EXECUTION_ORDER = 100;
-        public HardwareRig23 hardwareRig;
+        public HardwareRig hardwareRig;
         public Transform m_HeadsetNetworkRig;
         public Transform m_LeftHandNetworkRig;
         public Transform m_RightHandNetworkRig;
@@ -35,7 +34,7 @@ namespace Fusion.XR.Host.Rig
             base.Spawned();
             if (IsLocalNetworkRig)
             {
-                hardwareRig = FindFirstObjectByType<HardwareRig23>();
+                hardwareRig = FindFirstObjectByType<HardwareRig>();
                 if (hardwareRig == null) Debug.LogError("Missing HardwareRig in the scene");
             }
 

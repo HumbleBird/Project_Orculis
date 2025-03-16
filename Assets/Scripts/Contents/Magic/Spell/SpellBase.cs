@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Oculus.Interaction.PoseDetection.Debug;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using static Define;
 
 [CreateAssetMenu(fileName = "Spell Base", menuName = "Scriptable Object/Spell Base", order = 0)]
@@ -14,15 +16,33 @@ public abstract class SpellBase : ScriptableObject
     [Header("Ref")]
     public Player m_Owner;
 
-    [Header("Property")]
+    [Header("Base Property")]
     public string spellName;
     [SerializeField] protected ushort m_Cost;
     public E_SpellActivation m_ESpellActivation;
     public E_SpellType m_SpellType;
-    public float m_fCoolTime = 10f;
-    public string m_sTagline;
+    [SerializeField] protected float m_fPowerCameraShake;
+
+    [Header("UI Property")]
+    public VideoClip m_UseVideoClip {  get; protected set; }
+    public Sprite m_icon;
     public string m_sDetailDescription;
-    public Sprite m_image;
+    public string m_sConditionDescription;
+
+    [Header("CoolTime Property")]
+    public float m_fCoolTime { private set; get; } = 10f;
+    private float m_fLastCastTime = -Mathf.Infinity;  // 마지막 사용 시간
+
+    // 스킬 사용 가능 여부
+    public bool m_bIsEndCooltime => Time.time >= m_fLastCastTime + m_fCoolTime;
+
+    // 쿨타임 진행률 (0 ~ 1)
+    // 0 쿨타임 시작, 1 쿨타임 완료
+    public float m_CooldownProgress => Mathf.Clamp01((Time.time - m_fLastCastTime) / m_fCoolTime); 
+
+    // 남은 쿨타임 시간
+    public float m_CooldownRemain => Mathf.Max(0, (m_fLastCastTime + m_fCoolTime) - Time.time); 
+
 
     [Header("Flag")]
     public bool m_bIsChant = false;
@@ -36,10 +56,8 @@ public abstract class SpellBase : ScriptableObject
     [SerializeField] protected AudioClip m_SpellSuccessAudioClip;
     [SerializeField] protected AudioClip m_SpellFailAudioClip;
 
-    [Header("Camera")]
-    [SerializeField] protected float m_fPowerCameraShake;
 
-    #region Base Conditoin
+    #region 1. Base Conditoin
 
     // 기본 음성 조건을 만족했을 경우
     public virtual IEnumerator AchieveChantFlag()
@@ -85,23 +103,33 @@ public abstract class SpellBase : ScriptableObject
 
     #endregion
 
+    #region 2. Spell Condition
+
     public void AttempToCastSpell()
     {
         // Equipment Light
 
         // 각자의 스펠 조건
-        bool m_CanAttempToCastSpell = AttempToCastSpellCondition();
 
-        if (m_CanAttempToCastSpell == true)
+        if (AttempToCastSpellCondition() == true)
             SuccessfullyCastSpell();
         else
             FailCastSpell();
     }
 
+
+
+
+    #endregion
+
+    #region 3. Spell Step by Step
+
     protected virtual bool AttempToCastSpellCondition()
     {
-        // Check Mana
-        if (m_Owner.m_PlayerStatesManager.HasEnoughMana(m_Cost) == false)
+        if (CheckMana() == false)
+            return false;
+
+        if (CheckCooltime() == false)
             return false;
 
         return true;
@@ -143,8 +171,38 @@ public abstract class SpellBase : ScriptableObject
         ClearCondition();
     }
 
+    #endregion
+
+    #region Flag & Conditions
+
     private void ClearCondition()
     {
         m_bIsChant = m_bIsChant = false;
     }
+
+    private bool CheckMana()
+    {
+        if (m_Owner.m_PlayerStatesManager.HasEnoughMana(m_Cost) == false)
+            return false;
+
+        return true;
+    }
+
+    private bool CheckCooltime()
+    {
+        if (m_bIsEndCooltime)
+        {
+            m_fLastCastTime = Time.time;
+            return true;
+        }
+        else
+        {
+            Debug.Log($"{spellName}이 아직 쿨타임입니다.");
+            Debug.Log($"m_fLastCastTime : {m_fLastCastTime}, Time.time : {Time.time}, m_fSpellCoolTime : {m_fCoolTime}");
+            return false;
+        }
+    }
+
+    #endregion
+
 }

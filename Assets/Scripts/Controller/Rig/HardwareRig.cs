@@ -1,198 +1,136 @@
-﻿using Fusion.Sockets;
-using Fusion.XR.Host.Grabbing;
-using System;
-using System.Collections;
+using Fusion;
+using Fusion.Sockets;
+using SimpleFPS;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
-using System.Threading.Tasks;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using static Define;
+using System.Collections;
+using Fusion.XR.Host.Rig;
+using static Unity.Collections.Unicode;
+using System.Threading.Tasks;
 
-namespace Fusion.XR.Host.Rig
+public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
+    [Header("XRBaseInteractor")]
+    public XRBaseInteractor m_RightHandLearFarInteractor;
+    public XRBaseInteractor m_LeftHandLearFarInteractor;
+
+    [Header("Ref")]
+    public @XRIDefaultInputActions inputActions;
+    [SerializeField] private AudioListener m_AudioListener;
+
+    public Transform m_LeftHandTransform;
+    public Transform m_RightHandTransform;
+    public Transform m_Headset;
+    public NetworkRunner runner;
+
+
+    public RunnerExpectations runnerExpectations = RunnerExpectations.DetectRunner;
+
+    bool searchingForRunner = false;
+
+    public async Task<NetworkRunner> FindRunner()
     {
-        public HardwareHand leftHand;
-        public HardwareHand rightHand;
-        public HardwareHeadset headset;
-        public NetworkRunner runner;
-
-        public enum RunnerExpectations
+        while (searchingForRunner) await Task.Delay(10);
+        searchingForRunner = true;
+        if (runner == null && runnerExpectations != RunnerExpectations.NoRunner)
         {
-            NoRunner, // For offline usages
-            PresetRunner,
-            DetectRunner // should not be used in multipeer scenario
-        }
-        public RunnerExpectations runnerExpectations = RunnerExpectations.DetectRunner;
-
-        bool searchingForRunner = false;
-
-        [Header("Input interpolation")]
-        public bool useInputInterpolation = false;
-        public float interpolationDelay = 0.008f;
-        XRHeadsetInputDevice headsetInputDevice;
-        XRControllerInputDevice leftHandInputDevice;
-        XRControllerInputDevice rightHandInputDevice;
-
-
-        public float InterpolationDelay => interpolationDelay;
-
-        public async Task<NetworkRunner> FindRunner()
-        {
-            while (searchingForRunner) await Task.Delay(10);
-            searchingForRunner = true;
-            if (runner == null && runnerExpectations != RunnerExpectations.NoRunner)
+            if (runnerExpectations == RunnerExpectations.PresetRunner || NetworkProjectConfig.Global.PeerMode == NetworkProjectConfig.PeerModes.Multiple)
             {
-                if (runnerExpectations == RunnerExpectations.PresetRunner || NetworkProjectConfig.Global.PeerMode == NetworkProjectConfig.PeerModes.Multiple)
-                {
-                    Debug.LogWarning("Runner has to be set in the inspector to forward the input");
-                }
-                else
-                {
-                    // Try to detect the runner
-                    runner = FindFirstObjectByType<NetworkRunner>();
-                    var searchStart = Time.time;
-                    while (searchingForRunner && runner == null)
-                    {
-                        if (NetworkRunner.Instances.Count > 0)
-                        {
-                            runner = NetworkRunner.Instances[0];
-                        }
-                        if (runner == null)
-                        {
-                            await System.Threading.Tasks.Task.Delay(10);
-                        }
-                    }
-                }
-            }
-            searchingForRunner = false;
-            return runner;
-        }
-
-        protected virtual void Awake()
-        {
-            if (leftHand) leftHandInputDevice = leftHand.GetComponentInChildren<XRControllerInputDevice>();
-            if (rightHand) rightHandInputDevice = rightHand.GetComponentInChildren<XRControllerInputDevice>();
-            if (headset) headsetInputDevice = headset.GetComponentInChildren<XRHeadsetInputDevice>();
-
-            if (leftHandInputDevice == null || rightHandInputDevice == null || headsetInputDevice == null)
-            {
-                useInputInterpolation = false;
-            }
-        }
-
-        protected virtual async void Start()
-        {
-            await FindRunner();
-            if (runner)
-            {
-                runner.AddCallbacks(this);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (searchingForRunner) Debug.LogError("Cancel searching for runner in HardwareRig");
-            searchingForRunner = false;
-            if (runner) runner.RemoveCallbacks(this);
-        }
-
-
-        #region Locomotion
-        // Update the hardware rig rotation. This will trigger a Riginput network update
-        public virtual void Rotate(float angle)
-        {
-            transform.RotateAround(headset.transform.position, transform.up, angle);
-        }
-
-        // Update the hardware rig position. This will trigger a Riginput network update
-        public virtual void Teleport(Vector3 position)
-        {
-            Vector3 headsetOffet = headset.transform.position - transform.position;
-            headsetOffet.y = 0;
-            transform.position = position - headsetOffet;
-        }
-
-        // Teleport the rig with a fader
-        public virtual IEnumerator FadedTeleport(Vector3 position)
-        {
-            if (headset.fader) yield return headset.fader.FadeIn();
-            Teleport(position);
-            if (headset.fader) yield return headset.fader.WaitBlinkDuration();
-            if (headset.fader) yield return headset.fader.FadeOut();
-        }
-
-        // Rotate the rig with a fader
-        public virtual IEnumerator FadedRotate(float angle)
-        {
-            if (headset.fader) yield return headset.fader.FadeIn();
-            Rotate(angle);
-            if (headset.fader) yield return headset.fader.WaitBlinkDuration();
-            if (headset.fader) yield return headset.fader.FadeOut();
-        }
-        #endregion
-
-        #region INetworkRunnerCallbacks
-
-        // Prepare the input, that will be read by NetworkRig in the FixedUpdateNetwork
-        public void OnInput(NetworkRunner runner, NetworkInput input)
-        {
-            RigInput rigInput = new RigInput();
-            rigInput.playAreaPosition = transform.position;
-            rigInput.playAreaRotation = transform.rotation;
-            if (useInputInterpolation)
-            {
-                var leftHandInterpolationPose = leftHandInputDevice.InterpolatedPose(InterpolationDelay);
-                var rightHandInterpolationPose = rightHandInputDevice.InterpolatedPose(InterpolationDelay);
-                var headsetInterpolationPose = headsetInputDevice.InterpolatedPose(InterpolationDelay);
-                rigInput.leftHandPosition = leftHandInterpolationPose.position;
-                rigInput.leftHandRotation = leftHandInterpolationPose.rotation;
-                rigInput.rightHandPosition = rightHandInterpolationPose.position;
-                rigInput.rightHandRotation = rightHandInterpolationPose.rotation;
-                rigInput.headsetPosition = headsetInterpolationPose.position;
-                rigInput.headsetRotation = headsetInterpolationPose.rotation;
+                Debug.LogWarning("Runner has to be set in the inspector to forward the input");
             }
             else
             {
-                rigInput.leftHandPosition = leftHand.transform.position;
-                rigInput.leftHandRotation = leftHand.transform.rotation;
-                rigInput.rightHandPosition = rightHand.transform.position;
-                rigInput.rightHandRotation = rightHand.transform.rotation;
-                rigInput.headsetPosition = headset.transform.position;
-                rigInput.headsetRotation = headset.transform.rotation;
+                // Try to detect the runner
+                runner = FindFirstObjectByType<NetworkRunner>();
+                var searchStart = Time.time;
+                while (searchingForRunner && runner == null)
+                {
+                    if (NetworkRunner.Instances.Count > 0)
+                    {
+                        runner = NetworkRunner.Instances[0];
+                    }
+                    if (runner == null)
+                    {
+                        await System.Threading.Tasks.Task.Delay(10);
+                    }
+                }
             }
+        }
+        searchingForRunner = false;
+        return runner;
+    }
 
-            //rigInput.leftHandCommand = leftHand.handCommand;
-            //rigInput.rightHandCommand = rightHand.handCommand;
 
-            rigInput.leftGrabInfo = leftHand.grabber.GrabInfo;
-            rigInput.rightGrabInfo = rightHand.grabber.GrabInfo;
 
-            input.Set(rigInput);
+    protected virtual async void Start()
+    {
+        await FindRunner();
+        if (runner)
+        {
+            runner.AddCallbacks(this);
         }
 
-        #endregion
+        if (inputActions == null)
+            inputActions = new XRIDefaultInputActions();
 
-        #region INetworkRunnerCallbacks (unused)
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
-
-        public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
-        public void OnConnectedToServer(NetworkRunner runner) { }
-        public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
-        public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
-        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
-        public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
-        public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
-        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
-        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
-        public void OnSceneLoadDone(NetworkRunner runner) { }
-        public void OnSceneLoadStart(NetworkRunner runner) { }
-        public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-        public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
-        public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
-        #endregion
+        inputActions.Enable();
     }
+
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        RigInput rigInput = new RigInput();
+        rigInput.playAreaPosition = transform.position;
+        rigInput.playAreaRotation = transform.rotation;
+
+        rigInput.headsetPosition = m_Headset.position;
+        rigInput.headsetRotation = m_Headset.rotation;
+
+        //right controller
+        //m_LeftHandCommand.LearFarInteractor_SelectActivate = inputActions.XRILeftInteraction.select.readvalue<bool>();
+        rigInput.rightHandPosition = m_RightHandTransform.position;
+        rigInput.rightHandRotation = m_RightHandTransform.rotation;
+        rigInput.rightHandCommand.LearFarInteractor_SelectValue = inputActions.XRIRightInteraction.SelectValue.ReadValue<float>();
+        rigInput.rightHandCommand.ActivateValue = inputActions.XRIRightInteraction.ActivateValue.ReadValue<float>();
+
+        //left controller
+        rigInput.leftHandPosition = m_LeftHandTransform.position;
+        rigInput.leftHandRotation = m_LeftHandTransform.rotation;
+
+
+        input.Set(rigInput);
+    }
+
+    private void OnDestroy()
+    {
+        if (searchingForRunner) Debug.LogError("Cancel searching for runner in HardwareRig");
+        searchingForRunner = false;
+        if (runner) runner.RemoveCallbacks(this);
+    }
+
+    #region INetworkRunnerCallbacks (unused)
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+
+    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
+    public void OnConnectedToServer(NetworkRunner runner) { }
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
+    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
+    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
+    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
+    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
+    public void OnSceneLoadDone(NetworkRunner runner) { }
+    public void OnSceneLoadStart(NetworkRunner runner) { }
+    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
+    public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
+    #endregion
 }

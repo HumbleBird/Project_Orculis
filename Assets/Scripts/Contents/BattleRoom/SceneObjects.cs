@@ -20,8 +20,11 @@ public class SceneObjects : SimulationBehaviour
     private Mivry _mivry;
     public Mivry m_Mivry { get { return FindComponentInScene(ref _mivry); } }
 
-    private HardwareRig23 _rig;
-    public HardwareRig23 m_Rig { get { return FindComponentInScene(ref _rig); } }
+    private HardwareRig _rig;
+    public HardwareRig m_Rig { get { return FindComponentInScene(ref _rig); } }
+
+    private GameManager _game;
+    public GameManager m_Game {  get { return FindComponentInScene(ref _game); } }
 
     private T FindComponentInScene<T>(ref T cachedComponent) where T : Component
     {

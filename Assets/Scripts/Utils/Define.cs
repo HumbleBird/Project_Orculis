@@ -1,12 +1,5 @@
-﻿using Fusion;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public partial class Define
+﻿public partial class Define
 {
-
-
     #region Interface
     public interface IHitable
     {
