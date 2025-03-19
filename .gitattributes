@@ -2,3 +2,5 @@
 * text=auto
 Assets/Plugins/Tool/Firebase/Plugins/x86_64/FirebaseCppApp-*.bundle filter=lfs diff=lfs merge=lfs -text
 Assets/Plugins/Tool/Firebase/Plugins/x86_64/FirebaseCppApp-*.so filter=lfs diff=lfs merge=lfs -text
+Assets/Import/Tool/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.bundle filter=lfs diff=lfs merge=lfs -text
+Assets/Import/Tool/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.so filter=lfs diff=lfs merge=lfs -text
