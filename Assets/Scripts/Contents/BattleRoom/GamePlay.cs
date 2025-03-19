@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Fusion;
 using static Define;
+using UnityEngine.Rendering;
 
 #if !UNITY_EDITOR && (UNITY_WEBGL || UNITY_ANDROID || UNITY_IOS)
 #error This sample doesn't support currently selected platform, please switch to Windows, Mac, Linux in Build Settings.
@@ -306,6 +307,31 @@ namespace SimpleFPS
             }
         }
 
+
+        #region Effect
+
+        [Header("Hit Effect")]
+        public Volume target;
+        public float m_fDuration = 0.05f;
+        public AudioClip[] m_DamageHumanSounds;
+
+        public IEnumerator HitEffectScreen()
+        {
+            target.enabled = true;
+
+            yield return new WaitForSeconds(m_fDuration);
+
+            target.enabled = false;
+        }
+
+        public void HitEffect()
+        {
+            StartCoroutine(HitEffectScreen());
+
+            Managers.Sound.RandomPlay(m_DamageHumanSounds);
+        }
+
+        #endregion
 
         #region RPC
 

@@ -23,9 +23,6 @@ public class SceneObjects : SimulationBehaviour
     private HardwareRig _rig;
     public HardwareRig m_Rig { get { return FindComponentInScene(ref _rig); } }
 
-    private GameManager _game;
-    public GameManager m_Game {  get { return FindComponentInScene(ref _game); } }
-
     private T FindComponentInScene<T>(ref T cachedComponent) where T : Component
     {
         if (cachedComponent == null && Runner != null && Runner.SceneManager != null && Runner.SceneManager.MainRunnerScene.IsValid())

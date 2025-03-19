@@ -25,10 +25,7 @@ public class Player : NetworkBehaviour
 
     [Header("Other Ref")]
     AppVoiceExperience voiceExperience;
-    StressReceiver m_StressReceiver; // Camera
-    Mivry m_Mivry;
     public SceneObjects _sceneObjects;
-    public GameManager m_GameManager;
 
     [Header("Interactor")]
     public XRBaseInteractor m_RightHandLearFarInteractor;
@@ -50,17 +47,11 @@ public class Player : NetworkBehaviour
         m_PlayerEquipmentManager = GetComponent<PlayerEquipmentManager>();
         m_CharacterAnimationManager = GetComponent<CharacterAnimationManager>();
 
-        // Camera
-        m_StressReceiver = GetComponentInChildren<StressReceiver>();
-        //m_MagicTryResultUI = GetComponentInChildren<UI_MagicTryResult>();
-
-
         StartCoroutine(GenerateMagicMoveParticle());
 
         if (HasInputAuthority == false)
         {
             name = name + " Orther Player";
-            //m_InputActionManager.enabled = false;
         }
         else
         {
@@ -71,16 +62,13 @@ public class Player : NetworkBehaviour
             voiceExperience = _sceneObjects.m_AppVoiceExperience;
 
             // Mivry
-            m_Mivry = _sceneObjects.m_Mivry;
-            m_Mivry.OnGestureCompletion.AddListener(CheckRecognition);
-            m_Mivry.LeftHand = m_CharacterAnimationManager.leftHandController.gameObject;
-            m_Mivry.RightHand = m_CharacterAnimationManager.rightHandController.gameObject;
+            Mivry mivry = _sceneObjects.m_Mivry;
+            mivry.OnGestureCompletion.AddListener(CheckRecognition);
+            mivry.LeftHand = m_CharacterAnimationManager.leftHandController.gameObject;
+            mivry.RightHand = m_CharacterAnimationManager.rightHandController.gameObject;
 
             // Set XRBaseInteractor
             m_HardwareRig =  _sceneObjects.m_Rig;
-
-            // GameManager
-            m_GameManager = _sceneObjects.m_Game;
         }
     }
 

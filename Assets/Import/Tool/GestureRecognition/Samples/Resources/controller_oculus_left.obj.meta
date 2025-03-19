@@ -112,5 +112,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/Plugins/Tool/GestureRecognition/Samples/Resources/controller_oculus_left.obj
+  assetPath: Assets/Import/Tool/GestureRecognition/Samples/Resources/controller_oculus_left.obj
   uploadId: 679908

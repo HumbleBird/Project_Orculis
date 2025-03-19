@@ -12,5 +12,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/Plugins/Tool/GestureRecognition/GestureManager/Resources/TuffyShader.shader
+  assetPath: Assets/Import/Tool/GestureRecognition/GestureManager/Resources/TuffyShader.shader
   uploadId: 679908

@@ -145,6 +145,6 @@ public class PlayerStatManager : NetworkBehaviour
 
         // Hp Effect
         // Sounds
-        m_PlayerManager.m_GameManager.HitEffect();
+        m_PlayerManager._sceneObjects.Gameplay.HitEffect();
     }
 }

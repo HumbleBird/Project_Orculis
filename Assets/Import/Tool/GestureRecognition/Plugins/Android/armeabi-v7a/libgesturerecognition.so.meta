@@ -99,5 +99,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/Plugins/Tool/GestureRecognition/Plugins/Android/armeabi-v7a/libgesturerecognition.so
+  assetPath: Assets/Import/Tool/GestureRecognition/Plugins/Android/armeabi-v7a/libgesturerecognition.so
   uploadId: 679908
