@@ -5,7 +5,8 @@ using UnityEngine;
 public class LobbyScene : BaseScene
 {
     public AudioClip m_EnterenceClip;
-    public AudioSource m_Source;
+    public AudioClip m_BgmClip;
+    public AudioClip m_BattleRoomEnterClip;
 
     protected override void Init()
     {
@@ -13,13 +14,18 @@ public class LobbyScene : BaseScene
 
         SceneType = Define.Scene.Lobby;
 
-        m_Source = GetComponent<AudioSource>();
-        m_Source.clip = m_EnterenceClip;
-        m_Source.Play();
+        Managers.Sound.Play(m_EnterenceClip);
+        Managers.Sound.Play(m_BgmClip, 1, Define.Sound.Bgm);
     }
 
     public override void Clear()
     {
 
     }
+
+    public void PlayClip_BattleRoomEnter()
+    {
+        Managers.Sound.Play(m_BattleRoomEnterClip);
+    }
+
 }

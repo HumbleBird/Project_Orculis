@@ -44,7 +44,7 @@ public class LoginSystem : MonoBehaviour
         // 성공 시 씬 이동
         if(result)
         {
-            Managers.Scene.LoadingSceneQueueNextScene(Scene.Game);
+            Managers.Scene.LoadingSceneQueueNextScene(Scene.Lobby);
         }
     }
 

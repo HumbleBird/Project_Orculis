@@ -1,3 +1,4 @@
+using SimpleFPS;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class Spell_Depulso : SpellBase
 {
     [SerializeField] private float m_fAddForece = 50;
     [SerializeField] private Accio m_Spell_Accio;
+    [SerializeField] private int m_iDamage = 10;
 
     protected override bool AttempToCastSpellCondition()
     {
@@ -23,7 +25,7 @@ public class Spell_Depulso : SpellBase
         // Acio를 통해 부유 중인 물체가 있다면
         if(m_Owner.m_PlayerMagicManager.m_bIsSelectObject)
         { 
-            m_Owner.m_PlayerMagicManager.MagicObjectTrow(
+            MagicObjectTrow(
                 m_Owner.m_RightHandInteractableObject.gameObject,
                 m_fAddForece,
                 ForceMode.Impulse);
@@ -39,5 +41,19 @@ public class Spell_Depulso : SpellBase
         {
             // 앞에 있는 물건을 감지해서 날려버림.
         }
+    }
+
+    public void MagicObjectTrow(GameObject prefab, float power, ForceMode mode)
+    {
+        MagicMovableBox obj = prefab.GetComponent<MagicMovableBox>();
+
+        // Set Info
+        obj.m_iDamage = m_iDamage;
+        obj.m_Owner = m_Owner;
+
+        // RigidBody
+        obj.m_Rigidbody.AddForce(m_Owner.m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform.forward * power);
+
+
     }
 }

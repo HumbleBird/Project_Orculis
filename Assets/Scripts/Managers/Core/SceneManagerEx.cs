@@ -8,6 +8,7 @@ public class SceneManagerEx
 {
     public BaseScene CurrentScene { get { return GameObject.FindFirstObjectByType<BaseScene>(); } }
     public Define.Scene m_NextScene;
+    float progressValue;
 
     public void LoadScene(Define.Scene type)
     {
@@ -37,11 +38,7 @@ public class SceneManagerEx
         while (!operation.isDone)
         {
             // 진행률 계산 (0.0f ~ 1.0f)
-            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
-
-            // UI 업데이트
-            //m_LoadingBarFill.fillAmount = progressValue;
-            //m_LoadingBarText.text = $"{progressValue * 100:F0}%";
+            progressValue = Mathf.Clamp01(operation.progress / 0.9f);
 
             // 씬 로드가 끝난 경우 처리
             if (operation.progress >= 0.9f)

@@ -29,7 +29,7 @@ public class Accio : SpellBase
             return false;
         
         m_obj = list[0] as XRBaseInteractable;
-        var magicObj = m_obj.transform.GetComponent<MagicObjectBase>();
+        var magicObj = m_obj.transform.GetComponent<MagicMovableBox>();
 
         if (magicObj == null || magicObj.CanControlMagicObject() == false)
             return false;

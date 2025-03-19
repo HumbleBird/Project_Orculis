@@ -187,7 +187,7 @@
         Unknown = 0,
         Start = 1,
         Lobby = 2,
-        Game = 3,
+        BattleRoom = 3,
         Login = 4,
         Loading = 5,
     }

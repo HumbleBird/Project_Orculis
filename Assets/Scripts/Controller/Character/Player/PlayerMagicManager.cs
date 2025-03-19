@@ -91,12 +91,6 @@ public class PlayerMagicManager : NetworkBehaviour
 
         m_PlayerManager.m_RightHandInteractableObject = null;
     }
-    
-    public void MagicObjectTrow(GameObject prefab, float power, ForceMode mode)
-    {
-        var obj =  prefab.GetComponent<Rigidbody>();
-        obj.AddForce(m_PlayerManager.m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform.forward* power);
-    }
 
     public void SpellFlagCheck(E_SpellCheckType type, string spellName)
     {

@@ -136,9 +136,12 @@ public class PlayerStatManager : NetworkBehaviour
         return false;
     }
 
-    public void OnHit(Player attacker, int damage, Item weapon)
+    public void OnHit(Player attacker, int damage)
     {
         Debug.Log("On Hit : " + name);
+
+        // HP
+        m_CurrentHealth = Mathf.Clamp(m_CurrentHealth - damage, 0, m_MaxHealth);
 
         // Hp Effect
         // Sounds

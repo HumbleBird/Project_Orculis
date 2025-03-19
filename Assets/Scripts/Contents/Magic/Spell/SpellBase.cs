@@ -17,15 +17,15 @@ public abstract class SpellBase : ScriptableObject
     public Player m_Owner;
 
     [Header("Base Property")]
-    public string spellName;
     [SerializeField] protected ushort m_Cost;
     public E_SpellActivation m_ESpellActivation;
     public E_SpellType m_SpellType;
     [SerializeField] protected float m_fPowerCameraShake;
 
-    [Header("UI Property")]
-    public VideoClip m_UseVideoClip {  get; protected set; }
+    [Header("Visuals")]
     public Sprite m_icon;
+    public string spellName;
+    public VideoClip m_UseVideoClip {  get; protected set; }
     public string m_sDetailDescription;
     public string m_sConditionDescription;
 
