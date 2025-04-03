@@ -9,7 +9,6 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 /// 지속성 마법
 /// </summary>
 
-[CreateAssetMenu(fileName = "Spell Accio", menuName = "Scriptable Object/Spell Accio")]
 public class Accio : SpellBase
 {
     public DrainManaEffect m_DrainManaEffect;
@@ -57,7 +56,7 @@ public class Accio : SpellBase
 
         m_Owner.m_RightHandInteractableObject = m_obj;
 
-        m_Owner.m_RightHandLearFarInteractor.interactionManager.SelectEnter( 
+        m_Owner.m_RightHandLearFarInteractor.interactionManager.SelectEnter(  
             (IXRSelectInteractor)m_Owner.m_RightHandLearFarInteractor,
             (IXRSelectInteractable)m_Owner.m_RightHandInteractableObject);
 

@@ -1,22 +1,20 @@
 using Fusion;
-using Fusion.XR.Host.Rig;
-using NUnit.Framework;
+using Meta.WitAi.CallbackHandlers;
 using Oculus.Voice;
-using SimpleFPS;
+using Projectiles;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Windows;
-using UnityEngine.XR.Interaction.Toolkit.Inputs;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using static Define;
 
 public class Player : NetworkBehaviour
 {
+    //[SerializeField]
+    //private DebugInputControl _inputControl;
     [Header("PlayerManager Ref")]
-    [HideInInspector] public HardwareRig m_HardwareRig;
+    public HardwareRig m_HardwareRig;
     [HideInInspector] public PlayerStatManager m_PlayerStatesManager;
     [HideInInspector] public PlayerMagicManager m_PlayerMagicManager;
     [HideInInspector] public PlayerEffectsManager m_PlayerEffectsManager;
@@ -36,6 +34,10 @@ public class Player : NetworkBehaviour
     [SerializeField] private GameObject m_MagicStafeMoveParticle;
     [SerializeField] private float m_fParticleTimeInterval = 0.03f;
     bool isGeneratingParticles = false;
+
+    [Header("Debug")]
+    public bool[] m_AlphaList = new bool[10];
+
 
     public override void Spawned()
     {
@@ -60,6 +62,8 @@ public class Player : NetworkBehaviour
 
             // Voice
             voiceExperience = _sceneObjects.m_AppVoiceExperience;
+            var matcher = voiceExperience.GetComponentInChildren<WitResponseMatcher>();
+            matcher.onMultiValueEvent.AddListener(CheckVoiceMagicSpells);
 
             // Mivry
             Mivry mivry = _sceneObjects.m_Mivry;
@@ -69,6 +73,24 @@ public class Player : NetworkBehaviour
 
             // Set XRBaseInteractor
             m_HardwareRig =  _sceneObjects.m_Rig;
+            m_HardwareRig.runner = Runner;
+            var networkEvents = Runner.GetComponent<NetworkEvents>();
+            networkEvents.OnInput.AddListener(m_HardwareRig.OnInput);
+
+            m_RightHandLearFarInteractor = m_HardwareRig.m_RightHandLearFarInteractor;
+            m_LeftHandLearFarInteractor = m_HardwareRig.m_LeftHandLearFarInteractor;
+
+            //_inputControl.RequestCursorLock();
+        }
+
+
+    }
+
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        if (Runner.LocalPlayer == Object.InputAuthority)
+        {
+           // _inputControl.RequestCursorRelease();
         }
     }
 
@@ -131,8 +153,8 @@ public class Player : NetworkBehaviour
             {
                 // 파티클 소환
                 GameObject go  = Managers.Resource.Instantiate(m_MagicStafeMoveParticle);
-                go.transform.position = m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform.position;
-                go.transform.rotation = m_PlayerEquipmentManager.m_CurrentWeapon.m_EquipmentEdge_SpawnTransform.rotation;
+                go.transform.position = m_PlayerEquipmentManager.m_CurrentWeapon.m_MuzzleTransform.position;
+                go.transform.rotation = m_PlayerEquipmentManager.m_CurrentWeapon.m_MuzzleTransform.rotation;
 
                 yield return new WaitForSeconds(m_fParticleTimeInterval);
             }
@@ -165,15 +187,34 @@ public class Player : NetworkBehaviour
             Debug.Log("MoveMagicStaff(true);");
         }
         //else
-            //MoveMagicStaff(false);
+        //MoveMagicStaff(false);
 
 
         // Right Hand
+
+        // Debug Spell Mater
+        Debug_SpellAlphaInput(input.Alpha0, 0);
+        Debug_SpellAlphaInput(input.Alpha1, 1);
+        Debug_SpellAlphaInput(input.Alpha2, 2);
+        Debug_SpellAlphaInput(input.Alpha3, 3);
+        Debug_SpellAlphaInput(input.Alpha4, 4);
+        Debug_SpellAlphaInput(input.Alpha5, 5);
+        Debug_SpellAlphaInput(input.Alpha6, 6);
+        Debug_SpellAlphaInput(input.Alpha7, 7);
+        Debug_SpellAlphaInput(input.Alpha8, 8);
+        Debug_SpellAlphaInput(input.Alpha9, 9);
     }
 
-    public override void Render()
+    private void Debug_SpellAlphaInput(NetworkBool alpha, int count)
     {
-
+        if (alpha && m_AlphaList[count] == false)
+        {
+            m_AlphaList[count] = true;
+            m_PlayerMagicManager.Editor_SuccessTrySpell(count);
+        }
+        else if (alpha == false && m_AlphaList[count] == true)
+        {
+            m_AlphaList[count] = false;
+        }
     }
-
 }

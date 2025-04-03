@@ -1,9 +1,6 @@
-using Meta.WitAi.Lib;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 // 스킬의 쿨타임을 나타내는 링의 색상을 변화시킴.
 public class IndicatorSkill : Indicator
@@ -16,11 +13,13 @@ public class IndicatorSkill : Indicator
     {
         base.Start();
 
+        var unlockspelllist = m_Player.m_PlayerMagicManager.UnlockSpellGet();
+
         // Temp
         {
-            for (int i = 0; i < m_Player.m_PlayerMagicManager.m_UnlockSpells.Count; i++)
+            for (int i = 0; i < unlockspelllist.Count; i++)
             {
-                m_DicIndicatorSpells.Add(m_Player.m_PlayerMagicManager.m_UnlockSpells[i], m_RingObj[i]);
+                m_DicIndicatorSpells.Add(unlockspelllist[i], m_RingObj[i]);
 
                 var rs = m_RingObj[i].GetComponentsInChildren<Renderer>();
                 Material[] ms = rs.SelectMany(r => r.materials).ToArray();

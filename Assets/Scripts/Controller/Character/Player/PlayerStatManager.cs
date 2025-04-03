@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using static Define;
 
-public class PlayerStatManager : NetworkBehaviour
+public class PlayerStatManager : NetworkBehaviour, IHitable
 {
     [Header("Ref")]
     private Player m_PlayerManager;
@@ -17,7 +17,6 @@ public class PlayerStatManager : NetworkBehaviour
     public int m_CurrentHealth { set; get; }
 
     //[Header("Mana")]
-    [Networked]
     public int m_MaxMana {  set; get; } = 100;
 
     [Networked]
@@ -40,7 +39,7 @@ public class PlayerStatManager : NetworkBehaviour
     public override void Spawned()
     {
         _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
-        InitState();
+        InitNetworkState();
     }
 
     void Awake()
@@ -48,20 +47,12 @@ public class PlayerStatManager : NetworkBehaviour
         m_PlayerManager = GetComponent<Player>();
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha5) && m_TestPlayerVimtim != null && HasInputAuthority)
-        {
-            m_PlayerManager._sceneObjects.Gameplay.ClientChangeHp(m_PlayerManager, m_TestPlayerVimtim, 10);
-        }
-    }
-
     public override void FixedUpdateNetwork()
     {
         RegenerateMana();
     }
 
-    public void InitState()
+    public void InitNetworkState()
     {
         InitHealth();
         InitMana();
@@ -70,6 +61,9 @@ public class PlayerStatManager : NetworkBehaviour
     // 체력 관련 메서드
     public void InitHealth()
     {
+        if (HasStateAuthority == false)
+            return;
+
         m_CurrentHealth = m_MaxHealth;
     }
 
@@ -82,11 +76,17 @@ public class PlayerStatManager : NetworkBehaviour
     // 마나 관련 메서드
     public void InitMana()
     {
+        if (HasStateAuthority == false)
+            return;
+
         m_CurrentMana = m_MaxMana;
     }
 
     public void ChangeMana(int manaDelta)
     {
+        if (HasStateAuthority == false)
+            return;
+
         m_CurrentMana = Mathf.Clamp(m_CurrentMana + manaDelta, 0, m_MaxMana);
 
         //m_PlayerManager.m_HUD.RefreshUI();
@@ -94,6 +94,9 @@ public class PlayerStatManager : NetworkBehaviour
 
     private void RegenerateMana()
     {
+        if (HasStateAuthority == false)
+            return;
+
         if (m_CurrentMana < m_MaxMana)
         {
             m_ManaRegenTimer += Time.deltaTime;

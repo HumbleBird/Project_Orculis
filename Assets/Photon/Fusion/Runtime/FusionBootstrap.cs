@@ -479,7 +479,7 @@ namespace Fusion {
       }
 
       // Clone the RunnerPrefab so we can safely delete the startup scene (the prefab might be part of it, rather than an asset).
-      //RunnerPrefab = Instantiate(RunnerPrefab);
+      RunnerPrefab = Instantiate(RunnerPrefab);
       DontDestroyOnLoad(RunnerPrefab);
       RunnerPrefab.name = "Temporary Runner Prefab";
 
@@ -515,7 +515,7 @@ namespace Fusion {
 
       // start server, just take address from it
       if (includesServerStart) {
-        _server = RunnerPrefab;// Instantiate(RunnerPrefab);
+        _server = Instantiate(RunnerPrefab);
         _server.name = serverMode.ToString();
 
         var serverTask = InitializeNetworkRunner(_server, serverMode, NetAddress.Any(ServerPort), sceneRef, (runner) => {
@@ -584,7 +584,7 @@ namespace Fusion {
     }
 
     public Task AddClient(GameMode serverMode, SceneRef sceneRef) {
-      var client = RunnerPrefab;// Instantiate(RunnerPrefab);
+      var client = Instantiate(RunnerPrefab);
       DontDestroyOnLoad(client);
 
       client.name = $"Client {(Char)(65 + LastCreatedClientIndex++)}";

@@ -109,6 +109,7 @@
     #endregion
 
     #region Spell
+
     public enum E_SpellActivation
     {
         Instant, // 즉발성

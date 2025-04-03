@@ -1,6 +1,7 @@
+using Fusion;
 using UnityEngine;
 
-public class Indicator : MonoBehaviour
+public class Indicator : NetworkBehaviour
 {
     public Player m_Player; // Stat 표시할 Player
 
@@ -8,11 +9,5 @@ public class Indicator : MonoBehaviour
     public virtual void Start()
     {
         m_Player = GetComponentInParent<Player>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

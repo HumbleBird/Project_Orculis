@@ -17,7 +17,7 @@ namespace SimpleFPS
     public class Gameplay : NetworkBehaviour
     {
         //public GameUI GameUI;
-        public GameObject PlayerPrefab;
+        public Player PlayerPrefab;
         public float GameDuration = 180f;
         public float PlayerRespawnTime = 5f;
         public float DoubleDamageDuration = 30f;
@@ -152,7 +152,7 @@ namespace SimpleFPS
             var player = Runner.Spawn(PlayerPrefab, spawnPoint.position, spawnPoint.rotation, playerRef);
 
             // Set player instance as PlayerObject so we can easily get it from other locations.
-            Runner.SetPlayerObject(playerRef, player);
+            Runner.SetPlayerObject(playerRef, player.Object);
 
             // hard rig
             if (player.HasInputAuthority)
@@ -216,7 +216,7 @@ namespace SimpleFPS
 
 
             // Set player instance as PlayerObject so we can easily get it from other locations.
-            Runner.SetPlayerObject(playerRef, player);
+            Runner.SetPlayerObject(playerRef, player.Object);
         }
 
         private Transform GetSpawnPoint()
@@ -311,17 +311,17 @@ namespace SimpleFPS
         #region Effect
 
         [Header("Hit Effect")]
-        public Volume target;
+        public Volume m_HitVolume;
         public float m_fDuration = 0.05f;
         public AudioClip[] m_DamageHumanSounds;
 
         public IEnumerator HitEffectScreen()
         {
-            target.enabled = true;
+            m_HitVolume.enabled = true;
 
             yield return new WaitForSeconds(m_fDuration);
 
-            target.enabled = false;
+            m_HitVolume.enabled = false;
         }
 
         public void HitEffect()

@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static Define;
 
-// Transform도 포함
-[RequireComponent(typeof(NetworkTransform))]
 public class CharacterAnimationManager : NetworkBehaviour
 {
     [Header("Ref")]
@@ -51,6 +49,8 @@ public class CharacterAnimationManager : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        base.FixedUpdateNetwork();
+
         // update the rig at each network tick
         if (GetInput<RigInput>(out var input))
         {
@@ -64,7 +64,6 @@ public class CharacterAnimationManager : NetworkBehaviour
 
             HeadController.position = input.headsetPosition;
             HeadController.rotation = input.headsetRotation;
-
         }
 
         HandAnimation(m_LeftHandAnimator, m_LeftgripAnimationAction, m_LeftpinchAnimationAction);
@@ -83,7 +82,7 @@ public class CharacterAnimationManager : NetworkBehaviour
         if (HasInputAuthority)
         {
             var hardwareRig = m_Player.m_HardwareRig;
-
+            
             leftHandController.position = hardwareRig.m_LeftHandTransform.position;
             leftHandController.rotation = hardwareRig.m_LeftHandTransform.rotation;
             

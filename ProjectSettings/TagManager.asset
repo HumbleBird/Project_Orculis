@@ -8,6 +8,7 @@ TagManager:
   - Right Pointer
   - Left Pointer
   - SamplesInfoPanel
+  - Target
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - UI
   - Sun
   - 
-  - Character
+  - Hitable
   - Shiled
   - Projectile
   - 
@@ -25,7 +26,7 @@ TagManager:
   - 
   - 
   - Environment
-  - 
+  - AbleFromContactSpell
   - 
   - 
   - 
@@ -37,7 +38,7 @@ TagManager:
   - 
   - 
   - Head
-  - 
+  - NetworkCollider
   - 
   - 
   - 

@@ -3335,6 +3335,214 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Keyboard"",
+            ""id"": ""1b13e919-73f2-4fa1-811a-815293c5f86f"",
+            ""actions"": [
+                {
+                    ""name"": ""Alpha0"",
+                    ""type"": ""Button"",
+                    ""id"": ""3dde862f-7fca-43d8-ad5f-84fca78fd210"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha1"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd3b39a3-13f2-4fac-ab0f-d2abfac87cc7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha2"",
+                    ""type"": ""Button"",
+                    ""id"": ""c31c01f8-7a32-4604-9e5f-d319f6bb4c85"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha3"",
+                    ""type"": ""Button"",
+                    ""id"": ""10a4c247-5a3a-4988-a090-58bcb7c6f6c6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha4"",
+                    ""type"": ""Button"",
+                    ""id"": ""d399907e-f090-46d0-86c5-11e2a583b7ed"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha5"",
+                    ""type"": ""Button"",
+                    ""id"": ""a931f7e0-0aab-40fe-beee-172244963670"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha6"",
+                    ""type"": ""Button"",
+                    ""id"": ""8973bbb1-9f95-4fcf-b595-7d542de01660"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha7"",
+                    ""type"": ""Button"",
+                    ""id"": ""86eefbe3-08e6-4332-986f-ae3f470b2434"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha8"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e5fff80-ac01-4e14-9be9-800b143a7d8e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alpha9"",
+                    ""type"": ""Button"",
+                    ""id"": ""273f4b6f-d050-4110-84f1-d3d272e737b8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""4f897a23-5dee-44cc-8ed1-547627279f39"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43314e26-c956-488e-8807-08019e1e725b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""61644749-b6f5-45ef-9eb9-a1de04b30209"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""186de083-136a-469d-8e00-dabd407426e6"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f767d91-b5c7-4dc2-a12c-5e72272525ce"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3bb8264-877f-4222-81a4-95150b14da2d"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d25efbe0-b1cb-4e3d-b225-e0fdd5ca914c"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha7"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68efd412-bb7c-489c-87ec-2331f1a118f6"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha8"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c968eb5f-d0a4-4af0-9c99-c987c5009e76"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha9"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b45a5c99-56c8-4f6e-8484-f6551633a36f"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alpha0"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -3447,6 +3655,18 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_TouchscreenGestures_TwistDeltaRotation = m_TouchscreenGestures.FindAction("Twist Delta Rotation", throwIfNotFound: true);
         m_TouchscreenGestures_ScreenTouchCount = m_TouchscreenGestures.FindAction("Screen Touch Count", throwIfNotFound: true);
         m_TouchscreenGestures_SpawnObject = m_TouchscreenGestures.FindAction("Spawn Object", throwIfNotFound: true);
+        // Keyboard
+        m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
+        m_Keyboard_Alpha0 = m_Keyboard.FindAction("Alpha0", throwIfNotFound: true);
+        m_Keyboard_Alpha1 = m_Keyboard.FindAction("Alpha1", throwIfNotFound: true);
+        m_Keyboard_Alpha2 = m_Keyboard.FindAction("Alpha2", throwIfNotFound: true);
+        m_Keyboard_Alpha3 = m_Keyboard.FindAction("Alpha3", throwIfNotFound: true);
+        m_Keyboard_Alpha4 = m_Keyboard.FindAction("Alpha4", throwIfNotFound: true);
+        m_Keyboard_Alpha5 = m_Keyboard.FindAction("Alpha5", throwIfNotFound: true);
+        m_Keyboard_Alpha6 = m_Keyboard.FindAction("Alpha6", throwIfNotFound: true);
+        m_Keyboard_Alpha7 = m_Keyboard.FindAction("Alpha7", throwIfNotFound: true);
+        m_Keyboard_Alpha8 = m_Keyboard.FindAction("Alpha8", throwIfNotFound: true);
+        m_Keyboard_Alpha9 = m_Keyboard.FindAction("Alpha9", throwIfNotFound: true);
     }
 
     ~@XRIDefaultInputActions()
@@ -3460,6 +3680,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         UnityEngine.Debug.Assert(!m_XRIRightLocomotion.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.XRIRightLocomotion.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_XRIUI.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.XRIUI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_TouchscreenGestures.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.TouchscreenGestures.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Keyboard.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.Keyboard.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -4579,6 +4800,124 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         }
     }
     public TouchscreenGesturesActions @TouchscreenGestures => new TouchscreenGesturesActions(this);
+
+    // Keyboard
+    private readonly InputActionMap m_Keyboard;
+    private List<IKeyboardActions> m_KeyboardActionsCallbackInterfaces = new List<IKeyboardActions>();
+    private readonly InputAction m_Keyboard_Alpha0;
+    private readonly InputAction m_Keyboard_Alpha1;
+    private readonly InputAction m_Keyboard_Alpha2;
+    private readonly InputAction m_Keyboard_Alpha3;
+    private readonly InputAction m_Keyboard_Alpha4;
+    private readonly InputAction m_Keyboard_Alpha5;
+    private readonly InputAction m_Keyboard_Alpha6;
+    private readonly InputAction m_Keyboard_Alpha7;
+    private readonly InputAction m_Keyboard_Alpha8;
+    private readonly InputAction m_Keyboard_Alpha9;
+    public struct KeyboardActions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public KeyboardActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Alpha0 => m_Wrapper.m_Keyboard_Alpha0;
+        public InputAction @Alpha1 => m_Wrapper.m_Keyboard_Alpha1;
+        public InputAction @Alpha2 => m_Wrapper.m_Keyboard_Alpha2;
+        public InputAction @Alpha3 => m_Wrapper.m_Keyboard_Alpha3;
+        public InputAction @Alpha4 => m_Wrapper.m_Keyboard_Alpha4;
+        public InputAction @Alpha5 => m_Wrapper.m_Keyboard_Alpha5;
+        public InputAction @Alpha6 => m_Wrapper.m_Keyboard_Alpha6;
+        public InputAction @Alpha7 => m_Wrapper.m_Keyboard_Alpha7;
+        public InputAction @Alpha8 => m_Wrapper.m_Keyboard_Alpha8;
+        public InputAction @Alpha9 => m_Wrapper.m_Keyboard_Alpha9;
+        public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(KeyboardActions set) { return set.Get(); }
+        public void AddCallbacks(IKeyboardActions instance)
+        {
+            if (instance == null || m_Wrapper.m_KeyboardActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_KeyboardActionsCallbackInterfaces.Add(instance);
+            @Alpha0.started += instance.OnAlpha0;
+            @Alpha0.performed += instance.OnAlpha0;
+            @Alpha0.canceled += instance.OnAlpha0;
+            @Alpha1.started += instance.OnAlpha1;
+            @Alpha1.performed += instance.OnAlpha1;
+            @Alpha1.canceled += instance.OnAlpha1;
+            @Alpha2.started += instance.OnAlpha2;
+            @Alpha2.performed += instance.OnAlpha2;
+            @Alpha2.canceled += instance.OnAlpha2;
+            @Alpha3.started += instance.OnAlpha3;
+            @Alpha3.performed += instance.OnAlpha3;
+            @Alpha3.canceled += instance.OnAlpha3;
+            @Alpha4.started += instance.OnAlpha4;
+            @Alpha4.performed += instance.OnAlpha4;
+            @Alpha4.canceled += instance.OnAlpha4;
+            @Alpha5.started += instance.OnAlpha5;
+            @Alpha5.performed += instance.OnAlpha5;
+            @Alpha5.canceled += instance.OnAlpha5;
+            @Alpha6.started += instance.OnAlpha6;
+            @Alpha6.performed += instance.OnAlpha6;
+            @Alpha6.canceled += instance.OnAlpha6;
+            @Alpha7.started += instance.OnAlpha7;
+            @Alpha7.performed += instance.OnAlpha7;
+            @Alpha7.canceled += instance.OnAlpha7;
+            @Alpha8.started += instance.OnAlpha8;
+            @Alpha8.performed += instance.OnAlpha8;
+            @Alpha8.canceled += instance.OnAlpha8;
+            @Alpha9.started += instance.OnAlpha9;
+            @Alpha9.performed += instance.OnAlpha9;
+            @Alpha9.canceled += instance.OnAlpha9;
+        }
+
+        private void UnregisterCallbacks(IKeyboardActions instance)
+        {
+            @Alpha0.started -= instance.OnAlpha0;
+            @Alpha0.performed -= instance.OnAlpha0;
+            @Alpha0.canceled -= instance.OnAlpha0;
+            @Alpha1.started -= instance.OnAlpha1;
+            @Alpha1.performed -= instance.OnAlpha1;
+            @Alpha1.canceled -= instance.OnAlpha1;
+            @Alpha2.started -= instance.OnAlpha2;
+            @Alpha2.performed -= instance.OnAlpha2;
+            @Alpha2.canceled -= instance.OnAlpha2;
+            @Alpha3.started -= instance.OnAlpha3;
+            @Alpha3.performed -= instance.OnAlpha3;
+            @Alpha3.canceled -= instance.OnAlpha3;
+            @Alpha4.started -= instance.OnAlpha4;
+            @Alpha4.performed -= instance.OnAlpha4;
+            @Alpha4.canceled -= instance.OnAlpha4;
+            @Alpha5.started -= instance.OnAlpha5;
+            @Alpha5.performed -= instance.OnAlpha5;
+            @Alpha5.canceled -= instance.OnAlpha5;
+            @Alpha6.started -= instance.OnAlpha6;
+            @Alpha6.performed -= instance.OnAlpha6;
+            @Alpha6.canceled -= instance.OnAlpha6;
+            @Alpha7.started -= instance.OnAlpha7;
+            @Alpha7.performed -= instance.OnAlpha7;
+            @Alpha7.canceled -= instance.OnAlpha7;
+            @Alpha8.started -= instance.OnAlpha8;
+            @Alpha8.performed -= instance.OnAlpha8;
+            @Alpha8.canceled -= instance.OnAlpha8;
+            @Alpha9.started -= instance.OnAlpha9;
+            @Alpha9.performed -= instance.OnAlpha9;
+            @Alpha9.canceled -= instance.OnAlpha9;
+        }
+
+        public void RemoveCallbacks(IKeyboardActions instance)
+        {
+            if (m_Wrapper.m_KeyboardActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IKeyboardActions instance)
+        {
+            foreach (var item in m_Wrapper.m_KeyboardActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_KeyboardActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public KeyboardActions @Keyboard => new KeyboardActions(this);
     public interface IXRIHeadActions
     {
         void OnPosition(InputAction.CallbackContext context);
@@ -4695,5 +5034,18 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnTwistDeltaRotation(InputAction.CallbackContext context);
         void OnScreenTouchCount(InputAction.CallbackContext context);
         void OnSpawnObject(InputAction.CallbackContext context);
+    }
+    public interface IKeyboardActions
+    {
+        void OnAlpha0(InputAction.CallbackContext context);
+        void OnAlpha1(InputAction.CallbackContext context);
+        void OnAlpha2(InputAction.CallbackContext context);
+        void OnAlpha3(InputAction.CallbackContext context);
+        void OnAlpha4(InputAction.CallbackContext context);
+        void OnAlpha5(InputAction.CallbackContext context);
+        void OnAlpha6(InputAction.CallbackContext context);
+        void OnAlpha7(InputAction.CallbackContext context);
+        void OnAlpha8(InputAction.CallbackContext context);
+        void OnAlpha9(InputAction.CallbackContext context);
     }
 }

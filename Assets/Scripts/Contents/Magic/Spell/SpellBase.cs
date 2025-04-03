@@ -1,4 +1,6 @@
-﻿using Oculus.Interaction.PoseDetection.Debug;
+﻿using Fusion;
+using FusionHelpers;
+using Oculus.Interaction.PoseDetection.Debug;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,28 +12,30 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using static Define;
 
-[CreateAssetMenu(fileName = "Spell Base", menuName = "Scriptable Object/Spell Base", order = 0)]
-public abstract class SpellBase : ScriptableObject
+
+public abstract class SpellBase : NetworkBehaviour
 {
-    [Header("Ref")]
-    public Player m_Owner;
+    protected Player m_Owner;
 
     [Header("Base Property")]
     [SerializeField] protected ushort m_Cost;
     public E_SpellActivation m_ESpellActivation;
     public E_SpellType m_SpellType;
     [SerializeField] protected float m_fPowerCameraShake;
+    public int m_iDamage = 0;
 
     [Header("Visuals")]
     public Sprite m_icon;
     public string spellName;
-    public VideoClip m_UseVideoClip {  get; protected set; }
+    public VideoClip m_UseVideoClip;
     public string m_sDetailDescription;
     public string m_sConditionDescription;
 
     [Header("CoolTime Property")]
     public float m_fCoolTime { private set; get; } = 10f;
     private float m_fLastCastTime = -Mathf.Infinity;  // 마지막 사용 시간
+    [Networked]
+    private TickTimer m_CoolTime { get; set; }
 
     // 스킬 사용 가능 여부
     public bool m_bIsEndCooltime => Time.time >= m_fLastCastTime + m_fCoolTime;
@@ -55,6 +59,20 @@ public abstract class SpellBase : ScriptableObject
     [SerializeField] protected AudioClip m_SpellAttempAudioClip;
     [SerializeField] protected AudioClip m_SpellSuccessAudioClip;
     [SerializeField] protected AudioClip m_SpellFailAudioClip;
+
+    public virtual void Awake()
+    {
+        m_Owner =GetComponentInParent<Player>();
+    }
+
+    public virtual void Start()
+    {
+    }
+
+    public virtual void Update()
+    {
+    }
+
 
 
     #region 1. Base Conditoin
@@ -129,8 +147,8 @@ public abstract class SpellBase : ScriptableObject
         if (CheckMana() == false)
             return false;
 
-        if (CheckCooltime() == false)
-            return false;
+        //if (m_CoolTime.ExpiredOrNotRunning(Runner) == false)
+        //    return false;
 
         return true;
     }
@@ -144,7 +162,7 @@ public abstract class SpellBase : ScriptableObject
             m_Owner.m_PlayerMagicManager.m_UsingSpells.Add(this);
 
         // Sound
-        Managers.Sound.Play(m_SpellSuccessAudioClip);
+        //Managers.Sound.Play(m_SpellSuccessAudioClip);
 
         // 화면 이펙트
         // PostProceeing?
@@ -186,21 +204,6 @@ public abstract class SpellBase : ScriptableObject
             return false;
 
         return true;
-    }
-
-    private bool CheckCooltime()
-    {
-        if (m_bIsEndCooltime)
-        {
-            m_fLastCastTime = Time.time;
-            return true;
-        }
-        else
-        {
-            Debug.Log($"{spellName}이 아직 쿨타임입니다.");
-            Debug.Log($"m_fLastCastTime : {m_fLastCastTime}, Time.time : {Time.time}, m_fSpellCoolTime : {m_fCoolTime}");
-            return false;
-        }
     }
 
     #endregion

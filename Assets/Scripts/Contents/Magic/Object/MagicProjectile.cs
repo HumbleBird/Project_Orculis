@@ -1,16 +1,31 @@
+using Fusion;
+using FusionHelpers;
 using UnityEngine;
 
-public class MagicProjectile : MonoBehaviour
+public class MagicProjectile : MagicObjectBase
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private GameObject _hitEffect;
+    [SerializeField]
+    private GameObject _visualsRoot;
 
-    // Update is called once per frame
-    void Update()
+    private bool _hitEffectVisible;
+
+    public void ShowHitEffect()
     {
-        
+        if (_hitEffectVisible == true)
+            return;
+
+        if (_hitEffect != null)
+        {
+            _hitEffect.SetActive(true);
+        }
+
+        if (_visualsRoot != null)
+        {
+            _visualsRoot.SetActive(false);
+        }
+
+        _hitEffectVisible = true;
     }
 }

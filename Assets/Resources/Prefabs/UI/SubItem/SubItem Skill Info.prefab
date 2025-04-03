@@ -1095,3 +1095,4 @@ MonoBehaviour:
   m_SkillCoolTimeNumber: {fileID: 5558643725427975675}
   m_SkillCoolTimeImage: {fileID: 1419743896423885264}
   m_VideoPlayer: {fileID: 4145395280627643581}
+  m_RawImage: {fileID: 7133774439101236390}

@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aaf69723d43ea44eab1da35644ce4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EquipmentEdge_SpawnTransform: {fileID: 4169480362408512787}
+  m_MuzzleTransform: {fileID: 4169480362408512787}
   m_IndicatorMana: {fileID: 4014330448136191203}
   m_Owner: {fileID: 0}
   m_fIndicatorManaOffset: 0.01
@@ -5435,7 +5435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4169480362408512787}
   m_Layer: 0
-  m_Name: EquipmentEdge
+  m_Name: Muzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

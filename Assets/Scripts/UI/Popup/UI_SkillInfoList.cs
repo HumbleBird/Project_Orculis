@@ -1,4 +1,7 @@
+using Fusion;
+using Oculus.Interaction;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -7,10 +10,18 @@ public class UI_SkillInfoList : MonoBehaviour
     public GameObject m_CreateSkillInfo;
     public GameObject m_PrefabSkillInfo;
     public List<UI_SkillInfo> uI_SkillInfos = new List<UI_SkillInfo>();
-    public Transform m_HandTransform;
+
+    [Header("Transfrom")]
+    public Transform m_DestTransform;
+    public Vector3 m_DestOffestPosition;
+    public Vector3 m_DestOffesRotation;
+
+    [Header("Camera")]
+    public List<RenderTexture> renderTextures = new List<RenderTexture>();
 
     public Transform  headset;
     public GameObject target;
+    public Player m_Player;
 
     public float thresholdAngle = 30f;
     public float thresholdDuraction = 2f;
@@ -22,12 +33,20 @@ public class UI_SkillInfoList : MonoBehaviour
     void Start()
     {
         RefreshUI();
-        transform.position = m_HandTransform.position;
+
+        m_Player = GetComponentInParent<Player>();
+        if(m_Player.HasInputAuthority == false)
+            gameObject.SetActive(false);
+        else
+        {
+            gameObject.SetActive(true);
+            transform.position = m_DestTransform.position;
+        }
     }
 
     private void Update()
     {
-        FollwPosition();
+        //FollwPosition();
         ActivateOnLookat();
     }
 
@@ -35,7 +54,7 @@ public class UI_SkillInfoList : MonoBehaviour
     {
         // 1. 플레이어 스킬 목록 가져오기
         Player player = GetComponentInParent<Player>();
-        List<SpellBase> spells = player.m_PlayerMagicManager.m_UnlockSpells;
+        var spells = player.m_PlayerMagicManager.UnlockSpellGet();
 
         if (spells.Count <= 0)
         {
@@ -58,6 +77,8 @@ public class UI_SkillInfoList : MonoBehaviour
             UI_SkillInfo slot = go.GetOrAddComponent<UI_SkillInfo>();
             slot.m_Spell = spells[i];
             slot.m_iSloNum = i;
+            slot.m_RawImage.texture = renderTextures[i];
+            slot.m_VideoPlayer.targetTexture = renderTextures[i];
 
             slot.SetInfo();
         }
@@ -65,7 +86,11 @@ public class UI_SkillInfoList : MonoBehaviour
 
     public void FollwPosition()
     {
-        transform.position = Vector3.Lerp(transform.position, m_HandTransform.position, Time.deltaTime);
+        Vector3 dest = m_DestTransform.position + m_DestOffestPosition;
+        Quaternion rotation = m_DestTransform.rotation * Quaternion.Euler(m_DestOffesRotation);
+
+        transform.position = dest;
+        transform.rotation = rotation;
     }
 
     private void ActivateOnLookat()

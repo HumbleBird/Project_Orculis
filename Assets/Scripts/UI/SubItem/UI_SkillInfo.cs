@@ -17,6 +17,9 @@ public class UI_SkillInfo : UI_Base
     public Image m_SkillCoolTimeImage;
     public VideoPlayer m_VideoPlayer;
 
+    [Header("Render Texture")]
+    public RawImage m_RawImage;
+
     public void SetInfo()
     {
         if(m_Spell == null)
@@ -37,6 +40,8 @@ public class UI_SkillInfo : UI_Base
 
         m_SkillCoolTimeNumber.enabled = false;
         m_SkillCoolTimeImage.enabled = false;
+
+        m_VideoPlayer.clip = m_Spell.m_UseVideoClip;
     }
 
     public void Update()

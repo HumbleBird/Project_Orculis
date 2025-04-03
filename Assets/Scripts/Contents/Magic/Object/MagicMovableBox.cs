@@ -1,27 +1,53 @@
 using Fusion;
 using UnityEngine;
+using static Define;
 
+[RequireComponent(typeof(NetworkTransform))]
+[RequireComponent(typeof(NetworkObject))]
 public class MagicMovableBox : MagicObjectBase, IMoveable
 {
     [SerializeField] public bool m_bIsMagicInteract = true;
+    [SerializeField] public bool m_bIsAttackable = true;
     public int m_iDamage = 0;
+    public Rigidbody m_Rigidbody;
+    protected Collider m_Collider;
+
+    [Header("Property")]
+    [SerializeField] protected Vector3 m_moveVector;
+    [SerializeField] protected LayerMask m_hitLayerMask;
+
+    [Header("RigidBody Property")]
+    [SerializeField] protected float m_fImpulse = 1f;
+
+    public virtual void Start()
+    {
+        m_Rigidbody = GetComponent<Rigidbody>();
+        m_Collider = GetComponent<Collider>();
+
+        m_hitLayerMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("Hitable"));
+    }
 
     public bool CanControlMagicObject()
     {
         return m_bIsMagicInteract;
     }
 
-    protected override void OnTriggerEnter(Collider other)
+    protected  void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Character"))
+        if (!m_bIsAttackable)
             return;
 
-        Player enemy =  other.GetComponentInParent<Player>();
+        if (other.gameObject.layer != LayerMask.NameToLayer("Hitable"))
+            return;
 
-        if(enemy != null && enemy != m_Owner)
+        if (other.gameObject == m_Owner.gameObject)
+            return;
+
+        var isHit = other.gameObject.GetComponent<IHitable>();
+
+        if (isHit != null)
         {
-            enemy.m_PlayerStatesManager.OnHit(attacker: m_Owner, damage : m_iDamage);
-
+            isHit.OnHit(m_Owner, m_iDamage);
             Clear();
         }
     }
@@ -30,5 +56,6 @@ public class MagicMovableBox : MagicObjectBase, IMoveable
     {
         m_iDamage = 0;
         m_Owner = null;
+        m_bIsAttackable = false;
     }
 }

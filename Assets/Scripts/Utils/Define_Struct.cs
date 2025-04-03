@@ -13,6 +13,18 @@ public partial class Define
     }
 
     [System.Serializable]
+    public struct TestSpellCommand : INetworkStruct
+    {
+
+        public bool LearFarInteractor_SelectActivate;
+        public float LearFarInteractor_SelectValue;
+
+        public float ActivateValue;
+    }
+
+
+
+    [System.Serializable]
     public struct RigInput : INetworkInput
     {
         public Vector3 playAreaPosition;
@@ -25,6 +37,17 @@ public partial class Define
         public Quaternion headsetRotation;
         public HandCommand leftHandCommand;
         public HandCommand rightHandCommand;
+
+        public NetworkBool Alpha0;
+        public NetworkBool Alpha1;
+        public NetworkBool Alpha2;
+        public NetworkBool Alpha3;
+        public NetworkBool Alpha4;
+        public NetworkBool Alpha5;
+        public NetworkBool Alpha6;
+        public NetworkBool Alpha7;
+        public NetworkBool Alpha8;
+        public NetworkBool Alpha9;
     }
 
     public struct PlayerData : INetworkStruct

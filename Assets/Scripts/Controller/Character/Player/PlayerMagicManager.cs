@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using System;
 using System.Collections;
@@ -43,41 +44,38 @@ public class PlayerMagicManager : NetworkBehaviour
         {"Incendio", false },
     };
 
-    public List<SpellBase> m_lockSpells = new List<SpellBase>();
-    public List<SpellBase> m_UnlockSpells = new List<SpellBase>();
-    public List<SpellBase> m_UsingSpells = new List<SpellBase>();
 
+    [Networked]
+    [Capacity(32)]
+    [UnitySerializeField]
+    NetworkLinkedList<SpellBase> m_UnlockSpells { get; }
+
+    public List<SpellBase> m_TempSpells = new List<SpellBase>();
+
+    //[Networked]
+    public List<SpellBase> m_UsingSpells { get; set; } = new List<SpellBase>();
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Spawned()
     {
         m_PlayerManager = GetComponent<Player>();
+        GetComponentsInChildren<SpellBase>().Select((spell, i) => m_UnlockSpells.Set(i, spell)).ToList();
 
-        foreach (var spell in m_UnlockSpells)
-            spell.m_Owner = m_PlayerManager;
+        m_TempSpells = GetComponentsInChildren<SpellBase>().ToList();
     }
 
     // Update is called once per frame
-    void Update()
+    public void Editor_SuccessTrySpell(int count)
     {
-        if (HasInputAuthority == false)
-            return;
-
-        // 숫자 키 입력 처리 (Alpha1 ~ Alpha4)
-        for (int i = 0; i < m_UnlockSpells.Count; i++)
+        // spells[i]가 존재할 경우 처리
+        if (m_UnlockSpells.Count > count &&  m_UnlockSpells[count] != null)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                // spells[i]가 존재할 경우 처리
-                if (m_UnlockSpells[i] != null)
-                {
-                    m_UnlockSpells[i].ChantCondition();
-                    m_UnlockSpells[i].SuccessfullyCastSpell();
-                }
-                else
-                {
-                    Debug.LogWarning($"Spell {i} is not assigned.");
-                }
-            }
+            m_UnlockSpells[count].ChantCondition();
+            m_UnlockSpells[count].SuccessfullyCastSpell();
+        }
+        else
+        {
+            Debug.LogWarning($"Spell {count} is not assigned.");
         }
     }
 
@@ -110,7 +108,7 @@ public class PlayerMagicManager : NetworkBehaviour
 
     public void AttempSpell(string spellName)
     {
-        SpellBase spell = m_UnlockSpells.Find(s => s.name == spellName);
+        SpellBase spell = m_UnlockSpells.FirstOrDefault(s => s.name == spellName);
         if (spell != null)
         {
             spell.AttempToCastSpell();
@@ -121,9 +119,9 @@ public class PlayerMagicManager : NetworkBehaviour
         }
     }
 
-    public void NetworkSpawnMagicObject(GameObject obj, Transform trans)
+    public List<SpellBase> UnlockSpellGet()
     {
-        Runner.Spawn(obj, trans.position, trans.rotation);
+        return m_TempSpells.ToList<SpellBase>();
     }
 
 }

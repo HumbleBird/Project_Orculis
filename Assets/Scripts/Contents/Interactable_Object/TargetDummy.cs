@@ -10,6 +10,7 @@ public class TargetDummy : MonoBehaviour, IHitable
     public void OnHit(Player Attacker, int damage)
     {
         Debug.Log("OnHit : " + name);
+        Debug.Log("damage :" + damage);
 
         m_Animation.Play();
         m_AudioSource.Play();

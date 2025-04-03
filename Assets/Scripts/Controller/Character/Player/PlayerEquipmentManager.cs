@@ -11,7 +11,7 @@ using static Define;
 
 // 플레이어의 장비는 인벤토리에서 전부 관리하며 이곳에서는 장착 여부를 확인하고 스테이터스를 조정한다.
 
-public class PlayerEquipmentManager : MonoBehaviour
+public class PlayerEquipmentManager : NetworkBehaviour
 {
     [Header("Ref")]
     [HideInInspector] public Player m_PlayerManager;
@@ -35,6 +35,9 @@ public class PlayerEquipmentManager : MonoBehaviour
 
     public void NearFarInteractorRaySet()
     {
+        if (HasInputAuthority == false)
+            return;
+
         XRBaseInteractor interactor = null;
 
         if (m_UsingRightHandWeapon)
@@ -50,7 +53,7 @@ public class PlayerEquipmentManager : MonoBehaviour
         var caster = interactor.GetComponent<CurveInteractionCaster>();
         var visual = interactor.GetComponentInChildren<CurveVisualController>();
 
-        Transform weaponEdge = m_CurrentWeapon.m_EquipmentEdge_SpawnTransform;
+        Transform weaponEdge = m_CurrentWeapon.m_MuzzleTransform;
 
         caster.castOrigin = weaponEdge;
         visual.lineOriginTransform = weaponEdge;

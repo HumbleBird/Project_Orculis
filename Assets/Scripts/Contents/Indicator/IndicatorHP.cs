@@ -14,13 +14,12 @@ public class IndicatorHP : Indicator
          m = GetComponent<Renderer>().material;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void FixedUpdate()
     {
         int currentHealth = m_Player.m_PlayerStatesManager.m_CurrentHealth;
         int maxHealth = m_Player.m_PlayerStatesManager.m_MaxHealth;
 
-        float ratio = (float)currentHealth/ maxHealth;
+        float ratio = (float)currentHealth / maxHealth;
 
         c = new Color(ratio, ratio, ratio);
 

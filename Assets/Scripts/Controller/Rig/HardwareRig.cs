@@ -6,12 +6,12 @@ using System;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using static Define;
-using System.Collections;
-using Fusion.XR.Host.Rig;
-using static Unity.Collections.Unicode;
 using System.Threading.Tasks;
 
-public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
+// VR의 헤드기어, 2개의 컨트롤러에서 입력과 위치를 받기 때문에
+// NetworkBehaviour를 상속받아서 사용할 수 없음.
+
+public class HardwareRig : NetworkBehaviour, INetworkRunnerCallbacks
 {
     [Header("XRBaseInteractor")]
     public XRBaseInteractor m_RightHandLearFarInteractor;
@@ -26,14 +26,22 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
     public Transform m_Headset;
     public NetworkRunner runner;
 
-
+    // Network Input
+    [Header("Network")]
     public RunnerExpectations runnerExpectations = RunnerExpectations.DetectRunner;
+    public enum RunnerExpectations
+    {
+        NoRunner, // For offline usages
+        PresetRunner,
+        DetectRunner // should not be used in multipeer scenario
+    }
 
     bool searchingForRunner = false;
 
     public async Task<NetworkRunner> FindRunner()
     {
-        while (searchingForRunner) await Task.Delay(10);
+        while (searchingForRunner) 
+            await Task.Delay(10);
         searchingForRunner = true;
         if (runner == null && runnerExpectations != RunnerExpectations.NoRunner)
         {
@@ -63,22 +71,26 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
         return runner;
     }
 
-
-
     protected virtual async void Start()
     {
+        if (inputActions == null)
+            inputActions = new XRIDefaultInputActions();
+
+        inputActions.Enable();
+
         await FindRunner();
         if (runner)
         {
             runner.AddCallbacks(this);
         }
-
-        if (inputActions == null)
-            inputActions = new XRIDefaultInputActions();
-
-        inputActions.Enable();
     }
 
+    private void OnDestroy()
+    {
+        if (searchingForRunner) Debug.LogError("Cancel searching for runner in HardwareRig");
+        searchingForRunner = false;
+        if (runner) runner.RemoveCallbacks(this);
+    }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
@@ -86,6 +98,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
         rigInput.playAreaPosition = transform.position;
         rigInput.playAreaRotation = transform.rotation;
 
+        
         rigInput.headsetPosition = m_Headset.position;
         rigInput.headsetRotation = m_Headset.rotation;
 
@@ -100,15 +113,19 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
         rigInput.leftHandPosition = m_LeftHandTransform.position;
         rigInput.leftHandRotation = m_LeftHandTransform.rotation;
 
+        // Debug Spell
+        rigInput.Alpha0 = inputActions.Keyboard.Alpha0.IsPressed();
+        rigInput.Alpha1 = inputActions.Keyboard.Alpha1.IsPressed();
+        rigInput.Alpha2 = inputActions.Keyboard.Alpha2.IsPressed();
+        rigInput.Alpha3 = inputActions.Keyboard.Alpha3.IsPressed();
+        rigInput.Alpha4 = inputActions.Keyboard.Alpha4.IsPressed();
+        rigInput.Alpha5 = inputActions.Keyboard.Alpha5.IsPressed();
+        rigInput.Alpha6 = inputActions.Keyboard.Alpha6.IsPressed();
+        rigInput.Alpha7 = inputActions.Keyboard.Alpha7.IsPressed();
+        rigInput.Alpha8 = inputActions.Keyboard.Alpha8.IsPressed();
+        rigInput.Alpha9 = inputActions.Keyboard.Alpha9.IsPressed();
 
         input.Set(rigInput);
-    }
-
-    private void OnDestroy()
-    {
-        if (searchingForRunner) Debug.LogError("Cancel searching for runner in HardwareRig");
-        searchingForRunner = false;
-        if (runner) runner.RemoveCallbacks(this);
     }
 
     #region INetworkRunnerCallbacks (unused)

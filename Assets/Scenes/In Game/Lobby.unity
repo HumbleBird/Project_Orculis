@@ -3891,9 +3891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4dffd09ee883f6499551ae7ee968203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EnterenceClip: {fileID: 0}
-  m_BgmClip: {fileID: 0}
-  m_BattleRoomEnterClip: {fileID: 0}
+  m_BgmClip: {fileID: 8300000, guid: c70d03ab65f33cd47bacb4f1b1f4d326, type: 3}
 --- !u!4 &1333876667
 Transform:
   m_ObjectHideFlags: 0
@@ -32491,6 +32489,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f524cac4f2747b4fb11c694dd9b39b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lensFlareType: 0
+  saturation: 0.9
+  threshold: 0.5
+  flareIntensity: 2.5
+  bloomIntensity: 2
+  iterations: 10
+  blurSpread: 0.6
+  downsample: 6
+  useDirt: 1
+  screenDirt: {fileID: 0}
 --- !u!33 &2771193282504115005
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -96538,7 +96546,7 @@ SceneRoots:
   - {fileID: 8353601486500043996}
   - {fileID: 5112809951632990793}
   - {fileID: 651657020}
-  - {fileID: 1250397057}
   - {fileID: 999495563}
   - {fileID: 1596053584}
   - {fileID: 193497674}
+  - {fileID: 1250397057}
