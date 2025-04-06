@@ -86,12 +86,15 @@ public abstract class SpellBase : NetworkBehaviour
 
         m_bIsChant = true;
 
+        Debug.Log($"{spellName}의 음성 조건 {m_bIsChant}");
+
         yield return new WaitForSeconds(m_fChantConditionTime);
 
         // 모션 조건을 만족하지 못 했을 경우
         if (m_bIsClearAllCondition == false)
         {
             m_bIsChant = false;
+            Debug.Log($"{spellName}의 음성 조건 {m_bIsChant}");
 
             FailHalfwayChant();
         }
@@ -106,6 +109,7 @@ public abstract class SpellBase : NetworkBehaviour
             yield break;
 
         m_bIsMotion = true;
+        Debug.Log($"{spellName}의 동작 조건 {m_bIsMotion}");
 
         yield return new WaitForSeconds(m_fMotionConditionTime);
         
@@ -113,6 +117,7 @@ public abstract class SpellBase : NetworkBehaviour
         if (m_bIsClearAllCondition == false)
         {
             m_bIsMotion = false;
+            Debug.Log($"{spellName}의 동작 조건 {m_bIsMotion}");
 
         }
     }

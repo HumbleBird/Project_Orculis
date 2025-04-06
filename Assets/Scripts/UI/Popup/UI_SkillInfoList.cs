@@ -40,7 +40,7 @@ public class UI_SkillInfoList : MonoBehaviour
         else
         {
             gameObject.SetActive(true);
-            transform.position = m_DestTransform.position;
+            //transform.position = m_DestTransform.position;
         }
     }
 

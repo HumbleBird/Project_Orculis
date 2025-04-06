@@ -9,20 +9,9 @@ public partial class Define
         public bool LearFarInteractor_SelectActivate;
         public float LearFarInteractor_SelectValue;
 
+        public bool Activate;
         public float ActivateValue;
     }
-
-    [System.Serializable]
-    public struct TestSpellCommand : INetworkStruct
-    {
-
-        public bool LearFarInteractor_SelectActivate;
-        public float LearFarInteractor_SelectValue;
-
-        public float ActivateValue;
-    }
-
-
 
     [System.Serializable]
     public struct RigInput : INetworkInput

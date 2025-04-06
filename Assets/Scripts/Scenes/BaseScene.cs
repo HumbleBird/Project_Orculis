@@ -9,9 +9,11 @@ public abstract class BaseScene : MonoBehaviour
 
 	void Awake()	{
 		Init();
-	}
 
-	protected virtual void Init()
+        //Screen.SetResolution(640, 480, false);
+    }
+
+    protected virtual void Init()
     {
         Object obj = GameObject.FindFirstObjectByType(typeof(EventSystem));
         if (obj == null)

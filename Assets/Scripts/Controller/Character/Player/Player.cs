@@ -2,6 +2,7 @@ using Fusion;
 using Meta.WitAi.CallbackHandlers;
 using Oculus.Voice;
 using Projectiles;
+using SimpleFPS;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class Player : NetworkBehaviour
     [HideInInspector] public PlayerEffectsManager m_PlayerEffectsManager;
     [HideInInspector] public PlayerEquipmentManager m_PlayerEquipmentManager;
     [HideInInspector] public CharacterAnimationManager m_CharacterAnimationManager;
+    [HideInInspector] public PlayerSoundManager m_PlayerSoundManager;
 
     [Header("Other Ref")]
     AppVoiceExperience voiceExperience;
@@ -38,7 +40,6 @@ public class Player : NetworkBehaviour
     [Header("Debug")]
     public bool[] m_AlphaList = new bool[10];
 
-
     public override void Spawned()
     {
         _sceneObjects = Runner.GetSingleton<SceneObjects>();
@@ -48,6 +49,7 @@ public class Player : NetworkBehaviour
         m_PlayerEffectsManager = GetComponent<PlayerEffectsManager>();
         m_PlayerEquipmentManager = GetComponent<PlayerEquipmentManager>();
         m_CharacterAnimationManager = GetComponent<CharacterAnimationManager>();
+        m_PlayerSoundManager = GetComponent<PlayerSoundManager>();
 
         StartCoroutine(GenerateMagicMoveParticle());
 
@@ -59,7 +61,6 @@ public class Player : NetworkBehaviour
         {
             name = name + " Input Player";
 
-
             // Voice
             voiceExperience = _sceneObjects.m_AppVoiceExperience;
             var matcher = voiceExperience.GetComponentInChildren<WitResponseMatcher>();
@@ -67,6 +68,7 @@ public class Player : NetworkBehaviour
 
             // Mivry
             Mivry mivry = _sceneObjects.m_Mivry;
+            mivry.gameObject.SetActive(true);
             mivry.OnGestureCompletion.AddListener(CheckRecognition);
             mivry.LeftHand = m_CharacterAnimationManager.leftHandController.gameObject;
             mivry.RightHand = m_CharacterAnimationManager.rightHandController.gameObject;
@@ -79,11 +81,7 @@ public class Player : NetworkBehaviour
 
             m_RightHandLearFarInteractor = m_HardwareRig.m_RightHandLearFarInteractor;
             m_LeftHandLearFarInteractor = m_HardwareRig.m_LeftHandLearFarInteractor;
-
-            //_inputControl.RequestCursorLock();
         }
-
-
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
@@ -124,19 +122,16 @@ public class Player : NetworkBehaviour
             return;
         }
 
-        //    Debug.Log("data similarity : " + data.similarity);
-        //    Debug.Log("data gestureName : " + data.gestureName);
-        //    Debug.Log("data parts : " + data.parts);
-        //    Debug.Log("data gestureID : " + data.gestureID);
+        //Debug.Log("data similarity : " + data.similarity);
+        //Debug.Log("data gestureName : " + data.gestureName);
+        //Debug.Log("data parts : " + data.parts);
+        //Debug.Log("data gestureID : " + data.gestureID);
 
         // 얼마나 기록한 제스쳐와 유사한가.
-        if (data.similarity > 0.4f)
+        if (data.similarity > 0.2f)
         {
             m_PlayerMagicManager.SpellFlagCheck(E_SpellCheckType.Motion, data.gestureName);
         }
-
-        // Show UI
-        // m_MagicTryResultUI.ShowUIPlayersMagicBehaviour(data.gestureName + ", data.similarity : " + data.similarity.ToString("n2"));
     }
 
     public void MoveMagicStaff(bool isMove)
@@ -180,14 +175,16 @@ public class Player : NetworkBehaviour
         // Head Gear
 
         // Right Hand
-        if (input.rightHandCommand.ActivateValue > 0)
+        if (input.rightHandCommand.Activate)
         {
 
-            //MoveMagicStaff(true);
-            Debug.Log("MoveMagicStaff(true);");
+            MoveMagicStaff(true);
         }
-        //else
-        //MoveMagicStaff(false);
+        else
+        {
+            MoveMagicStaff(false);
+
+        }
 
 
         // Right Hand
@@ -203,6 +200,7 @@ public class Player : NetworkBehaviour
         Debug_SpellAlphaInput(input.Alpha7, 7);
         Debug_SpellAlphaInput(input.Alpha8, 8);
         Debug_SpellAlphaInput(input.Alpha9, 9);
+
     }
 
     private void Debug_SpellAlphaInput(NetworkBool alpha, int count)

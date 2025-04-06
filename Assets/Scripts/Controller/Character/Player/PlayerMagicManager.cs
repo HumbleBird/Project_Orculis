@@ -92,7 +92,7 @@ public class PlayerMagicManager : NetworkBehaviour
 
     public void SpellFlagCheck(E_SpellCheckType type, string spellName)
     {
-        SpellBase s = m_UsingSpells.FirstOrDefault(spell => spell.spellName == spellName);
+        SpellBase s = m_UnlockSpells.FirstOrDefault(spell => spell.spellName == spellName);
 
         if (s == null)
             return;

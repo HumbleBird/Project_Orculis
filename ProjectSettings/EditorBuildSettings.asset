@@ -10,6 +10,9 @@ EditorBuildSettings:
       Legacy Particles.unity
     guid: c69dc9c355df3364ca0876198cde32e2
   - enabled: 1
+    path: Assets/Scenes/In Game/BattleRoom.unity
+    guid: a23a1a76ae3b19d4d88f51c8158adf4c
+  - enabled: 1
     path: Assets/Scenes/In Game/Login.unity
     guid: df41d36c2a24e2a4a8d228734a6b328b
   - enabled: 1
@@ -18,9 +21,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/In Game/Lobby.unity
     guid: 86bb9263f4881e64688af8ad9729ef25
-  - enabled: 1
-    path: Assets/Scenes/In Game/BattleRoom.unity
-    guid: a23a1a76ae3b19d4d88f51c8158adf4c
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}

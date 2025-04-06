@@ -10,5 +10,5 @@ AssetOrigin:
   productId: 143176
   packageName: MiVRy - 3D Gesture Recognition
   packageVersion: 2.11
-  assetPath: Assets/Import/Tool/GestureRecognition/GestureManager/Resources/Keyboard.prefab
+  assetPath: Assets/GestureRecognition/GestureManager/Resources/Keyboard.prefab
   uploadId: 679908

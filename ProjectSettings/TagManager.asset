@@ -17,12 +17,12 @@ TagManager:
   - Water
   - UI
   - Sun
-  - 
+  - Collider
   - Hitable
-  - Shiled
-  - Projectile
   - 
   - 
+  - 
+  - Spell
   - 
   - 
   - Environment

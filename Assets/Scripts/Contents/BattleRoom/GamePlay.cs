@@ -37,6 +37,9 @@ namespace SimpleFPS
         private List<PlayerData> _tempPlayerData = new(16);
         private List<Transform> _recentSpawnPoints = new(4);
 
+        [Header("Hit Volumne")]
+        public Volume m_HitVolumne;
+
         public void PlayerKilled(PlayerRef killerPlayerRef, PlayerRef victimPlayerRef, E_WeaponType weaponType)
         {
             if (HasStateAuthority == false)
@@ -310,26 +313,7 @@ namespace SimpleFPS
 
         #region Effect
 
-        [Header("Hit Effect")]
-        public Volume m_HitVolume;
-        public float m_fDuration = 0.05f;
-        public AudioClip[] m_DamageHumanSounds;
 
-        public IEnumerator HitEffectScreen()
-        {
-            m_HitVolume.enabled = true;
-
-            yield return new WaitForSeconds(m_fDuration);
-
-            m_HitVolume.enabled = false;
-        }
-
-        public void HitEffect()
-        {
-            StartCoroutine(HitEffectScreen());
-
-            Managers.Sound.RandomPlay(m_DamageHumanSounds);
-        }
 
         #endregion
 
@@ -364,34 +348,6 @@ namespace SimpleFPS
             playerData.Nickname = nickname;
             PlayerData.Set(playerRef, playerData);
         }
-
-        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, HostMode = RpcHostMode.SourceIsHostPlayer)]
-        public void RPC_ClientRequestHP(Player attacker, Player defender, int damage)
-        {
-
-            Debug.Log("RPC_ClientRequestHP");
-            defender.m_PlayerStatesManager.m_CurrentHealth = Mathf.Clamp(defender.m_PlayerStatesManager.m_CurrentHealth - damage, 0, defender.m_PlayerStatesManager.m_MaxHealth);
-            if (defender.m_PlayerStatesManager.m_CurrentHealth <= 0)
-            {
-                Debug.Log($"플레이어 사망 {defender.name}");
-                // OnPlayerDeath();
-            }
-        }
-
-        public void ClientChangeHp(Player attacker, Player defender, int damage)
-        {
-            if (HasStateAuthority == false)
-                return;
-
-            Debug.Log("RPC_ClientRequestHP");
-            defender.m_PlayerStatesManager.m_CurrentHealth = Mathf.Clamp(defender.m_PlayerStatesManager.m_CurrentHealth - damage, 0, defender.m_PlayerStatesManager.m_MaxHealth);
-            if (defender.m_PlayerStatesManager.m_CurrentHealth <= 0)
-            {
-                Debug.Log($"플레이어 사망 {defender.name}");
-                // OnPlayerDeath();
-            }
-        }
-
         #endregion
     }
 }

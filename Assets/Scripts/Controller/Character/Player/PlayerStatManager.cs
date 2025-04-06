@@ -1,6 +1,8 @@
 using Fusion;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Define;
 
 public class PlayerStatManager : NetworkBehaviour, IHitable
@@ -13,8 +15,10 @@ public class PlayerStatManager : NetworkBehaviour, IHitable
     public int m_MaxHealth { set; get; } = 100;
 
     [SerializeField]
-    [Networked]
+    [Networked, OnChangedRender(nameof(OnChangedHealth))]
     public int m_CurrentHealth { set; get; }
+    public int m_LastHeath;
+
 
     //[Header("Mana")]
     public int m_MaxMana {  set; get; } = 100;
@@ -30,15 +34,9 @@ public class PlayerStatManager : NetworkBehaviour, IHitable
     [Networked]
     public float m_ManaRegenTimer { get; set; } = 0f;
 
-    private ChangeDetector _changeDetector;
-
-    [Header("Test")]
-    public Player m_TestPlayerVimtim;
-    public TextMeshProUGUI m_Text;
 
     public override void Spawned()
     {
-        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
         InitNetworkState();
     }
 
@@ -64,6 +62,7 @@ public class PlayerStatManager : NetworkBehaviour, IHitable
         if (HasStateAuthority == false)
             return;
 
+        m_LastHeath = m_MaxHealth;
         m_CurrentHealth = m_MaxHealth;
     }
 
@@ -145,9 +144,25 @@ public class PlayerStatManager : NetworkBehaviour, IHitable
 
         // HP
         m_CurrentHealth = Mathf.Clamp(m_CurrentHealth - damage, 0, m_MaxHealth);
+    }
 
-        // Hp Effect
-        // Sounds
-        m_PlayerManager._sceneObjects.Gameplay.HitEffect();
+    public void OnChangedHealth()
+    {
+        if (HasInputAuthority == false)
+            return;
+
+        // 처음 Init 방지
+        if (m_CurrentHealth == m_LastHeath)
+            return;
+
+        m_LastHeath = m_CurrentHealth;
+
+        Debug.Log("공격당함");
+        HitSound();
+    }
+
+    public void HitSound()
+    {
+        m_PlayerManager.m_PlayerSoundManager.PlayHitSounds();
     }
 }

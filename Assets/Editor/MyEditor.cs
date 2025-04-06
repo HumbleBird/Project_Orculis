@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class MyEditor
 {
-    // 경로 설정 (슬래시 사용)
-    private static string originalPath = @"C:/Users/wltns/AppData/LocalLow/DefaultCompany/Project_Orculis/Samples";
-    private static string copyPath = @"D:/LeeTaeSeop/Game Make/PP/Project_Orculis/Assets/Resources/Data/Gesture Recognition/";
+    [MenuItem("My Editor/Device")]
+    static void CheckMicDevices()
+    {
+        foreach (var device in Microphone.devices)
+        {
+            Debug.Log("Detected Mic: " + device);
+        }
+    }
+
 
     [MenuItem("My Editor/File/Gesture Record File Load C To D")]
     static void SyncFiles()
     {
+        // 원본 파일 경로를 Unity 프로젝트 루트를 기준으로 상대 경로로 구성
+        string originalPath = "C:/Users/wltns/AppData/LocalLow/DefaultCompany/Project_Orculis/Samples";
+
+        // 복사 대상 경로는 Unity 프로젝트 내부 Resources 폴더 안
+        string copyPath = Path.Combine(Application.dataPath, "Resources/Data/Gesture Recognition/");
+
         // 원본 폴더 존재 확인
         if (!Directory.Exists(originalPath))
         {

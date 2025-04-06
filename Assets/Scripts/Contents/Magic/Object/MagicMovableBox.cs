@@ -24,7 +24,10 @@ public class MagicMovableBox : MagicObjectBase, IMoveable
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<Collider>();
 
-        m_hitLayerMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("Hitable"));
+        
+        m_hitLayerMask = (1 << LayerMask.NameToLayer("Default")) 
+                       | (1 << LayerMask.NameToLayer("Collider")) // 임시 방편으로 넣음
+                       | (1 << LayerMask.NameToLayer("Hitable"));
     }
 
     public bool CanControlMagicObject()
@@ -37,13 +40,13 @@ public class MagicMovableBox : MagicObjectBase, IMoveable
         if (!m_bIsAttackable)
             return;
 
-        if (other.gameObject.layer != LayerMask.NameToLayer("Hitable"))
+        if (other.gameObject.layer != m_hitLayerMask)
             return;
 
-        if (other.gameObject == m_Owner.gameObject)
+        if (m_Owner != null && other.gameObject == m_Owner.gameObject)
             return;
 
-        var isHit = other.gameObject.GetComponent<IHitable>();
+        var isHit = other.gameObject.GetComponentInParent<IHitable>();
 
         if (isHit != null)
         {

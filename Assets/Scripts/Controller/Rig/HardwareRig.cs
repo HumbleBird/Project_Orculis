@@ -107,6 +107,7 @@ public class HardwareRig : NetworkBehaviour, INetworkRunnerCallbacks
         rigInput.rightHandPosition = m_RightHandTransform.position;
         rigInput.rightHandRotation = m_RightHandTransform.rotation;
         rigInput.rightHandCommand.LearFarInteractor_SelectValue = inputActions.XRIRightInteraction.SelectValue.ReadValue<float>();
+        rigInput.rightHandCommand.Activate = inputActions.XRIRightInteraction.Activate.IsPressed();
         rigInput.rightHandCommand.ActivateValue = inputActions.XRIRightInteraction.ActivateValue.ReadValue<float>();
 
         //left controller
