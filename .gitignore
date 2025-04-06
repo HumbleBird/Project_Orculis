@@ -70,3 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+echo "Assets/Plugins/Tool/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.bundle" >> .gitignore
+echo "Assets/Plugins/Tool/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.so" >> .gitignore
